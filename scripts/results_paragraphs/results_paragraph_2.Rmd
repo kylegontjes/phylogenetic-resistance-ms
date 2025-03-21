@@ -1,5 +1,5 @@
 ---
-title: "Results Section 1: Study population"
+title: 'Results Section 2: Antibacterial susceptibility testing'
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
@@ -16,7 +16,7 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 
 ```{r environment, echo=F, message=FALSE, include=F, results=F}
 #Packages
-packages <- c("tidyverse")   
+packages <- c("tidyverse","kableExtra","gontjesr","tableone")   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T))
 
@@ -27,16 +27,16 @@ sessionInfo()
 
 # Load data
 
-```{r}
+```{r load data,include=T,echo=T,results=F,message=F}
+# Patient Metadata
 df <- readRDS("./data/dataset/df.RDS")
 ```
 
-# Overall statistics on cohort
+# Describe non-susceptibility
+
+-   Note: 1 indicates non-susceptibility
 
 ```{r}
-paste0("Number of isolates: ",nrow(df))
-paste0("Number of unique patients: ",df$Patient_ID %>% unique %>% length)
-paste0("Number of LTACHs: ",df$LTACH %>% unique %>% length)
+pheno_vars <- c("TMP_SMX_dich_num","gentamicin_dich_num","AMK_dich_num","CST_dich_num","blbli_dich_num","MVB_dich_num","IR_dich_num")
+gontjesr::convert_tableone_into_df(df,vars=pheno_vars,factorVars = pheno_vars) %>% favorite_kable
 ```
-
-# For cohort statistics mentioned in this section, please see supplemental table 4 
