@@ -35,3 +35,10 @@ mytheme <- ttheme_minimal(core = list(fg_params = list(hjust=0, x=0.01,
                           colhead = list(fg_params = list(hjust=0, x=0.01,fontsize=18,
                                                           fontface="bold")),
                           rowhead=list(fg_params=list(hjust=0, x=0)))
+
+# Favorite kable
+favorite_kable <- function (x){
+  x %>% kable(., format = "html", table.attr = "style='width:100%;'",
+              row.names = F) %>% kable_styling(bootstrap_options = c("striped",
+                                                                    "hover", "condensed", "responsive"))
+}
