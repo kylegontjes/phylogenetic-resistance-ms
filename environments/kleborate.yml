@@ -1,0 +1,15 @@
+name: kleborate_v3_1_3
+channels:
+  - conda-forge
+  - bioconda
+  - default
+  - r
+dependencies:
+  - python=3.9
+  - minimap2
+  - mash 
+
+# Submit using conda env create -f kleborate.yml
+# After completion, perform the following
+##  conda activate kleborate_v3_1_3
+##  conda install -c bioconda kleborate
