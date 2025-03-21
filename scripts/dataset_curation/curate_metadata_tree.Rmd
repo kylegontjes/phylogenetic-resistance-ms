@@ -1,0 +1,342 @@
+---
+title: "Curate the metadata and phylogenetic tree for this project"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+knitr::opts_knit$set(echo = TRUE,warning = FALSE, message = FALSE)  
+knitr::opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/') 
+```
+
+# Environment
+
+```{r}
+# Packages
+packages <- c("readxl","tidyverse","ape","phytools")
+lapply(packages,library,character.only=T)
+
+# Functions
+source("./scripts/dataset_curation/metadata_curation_functions.R")
+
+# Print environment
+Sys.info()
+sessionInfo()
+```
+
+# Clean the patient metadata
+
+Source: UPENN metadata file (459_patients_data_for_posting.xls)
+
+NFS Path:
+/nfs/turbo/umms-esnitkin/Project_Penn_KPC/Analysis/data/459_patients_data_for_posting.xls
+
+## Load and remove isolate with incomplete data
+
+```{r}
+# Load in the patient data
+metadata_raw <- read_xls('../../data/459_patients_data_for_posting.xls') %>% as.data.frame
+paste0("Number of isolates in metadata: ",nrow(metadata_raw))
+# Keep only california isolates
+metadata <- subset(metadata_raw,state=="CA")
+metadata$isolate_no <-  paste0("PCMP_H",metadata$isolate_no)
+rownames(metadata) <- metadata$isolate_no 
+paste0("Number of isolates in metadata from California: ",nrow(metadata))
+
+# Remove patient with mismatched SENSITIRE isolate number
+metadata <- metadata %>% subset(isolate_no != "PCMP_H473")
+paste0("Number of isolates in metadata from California with correct SENSITITRE data: ",nrow(metadata))
+```
+
+## Update length of stay data 
+
+```{r}
+# Length of stay
+metadata <- metadata %>% mutate(LOSbeforeCx = dplyr::recode(LOSbeforeCx, '-202' = 202))
+```
+
+## Recode antibiotic exposure history data
+
+```{r}
+## Create new days of therapy (DOT) variables
+metadata$AG_day <- metadata %>% select(amikacin_day,gent_day,tobra_day) %>% rowSums()
+metadata$third_plus_ceph_day <- metadata %>% select(ceftazidime_day,ctx_day,ceftaroline_day,cefepime_day) %>% rowSums()
+metadata$FQ_day <- metadata %>% select(cipro_day,levo_day) %>% rowSums() 
+metadata$pseudoPCN_day <- metadata %>% select(zosyn_day,ceftazidime_day) %>% rowSums() 
+
+## Binarize antibiotic exposure history (1 day was chosen)
+DOT_vars <- colnames(metadata) %>% subset(grepl("day",.))
+for(i in DOT_vars){
+  metadata[,paste0(gsub("_day","",i),"_1d")] <-  binarize_abx_history(i,1,metadata)
+}
+
+## Binarized data
+metadata$any_antibiotic_1d <- ifelse(rowSums(metadata %>% select(any_of(DOT_vars)))>0,1,0)
+```
+
+# Antibiotic resistance metadata
+
+Source; Custom SENSITITRE broth microdilution assay
+
+NFS Paths:
+/nfs/turbo/umms-esnitkin/Project_Penn_KPC/Analysis/Antibiotic_resistance/data/SENSITITRE
+MICs.xlsx
+
+## Load data
+
+```{r}
+SENSITITRE <- read_excel("../../Antibiotic_resistance/data/SENSITITRE MICs.xlsx", range = "B1:N460") %>% as.data.frame
+SENSITITRE <- SENSITITRE %>% mutate(isolate_no = paste0("PCMP_H",str_remove(gsub('CRKP_','',SENSITITRE$ISOLATES),"^0+"))) %>% `rownames<-`(.$isolate_no)
+
+# PCMP_H472 & PCMP_H473 were excluded due to data reporting issues
+SENSITITRE <- subset(SENSITITRE,!isolate_no %in% c("PCMP_H472","PCMP_H473"))
+```
+
+## Clean variables
+
+```{r}
+## Convert names
+SENSITITRE <-  dplyr::rename(SENSITITRE,MVB = "MEV",IR = "IMK", CST = "COL", AMK = "AMI", FOS = "FOS+",PT = "P/T4")
+
+## Fix MVB data due to miscoding (vaborbactom is a constant 8 µg/mL not 4 µg/mL)
+table(SENSITITRE$MVB)
+SENSITITRE <- SENSITITRE %>% mutate(MVB = dplyr::recode(MVB,"2/4" = "2/8"))
+
+## Create MIC Variable
+MIC_variables <- c("Ceftazidime-avibactam"="CZA","Meropenem-vaborbactam"="MVB","Imipenem-relebactam"="IR","Tigeycline"="TGC","Colistin"="CST","Amikacin"="AMK","Plazomicin"="PLZ","MERO","IMI")
+
+## Numerize MIC Data
+for(i in MIC_variables){
+  SENSITITRE[,paste0(i,"_num")] <- SENSITITRE[,paste0(i)]  %>% gsub("≤","",.) %>% gsub(">","",.) %>% gsub("/.","",.) %>% trimws(.,'both') %>% as.numeric
+}
+
+## Factorize Raw MIC Data
+for(i in MIC_variables){
+  SENSITITRE[,i] <- factorize_MIC(SENSITITRE,i)
+}
+
+## Log-2 Transform Data
+for(i in MIC_variables){
+  SENSITITRE[,paste0(i,"_log_2")] <- log2(SENSITITRE[,paste0(i,"_num")])
+}
+```
+
+## Convert Raw MIC data to phenotypic resistance categories
+
+Select references:
+
+1\. <https://academic.oup.com/cid/article/72/8/1484/5868454?login=true>
+
+2\.
+<https://www.sciencedirect.com/science/article/pii/S0255085721041062>
+
+```{r}
+SENSITITRE <- SENSITITRE %>% mutate(
+  ### Meropenem (MERO): ≤1/2/≥4
+  MERO_cat = ifelse(MERO_num <= 1,"S",ifelse(MERO_num >= 4,"R","I")),
+  ### Imipenem (IMI): ≤1/2/≥4
+  IMI_cat = ifelse(IMI_num <= 1,"S",ifelse(IMI_num >= 4,"R","I")),
+  ### Ceftazidime-avibactam: Susceptible (MIC≤8/4), Resistant (MIC≥16/4)  
+  CZA_cat = ifelse(CZA_num <= 8,"S",ifelse(CZA_num >= 16,"R","")),
+  ### Meropenem-vaborbactam (MVB): Susceptible (MIC≤4/8), Intermediate (MIC=8/8), Resistant (MIC≥16/8)  
+  MVB_cat = ifelse(MVB_num <= 4,"S",ifelse(MVB_num == 8,"I","R")),
+  ### Imipenem-relebactam (I-R): Susceptible (MIC≤1/4), Intermediate (MIC=2/4), Resistant (MIC≥4/4)  
+  IR_cat = ifelse(IR_num <= 1,"S",ifelse(IR_num == 2,"I","R")),
+  ### Tigecycline (TGC): Susceptible (MIC≤2), Intermediate (MIC=4), Resistant (MIC≥8)  
+  TGC_cat = ifelse(TGC_num <= 2,"S",ifelse(TGC_num == 4,"I","R")),
+  ### Colistin (CST): Intermediate (MIC≤2), Resistant (MIC≥4)
+  CST_cat = ifelse(CST_num <= 2,"I",ifelse(CST_num >= 4,"R","")),
+  ### Amikacin (AMK): Susceptible (MIC≤16), Intermediate (MIC=32), Resistant (MIC≥64)   
+  AMK_cat =  ifelse(AMK_num <= 16,"S",ifelse(AMK_num == 32,"I","R")),
+  ### Plazomicin (PLZ): Susceptible (MIC≤2), Intermediate (MIC=4), Resistant (MIC≥8) 
+  PLZ_cat = ifelse(PLZ_num <= 2,"S",ifelse(PLZ_num == 4,"I","R")))
+
+## Factorize Categorical Data
+MIC_variables_cat <- paste0(MIC_variables,"_cat") 
+for(i in MIC_variables_cat){
+  SENSITITRE[,i] <- factor(as.vector(SENSITITRE[,i]),
+                           levels = c("S","I","R"),
+                           labels = c("Susceptible","Intermediate","Resistant"))
+}
+
+## Create Binary Non-Susceptible Variable
+MIC_variables_no_CST <- c("MERO","IMI","MVB","IR","CZA","AMK","PLZ","TGC")
+for(i in MIC_variables_no_CST){
+  SENSITITRE[,paste0(i,"_dich")] <- binarize_MIC(SENSITITRE,paste0(i,"_cat"))
+}
+SENSITITRE$CST_dich <- ifelse(SENSITITRE$CST_cat == "Resistant","Non-Susceptible","Susceptible")
+
+## Factorize Dichotomous Data
+MIC_variables_dich <- paste0(MIC_variables,"_dich") 
+for(i in MIC_variables_dich){
+  SENSITITRE[,i] <- factor(as.vector(SENSITITRE[,i]),
+                           levels = c("Susceptible","Non-Susceptible"),
+                           labels = c("Susceptible","Non-Susceptible"))
+}
+
+## Numerical Dichotemous Variable for Resistance
+for(i in MIC_variables_dich){
+  SENSITITRE[,paste0(i,"_num")] <- ifelse(SENSITITRE[,i] == "Susceptible",0,1)
+}
+```
+
+### Simplify BL/BLI Non-susceptibility
+
+```{r}
+# BL/BLI Resistance
+SENSITITRE$blbli_dich <- ifelse(SENSITITRE$MVB_dich_num==1 | SENSITITRE$IR_dich_num==1,"Non-Susceptible","Susceptible")
+SENSITITRE$blbli_dich_num <- ifelse(SENSITITRE$MVB_dich_num==1 | SENSITITRE$IR_dich_num==1,1,0)
+```
+
+## Curate lab-abstracted phenotypes  
+
+```{r}
+# Gentamicin Recode
+metadata$gentamicin_mic <- metadata$gent_mic %>% {ifelse(.==">-16",">=16",.)} %>% gsub(">=","≥",.) %>% gsub("<=","≤",.)
+metadata$gentamicin_int <- ifelse(metadata$gentamicin_mic %in% c("≤1","2","4"),"S",ifelse(metadata$gentamicin_mic =="8","I","R") )
+   
+# Bactrim Recode
+metadata$bactrim_mic <- metadata$bactrim_mic %>% {ifelse(.=="4","40",.)} %>% gsub(">=","≥",.) %>% gsub("<=","≤",.)
+metadata$bactrim_int <- metadata$bactrim_mic %>% {ifelse(.=="40","S",metadata$bactrim_int)}
+metadata$bactrim_int <- metadata$bactrim_mic %>% {ifelse(.=="40","S", ifelse(.=="≥320","R",metadata$bactrim_int))}
+
+MIC_variables <- c("bactrim_mic","gentamicin_mic") 
+
+factorize_MIC_lab <- function(dataset,resistance){
+  values <- as.vector(unique(dataset[,resistance]))
+  combination <- ifelse(length(grep("/",values))>0,"yes","no")
+  if(combination == "no"){
+    level <- c(
+      #Endpoint 
+      values[grep("≤|<|<=",values)], 
+      #if non endpoint included 
+      #non-endpoint sorted
+      as.character(sort(as.numeric(values[!grepl(">|>=|≥|≤|<|<=", values)]))),
+      #Endpoint
+      values[grep(">|>=|≥",values)])
+  }
+  if(combination == "yes"){
+    values_no_in <- gsub("/.*","",values)
+    in_value <- gsub(".*\\/","",values)
+    level <- c(
+      #Endpoint 
+      values_no_in[grep("≤",values_no_in)], 
+      #if non endpoint included 
+      #non-endpoint sorted
+        as.character(sort(as.numeric(values_no_in[!grepl("≤|>", values_no_in)]))),
+      #Endpoint
+      values_no_in[grep(">",values_no_in)])
+    level <- paste0(level,"/",in_value)
+  }    
+  factorized <- factor(as.vector(dataset[,resistance]),levels = level)
+  return(factorized)
+}
+
+for(i in MIC_variables){
+  metadata[,i] <- factorize_MIC_lab(metadata,i)
+}
+
+## Factorize Categorical Data
+MIC_variables <- c("bactrim","gentamicin")
+for(i in MIC_variables){
+  metadata[,paste0(i,"_cat")] <- factor(as.vector(metadata[,paste0(i,"_int")]),
+                           levels = c("S","I","R"),
+                           labels = c("Susceptible","Intermediate","Resistant"))
+}
+
+## add bactrim (TMP_SMX), gentamicin
+metadata$TMP_SMX_cat <- metadata$bactrim_cat
+metadata$TMP_SMX_mic <- metadata$bactrim_mic
+metadata$TMP_SMX_dich <- ifelse(metadata$bactrim_cat == "Resistant","Non-Susceptible","Susceptible")
+metadata$TMP_SMX_dich_num <- ifelse(metadata$bactrim_cat == "Resistant",1,0)
+
+## Gentamicin 
+metadata$gentamicin_dich <- ifelse(metadata$gentamicin_cat == "Susceptible","Susceptible","Non-Susceptible")
+metadata$gentamicin_dich_num <- ifelse(metadata$gentamicin_cat == "Susceptible",0,1)
+```
+
+## Curate sequence type data 
+
+Source: Kleborate version 3.1.3
+
+NFS Paths:
+/nfs/turbo/umms-esnitkin/Project_Penn_KPC/Analysis/Phyloaware/phylogenetic-resistance-ms/data/kleborate/klebsiella_pneumo_complex_output.txt
+
+```{r}
+# Load data
+kleborate <- read.delim(file='./data/kleborate/klebsiella_pneumo_complex_output.txt',sep='\t')
+
+# Get isolate name from assembly name
+kleborate<- kleborate %>% mutate(isolate_no = gsub("_contigs_l1000","",strain)) %>% `rownames<-`(.$isolate_no) 
+
+# Clean ST Variable
+kleborate <- kleborate %>% mutate(ST = gsub("ST","",ST) %>% gsub("-1LV","*",.),
+                                  ST258 = ifelse(ST == "258",1,0))
+```
+
+# Create metadata dataframe
+
+1.  Drop to only ST258 genomes
+2.  Drop to only isolates from california
+
+```{r}
+# Merge metadata and sensititre data
+df <- left_join(metadata,SENSITITRE,by="isolate_no") 
+# Only keep ST258 isolates
+df <- left_join(df,kleborate %>% select(isolate_no,ST,ST258))
+df <- subset(df,ST258==1)
+paste0("ST258 isolates from California: ",nrow(df))
+```
+
+# Phylogenetic tree
+
+```{r}
+tr <- read.tree(file="../../../Sequence_data/variant_calling/2025-02-17_snpkit_Penn_KPC_ST258/output_files/2025_02_23_21_11_49_core_results/phylokit/results/IQtree/Penn_KPC_ST258.treefile")  %>% 
+                    drop.tip(
+                    # Reference Sequence: genome w/o sensitire) & PCMP_H243 (outgroup)
+                    c('gi|661922017|gb|CP008827.1|','PCMP_H243','PCMP_H473'))
+
+# California only isolates
+tr_ca <- keep.tip(tr,df %>% subset(state=='CA') %>% .$isolate)
+# Midpoint rooted tree 
+tr_ca_midpoint = phytools::midpoint.root(tr_ca) 
+paste0("ST258 isolates from California with assembly: ",length(tr_ca$tip.label))
+
+# Save  
+write.tree(tr_ca_midpoint,"./data/tree/tree.treefile")
+```
+
+# Only keep isolates with entry in phylogenetic tree (i.e., good genome
+
+```{r}
+tr <- keep.tip(tr,df$isolate_no)
+df <- df %>%.[match(as.vector(tr$tip.label), .$isolate_no),]
+rownames(df) <- df$isolate_no
+```
+
+# Get clade data
+
+```{r}
+library(ggtree)
+root_number <-  tr_ca_midpoint$edge[,1] %>% as.numeric %>% min
+clade_nodes <-  tr_ca_midpoint$edge[tr_ca_midpoint$edge[,1] == root_number,] %>% .[,2]  
+ 
+ggtree(tr_ca_midpoint) + geom_point2(aes(subset=node==clade_nodes[1]), color='red', size=5)  + geom_point2(aes(subset=node==clade_nodes[2]), color='blue', size=5)
+ 
+clade_1_descendants = tr_ca_midpoint$tip.label[ phangorn::Descendants(x = tr_ca_midpoint,node = clade_nodes[[1]],type='tips') %>% unlist]
+clade_2_descendants = tr_ca_midpoint$tip.label[ phangorn::Descendants(x = tr_ca_midpoint,node = clade_nodes[[2]],type='tips') %>% unlist]
+
+df$clade_I <- ifelse(df$isolate_no %in% clade_1_descendants,"Clade I","Clade II")
+gheatmap(ggtree(tr_ca_midpoint),df %>% select(clade_I))
+```
+
+# Save the metadata file to dataset folder
+
+```{r}
+saveRDS(df,"./data/dataset/df.RDS") 
+```
