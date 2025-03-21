@@ -20,6 +20,12 @@ packages <- c("tidyverse","kableExtra","gontjesr","tableone")
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T))
 
+# Scripts
+source("./lib/common_functions.R")
+
+#Themes
+source("./lib/consistent_themes.R")
+
 # Print environment
 Sys.info()
 sessionInfo()
@@ -38,5 +44,6 @@ df <- readRDS("./data/dataset/df.RDS")
 
 ```{r}
 pheno_vars <- c("TMP_SMX_dich_num","gentamicin_dich_num","AMK_dich_num","CST_dich_num","blbli_dich_num","MVB_dich_num","IR_dich_num")
-gontjesr::convert_tableone_into_df(df,vars=pheno_vars,factorVars = pheno_vars) %>% favorite_kable
+convert_tableone_into_df(df,vars=pheno_vars,factorVars = pheno_vars) %>% favorite_kable
 ```
+

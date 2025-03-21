@@ -596,7 +596,7 @@ df &lt;- readRDS(&quot;./data/dataset/df.RDS&quot;)</code></pre>
 <li>Note: 1 indicates non-susceptibility</li>
 </ul>
 <pre class="r"><code>pheno_vars &lt;- c(&quot;TMP_SMX_dich_num&quot;,&quot;gentamicin_dich_num&quot;,&quot;AMK_dich_num&quot;,&quot;CST_dich_num&quot;,&quot;blbli_dich_num&quot;,&quot;MVB_dich_num&quot;,&quot;IR_dich_num&quot;)
-gontjesr::convert_tableone_into_df(df,vars=pheno_vars,factorVars = pheno_vars) %&gt;% favorite_kable</code></pre>
+convert_tableone_into_df(df,vars=pheno_vars,factorVars = pheno_vars) %&gt;% favorite_kable</code></pre>
 <table style="width:100%; color: black; margin-left: auto; margin-right: auto;" class="table table-striped table-hover table-condensed table-responsive">
 <thead>
 <tr>
