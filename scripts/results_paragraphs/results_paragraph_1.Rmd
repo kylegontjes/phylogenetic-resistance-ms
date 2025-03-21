@@ -1,0 +1,42 @@
+---
+title: "Results Section: Study population"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+
+# Environment
+
+```{r environment, echo=F, message=FALSE, include=F, results=F}
+#Packages
+packages <- c("tidyverse")   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T))
+
+# Print environment
+Sys.info()
+sessionInfo()
+```
+
+# Load data
+
+```{r}
+df <- readRDS("./data/dataset/df.RDS")
+```
+
+# Overall statistics on cohort
+
+```{r}
+paste0("Number of isolates: ",nrow(df))
+paste0("Number of unique patients: ",df$Patient_ID %>% unique %>% length)
+paste0("Number of LTACHs: ",df$LTACH %>% unique %>% length)
+```
+
+# For cohort statistics mentioned in this section, please see supplemental table 4 
