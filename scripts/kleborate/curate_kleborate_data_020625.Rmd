@@ -1,0 +1,74 @@
+---
+title: "curate_kleborate_data_020625"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+knitr::opts_knit$set(echo = TRUE,warning = FALSE, message = FALSE)  
+knitr::opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Combination_resistance/2025-01-31_kleborate/') 
+```
+
+# Environment
+```{r}
+packages <- c("tidyverse","ape")
+lapply(packages,library,character.only=T)
+
+source("./scripts/kleborate_curation_functions.R")
+```
+
+# Data
+## Load Tree & Dataframe
+```{r}
+tr <- read.tree("../2025-01-31_metadata_curation/results/tr.treefile")
+df <- readRDS("../2025-01-31_metadata_curation/results/df.RDS")
+```
+
+## Load kleborate
+```{r} 
+kleborate <- read.delim(file='./results/klebsiella_pneumo_complex_output.txt',sep='\t')
+kleborate<- kleborate %>% mutate(isolate_no = gsub("_contigs_l1000","",strain)) %>% `rownames<-`(.$isolate_no) 
+```
+
+# Subset to ST258 isolates
+```{r}
+# Clean ST Variable
+kleborate <- kleborate %>% mutate(ST = gsub("ST","",ST) %>% gsub("-1LV","*",.),
+                                  ST258 = ifelse(ST == "258",1,0))
+
+# Subset to ST258 isolates & Match order  variables
+kleborate <- subset(kleborate,isolate_no %in% tr$tip.label) %>% .[match(as.vector(tr$tip.label), .$isolate_no),] 
+```
+
+# Create presence/absence variables for kleborate porin mutations and b-lactamase genes
+```{r}
+## Porin mutations
+porin_mutations_mat <- get_presence_absence_matrix("Omp_mutations",kleborate) %>% as.data.frame %>% mutate(isolate_no = rownames(.))
+porin_mutations_mat$OmpK36_loop3_insertion <- ifelse(porin_mutations_mat$OmpK36GD==1   | porin_mutations_mat$OmpK36TD ==1,1,0) 
+
+# B-lactamase genes  
+bla_variables <- c("Bla_acquired","Bla_ESBL_acquired","Bla_Carb_acquired","Bla_chr")
+bla_mat<- lapply(bla_variables,FUN=function(x){get_presence_absence_matrix(x,kleborate)}) %>% do.call(cbind,.) %>% as.data.frame %>% mutate(isolate_no = rownames(.)) 
+
+## Edit similar b-lactamase gene calls
+bla_mat$`KPC-3` <- ifelse(bla_mat$`KPC-3`==1 | bla_mat$`KPC-3^`,1,0)
+bla_mat$`SHV-11` <- ifelse(bla_mat$`SHV-11`==1 | bla_mat$`SHV-11^`,1,0) 
+
+# Futher curate
+bla_genes <- colnames(bla_mat %>% select(-isolate_no)) %>% sort
+bla_genes_final <- subset(bla_genes,!bla_genes %in% c("KPC-3^","SHV-11^","SHV-12^"))
+  
+bla_mat <- bla_mat %>% select(any_of(bla_genes_final),"isolate_no")
+bla_mat$KPC_type <- ifelse(bla_mat$`KPC-2`==1,"KPC-2",ifelse(bla_mat$`KPC-3`==1,"KPC-3",ifelse(bla_mat$`KPC-5`==1,"KPC-5","No KPC")))
+bla_mat$KPC_present <-  ifelse(bla_mat$KPC_type !="No KPC",1,0) 
+```
+
+# Curate final dataset
+```{r}
+kleborate_mat <- left_join(kleborate,porin_mutations_mat) %>% left_join(bla_mat)
+kleborate_mat_curated <- kleborate_mat %>% select(isolate_no,species,ST,Omp_mutations,all_of(colnames(porin_mutations_mat %>% select(-isolate_no))),bla_variables,all_of(colnames(bla_mat %>% select(-isolate_no))))
+
+saveRDS(kleborate_mat_curated,"./results/kleborate_curated.RDS")
+```
