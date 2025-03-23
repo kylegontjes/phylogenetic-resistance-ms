@@ -1,0 +1,58 @@
+---
+title: "generate_asr_clustering"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+
+# Environment
+```{r environment, echo=T, message=T, include=T, results=T}
+#Packages
+packages <- c("tidyverse",'phylosuite','ape')   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T)) 
+# Load function
+source('./lib/consistent_themes.R')
+# Print
+Sys.info()
+sessionInfo() 
+``` 
+
+# Load data
+```{r}
+# Patient Metadata & Phylogeny
+df <- readRDS("./data/dataset/df.RDS")
+tr <- read.tree("./data/tree/tree.treefile")   
+df<- df %>% .[match(tr$tip.label,.$isolate_no),] 
+
+# ASR models
+pheno <- c("TMP_SMX","gentamicin","AMK","CST","blbli")
+for(i in pheno){
+  assign(paste0(i,"_asr"),readRDS(paste0("./data/asr_clustering/",i,"_asr.RDS")))
+}
+```
+
+# Generate clustering
+```{r}
+# reclassify text string for figure 
+reclassify_asr_resistance <- function(string){
+  ifelse(string %in% c("No Feature"),"Susceptible",
+         paste0("Non-Susceptible ",string))  
+}
+```
+
+```{r}   
+for(i in pheno){
+  pheno_dich=paste0(i,"_dich_num")
+  parent_child = get(paste0(i,"_asr")) %>% .[["parent_child_df"]]
+  asr_clustering <- asr_cluster_detection(df = df,tr = tr,tip_name_var = "isolate_no",patient_id="Patient_ID",pheno = pheno_dich, parent_child_df = parent_child,node_states = "joint",confidence = NULL,faux_clusters = "remove",remove_revertant = "yes",collapse_cluster = "yes")
+  asr_clustering$asr_cluster_renamed_ns <-  reclassify_asr_resistance(asr_clustering$asr_cluster_renamed)
+  saveRDS(asr_clustering,paste0("./data/asr_clustering/",i,"_asr_clustering.RDS")) 
+}
+```
