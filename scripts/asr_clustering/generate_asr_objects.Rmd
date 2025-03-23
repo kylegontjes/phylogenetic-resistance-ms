@@ -1,0 +1,46 @@
+---
+title: "generate_asr_clustering"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+
+# Environment
+```{r environment, echo=T, message=T, include=T, results=T}
+#Packages
+packages <- c("tidyverse",'phylosuite','phytools','ggtree')   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T))  
+# Print
+Sys.info()
+sessionInfo() 
+``` 
+ 
+```{r load data,include=T,echo=T,results=F,message=F}
+# Patient Metadata & Phylogeny
+df <- readRDS("./data/dataset/df.RDS")
+tr <- read.tree("./data/tree/tree.treefile")   
+df<- df %>% .[match(tr$tip.label,.$isolate_no),] 
+# Best model call
+asr_model_choices <- readRDS("./data/asr_clustering/asr_model_choices.RDS") 
+asr_best_models <- lapply(asr_model_choices,FUN=function(x){x[["best_model"]]})  %>% `names<-`(NULL) %>%unlist(use.names = T)  
+```
+
+
+# Run phylosuite
+```{r}
+pheno <- c("TMP_SMX","gentamicin","AMK","CST","blbli")
+for(i in pheno){
+  pheno_dich = paste0(i,"_dich_num")
+  best_model <- subset(asr_best_models,names(asr_best_models)==pheno_dich)
+  asr_model <- asr(df = df,tr = tr,tip_name_var = "isolate_no",pheno=pheno_dich,model = best_model,node_states = "joint", upper_bound=1e100, lower_bound=1e-9, conf_threshold=NULL) 
+  saveRDS(asr_model,paste0("./data/asr_clustering/",i,"_asr.RDS"))
+}
+```
