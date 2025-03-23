@@ -1,0 +1,11 @@
+Phenotype,Clade,No. NS,NS Frequency,Phylogenetic Frequency,Clustering Frequency,Phylogenetic Events,No. Singletons,No. Clusters,No. Cluster Isolates,"Cluster Size, Median (Range)"
+TMP-SMX,Clade I,40,29.85%,19.66%,21.74%,23,18,5,22,4 (2-8)
+TMP-SMX,Clade II,167,66.27%,9.33%,22.22%,18,14,4,153,2.5 (2-146)
+Gentamicin,Clade I,36,26.87%,13.41%,22.73%,22,17,5,19,3 (2-7)
+Gentamicin,Clade II,163,64.68%,6.29%,33.33%,9,6,3,157,8 (2-147)
+Amikacin,Clade I,79,58.96%,6.45%,36.36%,22,14,8,65,7 (2-25)
+Amikacin,Clade II,53,21.03%,9.21%,17.24%,29,24,5,29,4 (2-15)
+Colistin,Clade I,19,14.18%,8.92%,7.14%,14,13,1,6,6 (6-6)
+Colistin,Clade II,110,43.65%,6.47%,46.67%,15,8,7,102,4 (2-71)
+BL/BLI,Clade I,37,27.61%,15.6%,22.73%,22,17,5,20,2 (2-10)
+BL/BLI,Clade II,19,7.54%,7.17%,5.56%,18,17,1,2,2 (2-2)

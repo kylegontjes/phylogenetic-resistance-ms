@@ -1,0 +1,78 @@
+---
+title: 'Supplemental Table 5: Clade differences'
+output: html_document
+date: "`r Sys.Date()`"
+---
+ 
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+
+# Environment
+```{r environment, echo=T, message=T, include=T, results=T}
+#Packages
+packages <- c("tidyverse",'phylosuite','ape')   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T)) 
+# Load function
+source('./lib/consistent_themes.R')
+# Print
+Sys.info()
+sessionInfo() 
+``` 
+
+# Load data
+```{r load data,include=T,echo=T,results=F,message=F} 
+# Best model call
+pheno <- c("TMP_SMX","gentamicin","AMK","CST","blbli")
+df <- readRDS("./data/dataset/df.RDS")
+clustering_df <-readRDS("./data/asr_clustering/asr_clustering_df.RDS" )
+
+for(i in pheno){
+  assign(paste0(i,"_asr_clustering"),readRDS(paste0("./data/asr_clustering/",i,"_asr_clustering.RDS")))
+}
+```
+
+# Get clade data
+```{r}
+clade1 <- subset(df,clade_I=="Clade I") %>% .$isolate_no
+clade2 <- subset(df,clade_I!="Clade I") %>% .$isolate_no
+
+subset_analysis_to_clade <- function(phenotype,cladeI,clustering){
+  clustering_CI <- asr_cluster_analysis(clustering %>% subset(child_name %in% cladeI),remove_faux = "yes") %>% mutate(clade = "Clade I")
+  clustering_CII <- asr_cluster_analysis(clustering %>% subset(!child_name %in% cladeI),remove_faux = "yes") %>% mutate(clade = "Clade II")
+  rbind.data.frame(clustering_CI,clustering_CII )  %>% mutate(pheno = phenotype)
+}
+
+TMP_SMX <- subset_analysis_to_clade("TMP-SMX",clade1,TMP_SMX_asr_clustering)
+gent <- subset_analysis_to_clade("Gentamicin",clade1,gentamicin_asr_clustering)
+AMK <- subset_analysis_to_clade("Amikacin",clade1,AMK_asr_clustering)
+CST <- subset_analysis_to_clade("Colistin",clade1,CST_asr_clustering)
+blbli <- subset_analysis_to_clade("BL/BLI",clade1,blbli_asr_clustering) 
+
+cluster_stats_clades <- rbind(TMP_SMX,gent,AMK,CST,blbli)
+```
+
+# Make supplemental table 
+```{r}
+stable5 <- cluster_stats_clades %>% select(pheno,clade,present,feature_frequency,phylogenetic_frequency,clustering_frequency,phylogenetic_events,singletons,clusters,cluster_isolates,cluster_size_median,cluster_size_range)
+ 
+stable5$cluster_median_range <- paste0(stable5$cluster_size_median," (",stable5$cluster_size_range,")")
+stable5 <- stable5%>% select(-cluster_size_median,-cluster_size_range) 
+
+stable5 <- stable5 %>% `colnames<-`(c("Phenotype","Clade","No. NS","NS Frequency","Phylogenetic Frequency","Clustering Frequency","Phylogenetic Events","No. Singletons","No. Clusters","No. Cluster Isolates","Cluster Size, Median (Range)"))
+
+stable5$`NS Frequency` <- paste0(stable5$`NS Frequency`,"%")
+stable5$`Phylogenetic Frequency` <- paste0(stable5$`Phylogenetic Frequency`,"%")
+stable5$`Clustering Frequency` <- paste0(stable5$`Clustering Frequency`,"%")
+```
+
+# Save results
+```{r}
+stable5 %>% favorite_kable
+saveRDS(stable5,file = "./tables/stable5.RDS")
+write_csv(stable5,file = "./tables/stable5.csv")
+```
