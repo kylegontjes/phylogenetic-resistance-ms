@@ -1,0 +1,50 @@
+---
+title: "identify_best_model"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+
+# Environment
+```{r load env,include=T,echo=T,results=T,message=T}
+#Packages
+packages <- c("tidyverse","phylosuite",'ape')   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T))
+# Print
+Sys.info()
+sessionInfo()
+```
+
+# Load data
+```{r load data,include=T,echo=T,results=F,message=F}
+# Patient Metadata & Phylogeny
+df <- readRDS("./data/dataset/df.RDS")
+tr <- read.tree("./data/tree/tree.treefile")   
+df<- df %>% .[match(tr$tip.label,.$isolate_no),] 
+```
+
+# Determine best model
+```{r best model testing,include=T,echo=T,results=T,message=T}
+pheno <- c("TMP_SMX","gentamicin","AMK","CST","blbli") 
+pheno_dich <- paste0(pheno,"_dich_num")
+asr_model_choices <- lapply(pheno_dich,function(x){
+  out <- phylosuite::find_best_asr_model(df,tr,tip_name_var = "isolate_no",pheno = x,node_states = "joint")  
+  out$model_options$pheno  <-  x
+  names(out$best_model) <- x
+  return(out)
+}) 
+
+names(asr_model_choices) <- pheno
+asr_model_choices
+
+# Save
+saveRDS(asr_model_choices,"./data/asr_clustering/asr_model_choices.RDS") 
+```

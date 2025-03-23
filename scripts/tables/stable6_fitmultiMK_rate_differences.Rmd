@@ -1,0 +1,61 @@
+---
+title: "Supplemental Table 6: Evaluation of single-regime and clade-specific evolutionary rate model using fitmultiMK"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/') 
+```
+
+# Environment
+```{r environment, echo=T, message=T, include=T, results=F}
+#Packages
+packages <- c("tidyverse",'phylosuite','kableExtra','gridExtra','readr')   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T)) 
+# Load function
+source('./lib/consistent_themes.R')
+# Print
+Sys.info()
+sessionInfo() 
+``` 
+
+# Create table
+```{r}
+rate_differences_table <- readRDS('./data/fitmultiMk_rate_differences/fitmultiMk_rate_differences_table.RDS')
+
+rate_differences_table_formatted <- rate_differences_table %>% select(phenotype,model) %>% cbind(.,rate_differences_table %>% select(R1,R2,log_likelihood,AIC,CI_R1,CI_R2,CII_R1,CII_R2,multi_regime_log_likelihood,multi_regime_AIC,LRT_chisq)  %>% mutate_all(as.numeric) %>% round(.,2)) %>% cbind(.,rate_differences_table %>% select(LRT_pvalue) %>% round(.,3))  
+
+rate_differences_table_formatted$phenotype <- recode(rate_differences_table_formatted$phenotype,'AMK_dich_num' = 'Amikacin','blbli_dich_num'='BL/BLI','CST_dich_num'='Colistin','TMP_SMX_dich_num'='TMP-SMX','gentamicin_dich_num'='Gentamicin')     
+rate_differences_table_formatted$phenotype <- factor(rate_differences_table_formatted$phenotype,levels = c("TMP-SMX","Gentamicin","Amikacin","Colistin","BL/BLI"))
+rate_differences_table_formatted <- rate_differences_table_formatted %>% arrange(phenotype)  
+colnames(rate_differences_table_formatted) <- c("Phenotype",
+"Model",
+"Rate 1",
+"Rate 2",
+"Single-regimeLog Likelihood",
+"Single-regime AIC",
+"Clade I Rate 1",
+"Clade I Rate 2",
+"Clade II Rate 1",
+"Clade II Rate 2",
+"Multi-regime Log Likelihood",
+"Multi-regime AIC",
+"X2 value",
+"p-value"
+
+)
+favorite_kable(rate_differences_table_formatted)
+```
+
+# Save table
+```{r}
+saveRDS(rate_differences_table_formatted,"./tables/stable6_fitmultiMK_rate_differences.RDS")
+write_csv(rate_differences_table_formatted,"./tables/stable6_fitmultiMK_rate_differences.csv")
+```

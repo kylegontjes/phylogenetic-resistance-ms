@@ -1,0 +1,56 @@
+---
+title: "stable2_best_model"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+
+# Environment
+```{r environment, echo=T, message=T, include=T, results=T}
+#Packages
+packages <- c("tidyverse",'phylosuite','kableExtra','gridExtra','readr')   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T)) 
+# Load function
+source('./lib/consistent_themes.R')
+# Print
+Sys.info()
+sessionInfo() 
+``` 
+
+# Load data
+```{r load data}
+asr_model_choices <- readRDS("./data/asr_clustering/asr_model_choices.RDS") 
+```
+
+# Create table
+```{r}
+model_table <- lapply(asr_model_choices,FUN=function(x){
+  x[["model_options"]]
+}) %>% do.call(rbind,.) 
+
+stable2 <- model_table %>%  select(pheno,model,np,rate1,rate2,loglik,AIC,AICc) %>% `colnames<-`(c("Phenotype","Model","No. Parameters","Rate 1","Rate 2","Log Likelihood","AIC","Corrected AIC")) %>% `rownames<-`(NULL) 
+stable2$Phenotype <- recode(stable2$Phenotype,'TMP_SMX_dich_num'='TMP-SMX',
+                             "gentamicin_dich_num"="Gentamicin",
+                             'AMK_dich_num'='Amikacin',
+                             'CST_dich_num'='Colistin',
+                             'blbli_dich_num'="BL/BLI")  
+stable2$`Log Likelihood` <- round(stable2$`Log Likelihood` ,2)
+stable2$`AIC` <- round(stable2$`AIC` ,2)
+stable2$`Corrected AIC` <- round(stable2$`Corrected AIC`,2)
+
+stable2 %>% favorite_kable 
+```
+
+# Save table
+```{r}
+saveRDS(stable2,"./tables/stable2.RDS")
+write_csv(stable2,"./tables/stable2.csv")
+``` 

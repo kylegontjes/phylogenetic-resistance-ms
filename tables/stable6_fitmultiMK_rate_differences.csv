@@ -1,4 +1,4 @@
-Phenotype,Model,Rate 1,Rate 2,Log Likelihood,AIC,Clade I Rate 1,Clade I Rate 2,Clade II Rate 1,Clade II Rate 2,Multi-regime Log Likelihood,Multi-regime AIC,X2 value,p-value
+Phenotype,Model,Rate 1,Rate 2,Single-regimeLog Likelihood,Single-regime AIC,Clade I Rate 1,Clade I Rate 2,Clade II Rate 1,Clade II Rate 2,Multi-regime Log Likelihood,Multi-regime AIC,X2 value,p-value
 TMP-SMX,ER,12300.44,NA,-186.86,375.71,12935.96,NA,12016.96,NA,-186.84,377.67,0.04,0.843
 TMP-SMX,ARD,14277.61,9773.99,-185.75,375.49,13558.78,18657.04,18620.48,9281,-184.26,376.51,2.98,0.225
 Gentamicin,ER,10271.16,NA,-162.08,326.16,15179.17,NA,8494.82,NA,-160.89,325.77,2.39,0.122
