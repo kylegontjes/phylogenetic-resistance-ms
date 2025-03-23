@@ -1,0 +1,162 @@
+---
+title: "fitmultiMK_analyses"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='/nfs/turbo/umms-esnitkin/Project_Penn_KPC/Analysis/Phyloaware/phylogenetic-resistance-ms')
+```
+
+# Environment
+```{r environment, echo=T, message=T, include=T, results=T}
+#Packages
+library(phytools) 
+library(pbmcapply) 
+library(tidyverse)
+library(ggtree) 
+set.seed(45) 
+Sys.info()
+sessionInfo() 
+```
+
+# Load data
+```{r} 
+# Standard data
+df <- readRDS("./data/dataset/df.RDS")
+tr <- read.tree("./data/tree/tree.treefile")
+```
+
+```{r}
+pheno <- c("TMP_SMX","gentamicin","AMK","CST","blbli")  %>% paste0(.,"_dich_num")
+```
+
+# Create feature
+```{r}
+feature_vectors <- lapply(pheno,FUN=function(x){
+ factor(setNames(df[,x],df[,"isolate_no"]),levels = c(0,1))
+}) %>% `names<-`(pheno)
+
+rate_matrices <- lapply(feature_vectors,FUN=function(x){
+  k<-length(levels(x))
+  ordered<-matrix(0,k,k,dimnames=list(levels(x),
+                                    levels(x)))
+for(i in 1:(k-1)){
+  ordered[i,i+1]<-1
+  ordered[i,i-1]<-2
+}
+ordered[k,k-1]<-2
+  return(ordered)
+}) %>% `names<-`(pheno)
+
+feature_matrices <- lapply(feature_vectors,FUN=function(x){
+  to.matrix(x,levels(x))  
+})  %>% `names<-`(pheno)
+```
+
+# Multi model 
+## Paint the clades (which is where differnces in rates can occur)
+```{r }
+clade_I <- subset(df,clade_I=="Clade I") %>% .$isolate_no
+clade_II <- subset(df,clade_I!="Clade I") %>% .$isolate_no
+CI <- ggtree::MRCA(tr,clade_I)
+CII <- ggtree::MRCA(tr,clade_II)
+painted <- paintSubTree(tr,node = CI,state="1",anc="0")
+painted <- paintSubTree(painted,node = CII,state="0",anc="1")
+plotSimmap(painted) 
+```
+
+# Perform simulation with permitting multiple rates
+## ARD
+```{r ARD multi}
+fits_multi_ARD <- lapply(pheno,FUN=function(x){
+  feature_matrix <- feature_matrices[[x]]
+  model_mat = rate_matrices[[x]]
+  tr=tr
+  painted=painted
+ fits_multi<- pbmclapply(1:10,FUN=function(x){
+  phytools::fitmultiMk(painted,feature_matrix,
+                       model=model_mat,rand_start=TRUE)
+  } , mc.cores = 10)
+
+logL_multi<-sapply(fits_multi,logLik)
+  
+fit.multi<-fits_multi[[which(logL_multi==max(logL_multi))[1]]]
+print(paste0(x," is done"))
+  return(fit.multi)
+}) %>% `names<-`(pheno)
+saveRDS(fits_multi_ARD,'./data/fitmultiMk_rate_differences/fitmultiMk_clade_regimes_ARD.RDS')
+```
+## ER
+```{r ER multi}
+fits_multi_ER <- lapply(pheno,FUN=function(x){
+  feature_matrix <- feature_matrices[[x]] 
+  tr=tr
+  painted=painted
+ fits_multi<- pbmclapply(1:10,FUN=function(x){
+  phytools::fitmultiMk(painted,feature_matrix,
+                       model='ER',rand_start=TRUE)
+  } , mc.cores = 10)
+
+logL_multi<-sapply(fits_multi,logLik)
+  
+fit.multi<-fits_multi[[which(logL_multi==max(logL_multi))[1]]]
+print(paste0(x," is done"))
+  return(fit.multi)
+}) %>% `names<-`(pheno)
+saveRDS(fits_multi_ER,'./data/fitmultiMk_rate_differences/fitmultiMk_clade_regimes_ER.RDS')
+```
+
+# Testing with one regime
+## ARD
+```{r ARD single} 
+root=tr$edge[,1] %>% min()
+painted_one <- paintSubTree(tr,node = root,state="1",anc="0")
+plotSimmap( painted_one) 
+
+fits_multi_one_ARD <- lapply(pheno,FUN=function(x){
+  feature_matrix <- feature_matrices[[x]]
+  model_mat = rate_matrices[[x]]
+  tr=tr
+  painted_one=painted_one
+  fits_multi<- pbmcapply::pbmclapply(1:10,FUN=function(x){
+  phytools::fitmultiMk(painted_one,feature_matrix,
+                       model=model_mat,rand_start=TRUE)
+  } , mc.cores = 10)
+
+logL_multi<-sapply(fits_multi,logLik)
+  
+fit.multi<-fits_multi[[which(logL_multi==max(logL_multi))[1]]]
+
+print(paste0(x," is done"))
+  return(fit.multi)
+}) %>% `names<-`(pheno)
+
+saveRDS(fits_multi_one_ARD,'./data/fitmultiMk_rate_differences/fitmultiMk_uniform_regimes_ARD.RDS')
+```
+
+## ER
+```{r ER single}  
+fits_multi_one_ER <- lapply(pheno,FUN=function(x){
+  feature_matrix <- feature_matrices[[x]] 
+  tr=tr
+  painted_one=painted_one
+  fits_multi<- pbmcapply::pbmclapply(1:10,FUN=function(x){
+  phytools::fitmultiMk(painted_one,feature_matrix,
+                       model='ER',rand_start=TRUE)
+  } , mc.cores = 10)
+
+logL_multi<-sapply(fits_multi,logLik)
+  
+fit.multi<-fits_multi[[which(logL_multi==max(logL_multi))[1]]]
+
+print(paste0(x," is done"))
+  return(fit.multi)
+}) %>% `names<-`(pheno)
+
+saveRDS(fits_multi_one_ER,'./data/fitmultiMk_rate_differences/fitmultiMk_uniform_regimes_ER.RDS')
+```

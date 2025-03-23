@@ -53,7 +53,7 @@ metadata <- metadata %>% subset(isolate_no != "PCMP_H473")
 paste0("Number of isolates in metadata from California with correct SENSITITRE data: ",nrow(metadata))
 ```
 
-## Update length of stay data 
+## Update length of stay data
 
 ```{r}
 # Length of stay
@@ -193,7 +193,7 @@ SENSITITRE$blbli_dich <- ifelse(SENSITITRE$MVB_dich_num==1 | SENSITITRE$IR_dich_
 SENSITITRE$blbli_dich_num <- ifelse(SENSITITRE$MVB_dich_num==1 | SENSITITRE$IR_dich_num==1,1,0)
 ```
 
-## Curate lab-abstracted phenotypes  
+## Curate lab-abstracted phenotypes
 
 ```{r}
 # Gentamicin Recode
@@ -260,7 +260,7 @@ metadata$gentamicin_dich <- ifelse(metadata$gentamicin_cat == "Susceptible","Sus
 metadata$gentamicin_dich_num <- ifelse(metadata$gentamicin_cat == "Susceptible",0,1)
 ```
 
-## Curate sequence type data 
+## Curate sequence type data
 
 Source: Kleborate version 3.1.3
 
