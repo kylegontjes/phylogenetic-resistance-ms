@@ -584,7 +584,7 @@ display: none;
 <div id="environment" class="section level1">
 <h1>Environment</h1>
 <pre class="r"><code>#Packages
-packages &lt;- c(&quot;tidyverse&quot;,&#39;phylosuite&#39;,&#39;kableExtra&#39;,&#39;gridExtra&#39;,&#39;readr&#39;)   
+packages &lt;- c(&quot;tidyverse&quot;,&#39;phylosuite&#39;)   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) </code></pre>
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
@@ -596,26 +596,23 @@ invisible(lapply(packages,library,character.only=T,quietly=T)) </code></pre>
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code># Load function
+source(&#39;./lib/consistent_themes.R&#39;)</code></pre>
+<pre><code>
+Attaching package: &#39;gridExtra&#39;
+
+The following object is masked from &#39;package:dplyr&#39;:
+
+    combine
+
 
 Attaching package: &#39;kableExtra&#39;
 
-
 The following object is masked from &#39;package:dplyr&#39;:
 
-    group_rows
-
-
-
-Attaching package: &#39;gridExtra&#39;
-
-
-The following object is masked from &#39;package:dplyr&#39;:
-
-    combine</code></pre>
-<pre class="r"><code># Load function
-source(&#39;./lib/consistent_themes.R&#39;)
-# Print
+    group_rows</code></pre>
+<pre class="r"><code># Print
 Sys.info()</code></pre>
 <pre><code>                                                                                           sysname 
                                                                                           &quot;Darwin&quot; 
@@ -652,7 +649,7 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] gridExtra_2.3    kableExtra_1.4.0 phylosuite_0.1.0 lubridate_1.9.4 
+ [1] kableExtra_1.4.0 gridExtra_2.3    phylosuite_0.1.0 lubridate_1.9.4 
  [5] forcats_1.0.0    stringr_1.5.1    dplyr_1.1.4      purrr_1.0.4     
  [9] readr_2.1.5      tidyr_1.3.1      tibble_3.2.1     ggplot2_3.5.1   
 [13] tidyverse_2.0.0  knitr_1.50      

@@ -15,7 +15,7 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=T, message=T, include=T, results=T}
 #Packages
-packages <- c("tidyverse",'phylosuite','kableExtra','gridExtra','readr')   
+packages <- c("tidyverse",'phylosuite')   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) 
 # Load function
