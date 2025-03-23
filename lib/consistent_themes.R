@@ -1,6 +1,10 @@
 # Consistent themes
 
+## Packages
 library(gridExtra)
+library(kableExtra)
+library(knitr)
+
 # Manuscript Background theme
 theme_bw_me <- theme(panel.background = element_rect(fill = "white",colour = NA), panel.grid = element_blank(),
                      strip.background = element_rect(fill = "white",colour = "black"),
