@@ -1,0 +1,123 @@
+---
+title: "curate_regression_dataset"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+
+# Environment
+```{r environment, echo=T, message=T, include=T, results=T}
+#Packages
+packages <- c("tidyverse")   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T)) 
+# Print
+Sys.info()
+sessionInfo() 
+``` 
+
+# Load data
+```{r load data,include=T,echo=T,results=F,message=F}
+# Patient Metadata & Phylogeny
+df <- readRDS("~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/data/dataset/df.RDS")  
+# Rownames
+rownames(df) <- df$isolate_no 
+```
+ 
+# Variable curation 
+```{r}
+rownames(df) <- df$isolate_no 
+# Demographics 
+dem_vars <- c("age","sex","LOSbeforeCx")
+df$sex.female <- ifelse(df$sex=="male",0,1)   
+# LOS
+LOS_quantiles <- quantile(df$LOSbeforeCx)  
+
+# Device variables
+device_vars <- c("trach","central_line","foley","gastro")
+df$num_device <-df %>% select(trach,central_line,foley,gastro) %>% {ifelse(.=="yes",1,0)} %>% rowSums() 
+df$any_device <-ifelse(df$num_device>0,"yes","no") 
+
+# Comorbidities
+comorb_vars <- c("AKI","CKD","VDRF","underweight","CHF","decub","lung_dz","brain_injury","malignancy","obese") 
+
+df$third_gen_ceph_1d <- ifelse(df %>% select(ceftazidime_1d,ctx_1d) %>% rowSums(.)>0,1,0)
+df$fourth_gen_ceph_1d <- ifelse(df %>% select(cefepime_1d,ceftaroline_1d) %>% rowSums(.)>0,1,0)
+# antibiotic exposures
+abx_vars_of_interest <- c(
+  #Carbapenem :imipenem,meropenem,erta
+  "carbapenem", 
+  #aminoglycoside: amikacin,gent,tobra
+  "amikacin","gent","tobra",
+  # Monobactam
+  "aztreonam",
+  # sulfonamides
+  "bactrim",
+  # 3rd/4th/5th 
+    # 3rd Gen Cephalosporin: ceftazidime, ctx
+    # 4th & 5th Gen Cephalosporin:  cefepime,ceftaroline
+  "third_plus_ceph",
+  # Floroquin: cipro,levo
+  "FQ",
+  # Lipopeptide
+  "dapto",
+  # nitroimidazole
+  "flagyl",
+  # oxazolidinones,
+  "linezolid",
+  # LPS
+  "poly_colistin",
+  # Glyc
+  "tigecycline",
+  # Glicopeptide
+  "vanco",
+  # Zosyn
+  "zosyn") %>% paste0(.,"_1d")
+  
+abx_vars_of_interest_sorted <- c("vanco","carbapenem","third_plus_ceph",'amikacin','gent','tobra',"flagyl","FQ",'linezolid',"tigecycline","zosyn","poly_colistin","dapto","aztreonam","bactrim")%>% paste0(.,"_1d") 
+```
+
+# Factorize and reformat variables
+```{r} 
+factor_vars <- c("sex.female",device_vars,"num_device","any_device",comorb_vars,abx_vars_of_interest_sorted)
+non_factor_vars <- c("LOSbeforeCx","age")
+                  
+factor_vars_df <- df %>% select(factor_vars)
+
+# convert "yes"  "no" and 10
+factor_vars_df <- apply(factor_vars_df,2,FUN=function(x){
+  ifelse(x=="yes",1,ifelse(x=="no",0,x)) %>% as.numeric
+})
+
+factor_vars_df <- as.data.frame(factor_vars_df)
+rownames(factor_vars_df) <- df$isolate_no
+
+# List of resistance columns to convert to factor
+pheno <- c("TMP_SMX","gentamicin","AMK","CST","blbli")  %>% paste0(.,"_dich_num")
+
+# Convert specified columns to factor
+resistance <- df %>% select(pheno) %>% mutate_all(as.factor)  %>% mutate(isolate_no = rownames(.))
+
+df_fin <- left_join(resistance, factor_vars_df %>% mutate(isolate_no = rownames(.))) %>% left_join(.,df %>% select(isolate_no,non_factor_vars,source,Patient_ID,Cx_date,clade_I))
+``` 
+
+# Eligible variables were included to a variable list and regression dataset saved, too
+```{r} 
+paste0("Eligible variables: ")
+other_vars <-  c("age","LOSbeforeCx","sex.female",device_vars,comorb_vars)
+variables <- c(other_vars,abx_vars_of_interest) 
+
+df_final <- df_fin %>% select(variables,isolate_no,source,clade_I,Patient_ID,Cx_date,pheno)
+
+# Save
+saveRDS(df_final,"~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/data/regression/regression_df.RDS")
+writeLines(variables,"~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/data/regression/eligible_variables.txt")
+```
+
