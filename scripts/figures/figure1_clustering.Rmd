@@ -65,10 +65,10 @@ names(clusters_col) <- clusters_name
 ## Clade scale
 clade_scale <- scale_fill_manual(breaks =c("Clade I","Clade II"),values=c("red","blue" ),name="Clade", guide = guide_legend(ncol=1, title.position = "top", label.position = "right",order=1))
 ## Non-susceptible 
-NS_scale <- scale_fill_manual(breaks = c("Susceptible","Non-Susceptible"),values=c("white","black"),labels = c("Susceptible","Non-susceptible (NS)"),name="Resistance Profile",guide = guide_legend(title.position = "top", label.position = "right",nrow=2),drop = FALSE )
+NS_scale <- scale_fill_manual(breaks = c("Susceptible","Non-Susceptible"),values=c("white","black"),labels = c("Susceptible","Non-susceptible"),name="Resistance Profile",guide = guide_legend(title.position = "top", label.position = "right",nrow=2),drop = FALSE )
 
 ## cluster_scale
-cluster_scale <- scale_fill_manual(breaks =c("Susceptible","Non-Susceptible Singleton",names(clusters_col)),values=c("Susceptible" = "white","Non-Susceptible Singleton" = "red",clusters_col),labels=c("Susceptible","NS Singleton",gsub("Non-Susceptible","NS",clusters_name)),name="Phylogenetics of Resistance", guide = guide_legend(ncol=4, title.position = "top", label.position = "right"))
+cluster_scale <- scale_fill_manual(breaks =c("Susceptible","Non-Susceptible Singleton",names(clusters_col)),values=c("Susceptible" = "white","Non-Susceptible Singleton" = "red",clusters_col),labels=c("Susceptible","NS Singleton",gsub("Non-Susceptible","NS",clusters_name)),name="Phylogenetics of Non-susceptibility (NS)", guide = guide_legend(ncol=4, title.position = "top", label.position = "right"))
 ```
 
 ```{r} 
