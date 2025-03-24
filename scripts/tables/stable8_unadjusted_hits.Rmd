@@ -96,19 +96,19 @@ print_final_model(phyloaware_regression_obj$blbli$univariable)
 # Candidate variables
 ```{r,results='asis'}
 paste0("Bactrim")
-TMP_SMX_candidate_tbl <- print_final_model_sig(phyloaware_regression_obj$TMP_SMX$univariable,0.25)  %>% cbind_na
+TMP_SMX_candidate_tbl <- print_final_model_sig(phyloaware_regression_obj$TMP_SMX$univariable,0.2)  %>% cbind_na
 
 paste0("Gentamicin")
-gentamicin_candidate_tbl <- print_final_model_sig(phyloaware_regression_obj$gentamicin$univariable,0.25)  %>% cbind_na
+gentamicin_candidate_tbl <- print_final_model_sig(phyloaware_regression_obj$gentamicin$univariable,0.2)  %>% cbind_na
 
 paste0("AMK")
-AMK_candidate_tbl <- print_final_model_sig(phyloaware_regression_obj$AMK$univariable,0.25)  %>% cbind_na
+AMK_candidate_tbl <- print_final_model_sig(phyloaware_regression_obj$AMK$univariable,0.2)  %>% cbind_na
 
 paste0("CST")
-CST_candidate_tbl <- print_final_model_sig(phyloaware_regression_obj$CST$univariable,0.25)   %>% cbind_na
+CST_candidate_tbl <- print_final_model_sig(phyloaware_regression_obj$CST$univariable,0.2)   %>% cbind_na
 
 paste0("blbli")
-blbli_candidate_tbl <- print_final_model_sig(phyloaware_regression_obj$blbli$univariable,0.25)  %>% cbind_na
+blbli_candidate_tbl <- print_final_model_sig(phyloaware_regression_obj$blbli$univariable,0.2)  %>% cbind_na
 ```
 
 # Size of events per model

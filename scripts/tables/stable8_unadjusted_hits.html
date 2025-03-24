@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-03-23" />
+<meta name="date" content="2025-03-24" />
 
 <title>stable8_unadjusted_hits</title>
 
@@ -576,7 +576,7 @@ display: none;
 
 <h1 class="title toc-ignore">stable8_unadjusted_hits</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-03-23</h4>
+<h4 class="date">2025-03-24</h4>
 
 </div>
 
@@ -626,7 +626,7 @@ Sys.info()</code></pre>
                                                                                            version 
 &quot;Darwin Kernel Version 24.3.0: Thu Jan  2 20:22:00 PST 2025; root:xnu-11215.81.4~3/RELEASE_X86_64&quot; 
                                                                                           nodename 
-                                                                                  &quot;msla0572.local&quot; 
+                                                                   &quot;macbookpro.wifi.med.umich.edu&quot; 
                                                                                            machine 
                                                                                           &quot;x86_64&quot; 
                                                                                              login 
@@ -3319,23 +3319,23 @@ cbind_na &lt;- function(df_list) {
 <h1>Candidate variables</h1>
 <pre class="r"><code>paste0(&quot;Bactrim&quot;)</code></pre>
 <p>[1] “Bactrim”</p>
-<pre class="r"><code>TMP_SMX_candidate_tbl &lt;- print_final_model_sig(phyloaware_regression_obj$TMP_SMX$univariable,0.25)  %&gt;% cbind_na
+<pre class="r"><code>TMP_SMX_candidate_tbl &lt;- print_final_model_sig(phyloaware_regression_obj$TMP_SMX$univariable,0.2)  %&gt;% cbind_na
 
 paste0(&quot;Gentamicin&quot;)</code></pre>
 <p>[1] “Gentamicin”</p>
-<pre class="r"><code>gentamicin_candidate_tbl &lt;- print_final_model_sig(phyloaware_regression_obj$gentamicin$univariable,0.25)  %&gt;% cbind_na
+<pre class="r"><code>gentamicin_candidate_tbl &lt;- print_final_model_sig(phyloaware_regression_obj$gentamicin$univariable,0.2)  %&gt;% cbind_na
 
 paste0(&quot;AMK&quot;)</code></pre>
 <p>[1] “AMK”</p>
-<pre class="r"><code>AMK_candidate_tbl &lt;- print_final_model_sig(phyloaware_regression_obj$AMK$univariable,0.25)  %&gt;% cbind_na
+<pre class="r"><code>AMK_candidate_tbl &lt;- print_final_model_sig(phyloaware_regression_obj$AMK$univariable,0.2)  %&gt;% cbind_na
 
 paste0(&quot;CST&quot;)</code></pre>
 <p>[1] “CST”</p>
-<pre class="r"><code>CST_candidate_tbl &lt;- print_final_model_sig(phyloaware_regression_obj$CST$univariable,0.25)   %&gt;% cbind_na
+<pre class="r"><code>CST_candidate_tbl &lt;- print_final_model_sig(phyloaware_regression_obj$CST$univariable,0.2)   %&gt;% cbind_na
 
 paste0(&quot;blbli&quot;)</code></pre>
 <p>[1] “blbli”</p>
-<pre class="r"><code>blbli_candidate_tbl &lt;- print_final_model_sig(phyloaware_regression_obj$blbli$univariable,0.25)  %&gt;% cbind_na</code></pre>
+<pre class="r"><code>blbli_candidate_tbl &lt;- print_final_model_sig(phyloaware_regression_obj$blbli$univariable,0.2)  %&gt;% cbind_na</code></pre>
 </div>
 <div id="size-of-events-per-model" class="section level1">
 <h1>Size of events per model</h1>
@@ -3537,7 +3537,7 @@ AKI
 0.62 (0.39-0.99)
 </td>
 <td style="text-align:left;">
-0.044
+0.0440
 </td>
 </tr>
 <tr>
@@ -3566,7 +3566,7 @@ gent_1d
 0.12 (0.01-0.66)
 </td>
 <td style="text-align:left;">
-0.046
+0.0460
 </td>
 </tr>
 <tr>
@@ -3580,13 +3580,13 @@ AKI
 0.0603
 </td>
 <td style="text-align:left;">
-decub
+NA
 </td>
 <td style="text-align:left;">
-1.82 (0.65-4.64)
+NA
 </td>
 <td style="text-align:left;">
-0.2264
+NA
 </td>
 <td style="text-align:left;">
 gastro
@@ -3624,7 +3624,7 @@ poly_colistin_1d
 1.92 (0.94-4.06)
 </td>
 <td style="text-align:left;">
-0.078
+0.0780
 </td>
 </tr>
 <tr>
@@ -3832,64 +3832,6 @@ underweight
 </tr>
 <tr>
 <td style="text-align:left;">
-FQ_1d
-</td>
-<td style="text-align:left;">
-0.71 (0.4-1.25)
-</td>
-<td style="text-align:left;">
-0.2298
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-sex.female
-</td>
-<td style="text-align:left;">
-0.76 (0.49-1.19)
-</td>
-<td style="text-align:left;">
-0.2382
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 gentamicin
 </td>
 <td style="text-align:left;">
@@ -4036,7 +3978,7 @@ third_plus_ceph_1d
 0.59 (0.35-0.98)
 </td>
 <td style="text-align:left;">
-0.042
+0.0420
 </td>
 <td style="text-align:left;">
 foley
@@ -4170,7 +4112,7 @@ third_plus_ceph_1d
 0.66 (0.39-1.11)
 </td>
 <td style="text-align:left;">
-0.1160
+0.116
 </td>
 </tr>
 <tr>
@@ -4280,17 +4222,6 @@ NA
 NA
 </td>
 <td style="text-align:left;">
-sex.female
-</td>
-<td style="text-align:left;">
-1.34 (0.85-2.13)
-</td>
-<td style="text-align:left;">
-0.2124
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 NA
 </td>
 <td style="text-align:left;">
@@ -4298,24 +4229,6 @@ NA
 </td>
 <td style="text-align:left;">
 NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-linezolid_1d
-</td>
-<td style="text-align:left;">
-0.66 (0.34-1.26)
-</td>
-<td style="text-align:left;">
-0.2125
 </td>
 </tr>
 <tr>
@@ -4388,7 +4301,7 @@ gent_1d
 6.33 (1.13-35.63)
 </td>
 <td style="text-align:left;">
-0.0280
+0.028
 </td>
 <td style="text-align:left;">
 gent_1d
@@ -4527,13 +4440,13 @@ tigecycline_1d
 0.1764
 </td>
 <td style="text-align:left;">
-central_line
+NA
 </td>
 <td style="text-align:left;">
-0.62 (0.29-1.29)
+NA
 </td>
 <td style="text-align:left;">
-0.2002
+NA
 </td>
 <td style="text-align:left;">
 malignancy
@@ -4542,27 +4455,27 @@ malignancy
 1.73 (0.79-3.7)
 </td>
 <td style="text-align:left;">
-0.159
+0.1590
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-obese
+NA
 </td>
 <td style="text-align:left;">
-0.48 (0.13-1.4)
+NA
 </td>
 <td style="text-align:left;">
-0.2110
+NA
 </td>
 <td style="text-align:left;">
-lung_dz
+NA
 </td>
 <td style="text-align:left;">
-0.45 (0.1-1.36)
+NA
 </td>
 <td style="text-align:left;">
-0.2094
+NA
 </td>
 <td style="text-align:left;">
 CHF
@@ -4572,64 +4485,6 @@ CHF
 </td>
 <td style="text-align:left;">
 0.1895
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CHF
-</td>
-<td style="text-align:left;">
-1.41 (0.8-2.44)
-</td>
-<td style="text-align:left;">
-0.2283
-</td>
-<td style="text-align:left;">
-zosyn_1d
-</td>
-<td style="text-align:left;">
-0.4 (0.06-1.42)
-</td>
-<td style="text-align:left;">
-0.2228
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-third_plus_ceph_1d
-</td>
-<td style="text-align:left;">
-1.37 (0.81-2.29)
-</td>
-<td style="text-align:left;">
-0.2319
-</td>
-<td style="text-align:left;">
-FQ_1d
-</td>
-<td style="text-align:left;">
-0.47 (0.11-1.41)
-</td>
-<td style="text-align:left;">
-0.2308
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
 </td>
 </tr>
 <tr>
@@ -4928,13 +4783,13 @@ bactrim_1d
 0.1915
 </td>
 <td style="text-align:left;">
-sex.female
+NA
 </td>
 <td style="text-align:left;">
-0.56 (0.2-1.4)
+NA
 </td>
 <td style="text-align:left;">
-0.2279
+NA
 </td>
 <td style="text-align:left;">
 lung_dz
@@ -4948,22 +4803,22 @@ lung_dz
 </tr>
 <tr>
 <td style="text-align:left;">
-trach
+NA
 </td>
 <td style="text-align:left;">
-1.38 (0.83-2.36)
+NA
 </td>
 <td style="text-align:left;">
-0.2208
+NA
 </td>
 <td style="text-align:left;">
-trach
+NA
 </td>
 <td style="text-align:left;">
-1.99 (0.7-7.11)
+NA
 </td>
 <td style="text-align:left;">
-0.2338
+NA
 </td>
 <td style="text-align:left;">
 malignancy
@@ -4977,13 +4832,13 @@ malignancy
 </tr>
 <tr>
 <td style="text-align:left;">
-AKI
+NA
 </td>
 <td style="text-align:left;">
-0.75 (0.47-1.2)
+NA
 </td>
 <td style="text-align:left;">
-0.2302
+NA
 </td>
 <td style="text-align:left;">
 NA
@@ -5251,46 +5106,6 @@ CHF
 0.1469
 </td>
 <td style="text-align:left;">
-linezolid_1d
-</td>
-<td style="text-align:left;">
-1.98 (0.61-5.51)
-</td>
-<td style="text-align:left;">
-0.2123
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-decub
-</td>
-<td style="text-align:left;">
-0.59 (0.23-1.3)
-</td>
-<td style="text-align:left;">
-0.2176
-</td>
-<td style="text-align:left;">
-FQ_1d
-</td>
-<td style="text-align:left;">
-0.45 (0.11-1.35)
-</td>
-<td style="text-align:left;">
-0.2086
-</td>
-<td style="text-align:left;">
-CKD
-</td>
-<td style="text-align:left;">
-1.75 (0.67-4.49)
-</td>
-<td style="text-align:left;">
-0.2416
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 NA
 </td>
 <td style="text-align:left;">
@@ -5298,24 +5113,6 @@ NA
 </td>
 <td style="text-align:left;">
 NA
-</td>
-<td style="text-align:left;">
-third_plus_ceph_1d
-</td>
-<td style="text-align:left;">
-1.64 (0.7-3.6)
-</td>
-<td style="text-align:left;">
-0.2304
-</td>
-<td style="text-align:left;">
-underweight
-</td>
-<td style="text-align:left;">
-0.48 (0.11-1.48)
-</td>
-<td style="text-align:left;">
-0.2493
 </td>
 </tr>
 </tbody>

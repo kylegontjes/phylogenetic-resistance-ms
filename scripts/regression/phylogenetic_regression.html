@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-03-23" />
+<meta name="date" content="2025-03-24" />
 
 <title>purposeful_selection</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">purposeful_selection</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-03-23</h4>
+<h4 class="date">2025-03-24</h4>
 
 </div>
 
@@ -398,7 +398,7 @@ Sys.info()</code></pre>
                                                                                            version 
 &quot;Darwin Kernel Version 24.3.0: Thu Jan  2 20:22:00 PST 2025; root:xnu-11215.81.4~3/RELEASE_X86_64&quot; 
                                                                                           nodename 
-                                                                                  &quot;msla0572.local&quot; 
+                                                                   &quot;macbookpro.wifi.med.umich.edu&quot; 
                                                                                            machine 
                                                                                           &quot;x86_64&quot; 
                                                                                              login 
@@ -466,7 +466,7 @@ for(i in pheno){
 <pre class="r"><code>purposeful_output &lt;- lapply(pheno,FUN=function(x){
   phenotype = paste0(x,&quot;_dich_num&quot;)
   phenotype_df = get(paste0(x,&quot;_regression_df&quot;))
-  phylosuite::phyloaware_regression(phenotype,variables =eligible_variables,df=phenotype_df,first_present=T,patient_id=&quot;Patient_ID&quot;,culture_date=&quot;Cx_date&quot;,multivariable=&#39;purposeful&#39;,stepwise_direction = NULL,entry_criteria = 0.25,retention_criteria = 0.1,confounding_criteria = 0.2)
+  phylosuite::phyloaware_regression(phenotype,variables =eligible_variables,df=phenotype_df,first_present=T,patient_id=&quot;Patient_ID&quot;,culture_date=&quot;Cx_date&quot;,multivariable=&#39;purposeful&#39;,stepwise_direction = NULL,entry_criteria = 0.2,retention_criteria = 0.1,confounding_criteria = 0.2)
 }) %&gt;% `names&lt;-`(pheno)
 
 saveRDS(purposeful_output,&quot;./data/regression/purposeful_regression_results.RDS&quot;)</code></pre>
