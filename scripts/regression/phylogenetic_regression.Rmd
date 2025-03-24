@@ -13,16 +13,21 @@ opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
 opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
 ```
 
-```{r environment, echo=F, message=FALSE, include=F, results=F}
+# Environment
+```{r environment, echo=T, message=T, include=T, results=T}
 #Packages
-packages <- c("tidyverse",'phylosuite')   
+packages <- c("tidyverse","phylosuite")   
 #Load Packages
-invisible(lapply(packages,library,character.only=T,quietly=T))  
+invisible(lapply(packages,library,character.only=T,quietly=T)) 
+# Functions
+source("./lib/common_functions.R")
+source('./lib/consistent_themes.R')
 # Print
 Sys.info()
 sessionInfo() 
 ``` 
 
+# Load data
 ```{r}
 df <- readRDS("./data/regression/regression_df.RDS")
 eligible_variables <- readLines("./data/regression/eligible_variables.txt")
@@ -41,6 +46,7 @@ for(i in pheno){
 }
 ```
 
+# Purposeful selection algorithm
 ```{r} 
 purposeful_output <- lapply(pheno,FUN=function(x){
   phenotype = paste0(x,"_dich_num")

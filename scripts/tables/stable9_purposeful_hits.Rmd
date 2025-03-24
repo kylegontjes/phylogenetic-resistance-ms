@@ -1,0 +1,114 @@
+---
+title: "stable8_purposeful_hitss"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+
+# Environment
+```{r environment, echo=T, message=T, include=T, results=T}
+#Packages
+packages <- c("tidyverse","phylosuite")   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T)) 
+# Functions
+source("./lib/common_functions.R")
+source('./lib/consistent_themes.R')
+# Print
+Sys.info()
+sessionInfo() 
+``` 
+
+# Load data
+```{r}
+phyloaware_regression_obj <- readRDS("./data/regression/purposeful_regression_results.RDS")
+```
+
+# Print model function
+```{r}
+print_final_model <- function(x){
+  tables <- lapply(x,FUN=function(list){
+    list[['final_model_table']] %>% arrange(p_value)
+  })  %>% `names<-`(c("present","singleton","spread")) 
+  
+  lapply(tables,function(y){
+   if(y %>% as.data.frame %>% nrow()==0){
+      paste0(names(y))
+      cbind.data.frame(Variable ='No model',`OR (95% CI)` = 'NA',p_value ='NA')
+    } 
+    if(y %>% as.data.frame %>% nrow()>0){
+      paste0(names(y))
+      y %>% arrange(p_value) %>% rownames_to_column(.,'Variable') %>% select("Variable","OR (95% CI)","p_value")
+    } 
+  })
+}
+
+cbind_na <- function(df_list) { 
+  max_rows <- max(lapply(df_list, nrow) %>% unlist) 
+  lapply(df_list,function(x){
+    rbind(x,as.data.frame(matrix(NA,nrow = (max_rows - nrow(x)),ncol=ncol(x))) %>% mutate_all(as.character) %>% `colnames<-`(c("Variable","OR (95% CI)","p_value")))
+  }) %>% do.call(cbind,.)
+}
+```
+
+#  Multivariable model
+```{r,results='asis'}
+paste0("Bactrim")
+TMP_SMX_tbl <- print_final_model(phyloaware_regression_obj$TMP_SMX$multivariable)  %>% cbind_na
+
+paste0("Gentamicin")
+gentamicin_tbl <- print_final_model(phyloaware_regression_obj$gentamicin$multivariable)  %>% cbind_na
+
+paste0("AMK")
+AMK_tbl <- print_final_model(phyloaware_regression_obj$AMK$multivariable)  %>% cbind_na
+
+paste0("CST")
+CST_tbl <- print_final_model(phyloaware_regression_obj$CST$multivariable)   %>% cbind_na
+
+paste0("blbli")
+blbli_tbl <- print_final_model(phyloaware_regression_obj$blbli$multivariable)  %>% cbind_na
+```
+ 
+
+# Size of events per model
+```{r}
+print_data <- function(drug,df){
+  dich <- paste0(drug,"_dich_num")
+  cluster <- paste0("asr_cluster_renamed_ns")  
+  
+  present <- subset(df,get(dich) ==1) %>% nrow %>% paste0("Present: ",.) 
+  singleton <- subset(df,get(cluster)=="Non-Susceptible Singleton") %>% nrow  %>% paste0("Singleton: ",.)
+  cluster <-  subset(df,get(dich)==1 & get(cluster)!="Non-Susceptible Singleton") %>% nrow  %>% paste0("Cluster: ",.)
+  
+  results <- cbind.data.frame(drug,present,var1="",singleton,var2="",var3="",cluster,var6="",var5="")
+  return(results)
+}
+
+TMP_SMX_ct <- print_data("TMP_SMX",phyloaware_regression_obj$TMP_SMX$datasets$present)
+gentamicin_ct <- print_data("gentamicin",phyloaware_regression_obj$gentamicin$datasets$present)
+AMK_ct <- print_data("AMK",phyloaware_regression_obj$AMK$datasets$present)
+CST_ct <- print_data("CST",phyloaware_regression_obj$CST$datasets$present)
+blbli_ct <- print_data("blbli",phyloaware_regression_obj$blbli$datasets$present)
+ 
+```
+
+# Final table
+```{r}
+list_df <- list(TMP_SMX_ct,header = TMP_SMX_tbl,gentamicin_ct,gentamicin_tbl,AMK_ct,AMK_tbl,CST_ct,CST_tbl,blbli_ct,blbli_tbl)
+stable9 <- lapply(list_df,FUN=function(x){
+  as.matrix(x)
+}) %>% do.call(rbind,.) %>% as.data.frame  
+```
+
+# Save final table
+```{r}
+favorite_kable(stable9)
+saveRDS(stable9,"./tables/stable9.RDS")
+write_csv(stable9,"./tables/stable9.csv")
+```
