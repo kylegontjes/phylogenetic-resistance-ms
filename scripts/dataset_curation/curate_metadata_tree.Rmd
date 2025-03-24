@@ -60,6 +60,21 @@ paste0("Number of isolates in metadata from California with correct SENSITITRE d
 metadata <- metadata %>% mutate(LOSbeforeCx = dplyr::recode(LOSbeforeCx, '-202' = 202))
 ```
 
+## Update ltach name
+```{r}
+metadata <- metadata %>% mutate(# Recode LTACH Variable (Alphabetical Coding)
+                                          LTACH_Recode = dplyr::recode(LTACH,
+                                                                # Southern CA
+                                                                EG =  "A", EH =  "B", EI =  "C", EJ =  "D", EL =  "E", GP =  "F",
+                                                                GQ =  "G", GR =  "H", GS =  "I", LM =  "J", OG =  "K", SG =  "L",
+                                                                # Houston
+                                                                DO = "M", DP = "N", DQ = "O", IL = "P", IS = "Q", TL = "R",
+                                                                # Tampa
+                                                                FB = "S", FD = "T",
+                                                                # Louisville
+                                                                EZ = "U"))  
+```
+
 ## Recode antibiotic exposure history data
 
 ```{r}

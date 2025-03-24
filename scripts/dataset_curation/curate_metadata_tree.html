@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-03-21" />
+<meta name="date" content="2025-03-24" />
 
 <title>Curate the metadata and phylogenetic tree for this project</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Curate the metadata and phylogenetic tree
 for this project</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-03-21</h4>
+<h4 class="date">2025-03-24</h4>
 
 </div>
 
@@ -424,7 +424,7 @@ Sys.info()</code></pre>
 ##                                                                                            version 
 ## &quot;Darwin Kernel Version 24.3.0: Thu Jan  2 20:22:00 PST 2025; root:xnu-11215.81.4~3/RELEASE_X86_64&quot; 
 ##                                                                                           nodename 
-##                                                                                   &quot;msla0572.local&quot; 
+##                                                                    &quot;macbookpro.wifi.med.umich.edu&quot; 
 ##                                                                                            machine 
 ##                                                                                           &quot;x86_64&quot; 
 ##                                                                                              login 
@@ -436,7 +436,7 @@ Sys.info()</code></pre>
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 4.4.3 (2025-02-28)
 ## Platform: x86_64-apple-darwin20
-## Running under: macOS Sequoia 15.3.1
+## Running under: macOS Sequoia 15.3.2
 ## 
 ## Matrix products: default
 ## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
@@ -505,6 +505,20 @@ paste0(&quot;Number of isolates in metadata from California with correct SENSITI
 <h2>Update length of stay data</h2>
 <pre class="r"><code># Length of stay
 metadata &lt;- metadata %&gt;% mutate(LOSbeforeCx = dplyr::recode(LOSbeforeCx, &#39;-202&#39; = 202))</code></pre>
+</div>
+<div id="update-ltach-name" class="section level2">
+<h2>Update ltach name</h2>
+<pre class="r"><code>metadata &lt;- metadata %&gt;% mutate(# Recode LTACH Variable (Alphabetical Coding)
+                                          LTACH_Recode = dplyr::recode(LTACH,
+                                                                # Southern CA
+                                                                EG =  &quot;A&quot;, EH =  &quot;B&quot;, EI =  &quot;C&quot;, EJ =  &quot;D&quot;, EL =  &quot;E&quot;, GP =  &quot;F&quot;,
+                                                                GQ =  &quot;G&quot;, GR =  &quot;H&quot;, GS =  &quot;I&quot;, LM =  &quot;J&quot;, OG =  &quot;K&quot;, SG =  &quot;L&quot;,
+                                                                # Houston
+                                                                DO = &quot;M&quot;, DP = &quot;N&quot;, DQ = &quot;O&quot;, IL = &quot;P&quot;, IS = &quot;Q&quot;, TL = &quot;R&quot;,
+                                                                # Tampa
+                                                                FB = &quot;S&quot;, FD = &quot;T&quot;,
+                                                                # Louisville
+                                                                EZ = &quot;U&quot;))  </code></pre>
 </div>
 <div id="recode-antibiotic-exposure-history-data" class="section level2">
 <h2>Recode antibiotic exposure history data</h2>
@@ -770,15 +784,16 @@ rownames(df) &lt;- df$isolate_no</code></pre>
 ## trees with their covariates and other associated data. Methods in
 ## Ecology and Evolution. 2017, 8(1):28-36. doi:10.1111/2041-210X.12628
 ## 
-## S Xu, Z Dai, P Guo, X Fu, S Liu, L Zhou, W Tang, T Feng, M Chen, L
-## Zhan, T Wu, E Hu, Y Jiang, X Bo, G Yu. ggtreeExtra: Compact
-## visualization of richly annotated phylogenetic data. Molecular Biology
-## and Evolution. 2021, 38(9):4039-4042. doi: 10.1093/molbev/msab166
-## 
 ## Guangchuang Yu, Tommy Tsan-Yuk Lam, Huachen Zhu, Yi Guan. Two methods
 ## for mapping and visualizing associated data on phylogeny using ggtree.
 ## Molecular Biology and Evolution. 2018, 35(12):3041-3043.
-## doi:10.1093/molbev/msy194</code></pre>
+## doi:10.1093/molbev/msy194
+## 
+## LG Wang, TTY Lam, S Xu, Z Dai, L Zhou, T Feng, P Guo, CW Dunn, BR
+## Jones, T Bradley, H Zhu, Y Guan, Y Jiang, G Yu. treeio: an R package
+## for phylogenetic tree input and output with richly annotated and
+## associated data. Molecular Biology and Evolution. 2020, 37(2):599-603.
+## doi: 10.1093/molbev/msz240</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;ggtree&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:ape&#39;:
