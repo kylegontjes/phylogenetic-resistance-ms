@@ -36,21 +36,26 @@ rownames(df) <- df$isolate_no
 rownames(df) <- df$isolate_no 
 # Demographics 
 dem_vars <- c("age","sex","LOSbeforeCx")
-df$sex.female <- ifelse(df$sex=="male",0,1)   
+df$sex.female <- ifelse(df$sex=="male",0,1)  
+age_quantiles <- quantile(df$age) 
+df$age_first <- ifelse(df$age <age_quantiles[[2]],"yes","no")
+df$age_fourth <- ifelse(df$age >age_quantiles[[4]],"yes","no")
 # LOS
-LOS_quantiles <- quantile(df$LOSbeforeCx)  
+LOS_quantiles <- quantile(df$LOSbeforeCx) 
+df$LOS_first <- ifelse(df$LOSbeforeCx <LOS_quantiles[[2]],"yes","no")
+df$LOS_fourth <- ifelse(df$LOSbeforeCx >LOS_quantiles[[4]],"yes","no")
 
 # Device variables
 device_vars <- c("trach","central_line","foley","gastro")
-df$num_device <-df %>% select(trach,central_line,foley,gastro) %>% {ifelse(.=="yes",1,0)} %>% rowSums() 
-df$any_device <-ifelse(df$num_device>0,"yes","no") 
+df$device_ct <-df %>% select(trach,central_line,foley,gastro) %>% {ifelse(.=="yes",1,0)} %>% rowSums() 
+df$any_device <-ifelse(df$device_ct>0,"yes","no") 
 
 # Comorbidities
 comorb_vars <- c("AKI","CKD","VDRF","underweight","CHF","decub","lung_dz","brain_injury","malignancy","obese") 
+df$comorb_ct <- df %>% select(comorb_vars) %>% {ifelse(.=="yes",1,0)} %>% rowSums() 
+df$multimorbid <- ifelse(df$comorb_ct>1,1,0)   
 
-df$third_gen_ceph_1d <- ifelse(df %>% select(ceftazidime_1d,ctx_1d) %>% rowSums(.)>0,1,0)
-df$fourth_gen_ceph_1d <- ifelse(df %>% select(cefepime_1d,ceftaroline_1d) %>% rowSums(.)>0,1,0)
-# antibiotic exposures
+# antibiotic exposures 
 abx_vars_of_interest <- c(
   #Carbapenem :imipenem,meropenem,erta
   "carbapenem", 
@@ -81,13 +86,13 @@ abx_vars_of_interest <- c(
   # Zosyn
   "zosyn") %>% paste0(.,"_1d")
   
-abx_vars_of_interest_sorted <- c("vanco","carbapenem","third_plus_ceph",'amikacin','gent','tobra',"flagyl","FQ",'linezolid',"tigecycline","zosyn","poly_colistin","dapto","aztreonam","bactrim")%>% paste0(.,"_1d") 
+abx_vars_of_interest_sorted <- c("vanco","carbapenem","third_plus_ceph",'AG','amikacin','gent','tobra',"flagyl","FQ",'linezolid',"tigecycline","zosyn","poly_colistin","dapto","aztreonam","bactrim")%>% paste0(.,"_1d") 
 ```
 
 # Factorize and reformat variables
 ```{r} 
-factor_vars <- c("sex.female",device_vars,"num_device","any_device",comorb_vars,abx_vars_of_interest_sorted)
-non_factor_vars <- c("LOSbeforeCx","age")
+factor_vars <- c("sex.female","any_device",device_vars,'multimorbid',comorb_vars,'any_antibiotic_1d',abx_vars_of_interest_sorted)
+non_factor_vars <- c("LOSbeforeCx","age",'comorb_ct','device_ct')
                   
 factor_vars_df <- df %>% select(factor_vars)
 
@@ -114,7 +119,7 @@ paste0("Eligible variables: ")
 other_vars <-  c("age","LOSbeforeCx","sex.female",device_vars,comorb_vars)
 variables <- c(other_vars,abx_vars_of_interest) 
 
-df_final <- df_fin %>% select(variables,isolate_no,source,clade_I,Patient_ID,Cx_date,pheno)
+df_final <- df_fin %>% select(variables,isolate_no,source,clade_I,Patient_ID,Cx_date,pheno,'multimorbid','any_antibiotic_1d','any_device','device_ct','comorb_ct','AG_1d')
 
 # Save
 saveRDS(df_final,"~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/data/regression/regression_df.RDS")

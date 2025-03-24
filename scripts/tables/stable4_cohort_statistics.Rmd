@@ -1,0 +1,54 @@
+---
+title: "stable4"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+
+```{r setup, include=FALSE} 
+require(knitr) 
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+
+# Environment
+```{r environment, echo=T, message=T, include=T, results=T}
+#Packages
+packages <- c("tidyverse","tableone")   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T)) 
+# Functions
+source("./lib/common_functions.R")
+source('./lib/consistent_themes.R')
+# Print
+Sys.info()
+sessionInfo() 
+``` 
+
+# Load dataset
+```{r load data,include=T,echo=T,results=F,message=F} 
+# Patient Metadata
+df <- readRDS("./data/regression/regression_df.RDS") 
+```
+
+# Variables of interest here
+```{r}
+rownames(df) <- df$isolate_no 
+dem_vars <- c("age","sex","LOSbeforeCx")
+device_vars <- c("trach","central_line","foley","gastro")
+comorb_vars <- c("AKI","CKD","VDRF","underweight","CHF","decub","lung_dz","brain_injury","malignancy","obese")    
+abx_vars_of_interest_sorted <- c("vanco","carbapenem","third_plus_ceph","AG","amikacin","tobra","gent","flagyl","FQ",'linezolid',"tigecycline","zosyn","poly_colistin","dapto",'bactrim',"aztreonam")%>% paste0(.,"_1d")
+```
+
+# Supplemental Table 4. Patient characteristics on first isolate collection
+```{r}
+first_df <- df %>% group_by(Patient_ID)%>% arrange(Cx_date) %>% filter(row_number()==1) %>% as.data.frame
+
+all_vars <- c("age","sex.female","LOSbeforeCx","device_ct","any_device",device_vars,"comorb_ct","multimorbid",comorb_vars,"any_antibiotic_1d",abx_vars_of_interest_sorted)
+
+convert_tableone_into_df(first_df,vars=all_vars,factorVars=c(all_vars %>% subset(!.%in% c("age","device_ct","comorb_ct","LOSbeforeCx")))) %>% favorite_kable()
+
+fivenum(first_df$age) %>% t %>%as.data.frame %>% `colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower)
+fivenum(first_df$LOSbeforeCx) %>% t %>%  as.data.frame %>%`colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower)
+fivenum(first_df$device_ct) %>% t %>%as.data.frame %>% `colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower)
+fivenum(first_df$comorb_ct) %>% t %>%as.data.frame %>% `colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower)
+```
