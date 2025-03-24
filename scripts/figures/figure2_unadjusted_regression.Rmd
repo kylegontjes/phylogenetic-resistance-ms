@@ -1,0 +1,45 @@
+---
+title: "figure2"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+# Environment
+```{r environment, echo=F, message=FALSE, include=F, results=F}
+#Packages
+packages <- c("tidyverse","cowplot")   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T))
+
+# Print environment
+Sys.info()
+sessionInfo()
+```
+
+# Load figures
+```{r load data,include=F,echo=F,results=F,message=F, include=F}
+clade_forest <- readRDS("./data/regression/unadjusted_regression_clade_figure.RDS")
+cognate_forest <- readRDS("./data/regression/unadjusted_regression_cognate_figure.RDS") 
+dysbiosis_forest <- readRDS("./data/regression/unadjusted_regression_dysbiotic_figure.RDS") 
+```
+
+# Create cowplot
+```{r,fig.height=12.5,fig.width=22.5}
+fig2A <- ggplotify::grid2grob(plot(clade_forest))
+fig2B <- ggplotify::grid2grob(plot(cognate_forest))
+fig2C <- ggplotify::grid2grob(plot(dysbiosis_forest)) 
+
+figure2 <- plot_grid(fig2A,fig2B,fig2C,labels = c("A.","B.","C."),nrow=2,label_size = 16,rel_heights = c(1,1,1)) 
+figure2
+```
+
+# Save figure
+```{r}
+ggsave("./figures/figure2.png",figure2,dpi=600,width=22.5,height=12.5,bg='white')
+```
