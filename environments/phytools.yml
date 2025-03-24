@@ -1,0 +1,14 @@
+name: phytools_v2_4_4
+channels:
+  - conda-forge
+  - bioconda
+  - default
+  - r
+dependencies:
+  - r-base
+  - r-phytools
+  - r-tidyverse
+  - bioconductor-ggtree
+  - r-pbmcapply 
+
+# Submit via conda env create -f phytools.yml 
