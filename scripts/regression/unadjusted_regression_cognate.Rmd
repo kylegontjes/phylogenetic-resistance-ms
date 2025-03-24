@@ -1,0 +1,148 @@
+---
+title: "figure2B_cognate"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+
+# Environment
+```{r environment, echo=F, message=FALSE, include=F, results=F}
+#Packages
+packages <- c("tidyverse","devtools","kableExtra","cowplot","gridExtra",'forestplot','tableone','phylosuite','ape')   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T))
+
+#Themes
+source("./lib/consistent_themes.R")
+
+# Scripts
+source("./lib/common_functions.R")
+source("./scripts/figures/figure2.R")
+
+# Print environment
+Sys.info()
+sessionInfo()
+```
+
+# Load data
+```{r load data,include=T,echo=T,results=F,message=F} 
+tr <- read.tree("./data/tree/tree.treefile")      
+df <- readRDS("./data/dataset/df.RDS")
+``` 
+
+# Curate exposures 
+```{r}
+rownames(df) <- df$isolate_no   
+cognate_drugs <- c("bactrim_1d","AG_1d","gent_1d","amikacin_1d","poly_colistin_1d","carbapenem_1d")
+
+# Create factor variables to help regression 
+factor_vars_df <- df %>% select(cognate_drugs) %>% as.data.frame()
+
+# convert "yes"  "no" and 10
+factor_vars_df <- apply(factor_vars_df,2,FUN=function(x){
+  ifelse(x=="yes",1,ifelse(x=="no",0,x)) %>% as.numeric
+}) %>% as.data.frame %>% `rownames<-`(df$isolate_no)
+
+# List of resistance columns to convert to factor
+drugs <- c("TMP_SMX","gentamicin","AMK","CST","blbli")
+phenotypes <- c(paste0(drugs,"_dich_num"))
+
+# Convert specified columns to factor
+resistance <- df %>% select(phenotypes) %>% mutate_all(as.factor) 
+
+df_fin <- cbind.data.frame(resistance,factor_vars_df,df %>% select(isolate_no,Patient_ID,Cx_date))
+```
+
+```{r}
+# Load asr
+pheno <- c("TMP_SMX","gentamicin","AMK","CST","blbli")
+for(i in pheno){
+  assign(paste0(i,"_asr_clustering"),readRDS(paste0("./data/asr_clustering/",i,"_asr_clustering.RDS")))
+}
+
+# Create dataset
+for(i in pheno){
+  asr_df <- get(paste0(i,"_asr_clustering"))
+  df_w_asr <- df_fin %>% left_join(asr_df %>% mutate(isolate_no = child_name))
+  assign(paste0(i,"_regression_df"),df_w_asr)
+}
+```
+
+# LR analyses 
+# Modeling 
+```{r,warning=F,message=F}
+TMP_SMX_lr <- phyloaware_regression("TMP_SMX_dich_num",df = TMP_SMX_regression_df,variables = "bactrim_1d",first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)
+gentamicin_lr <- phyloaware_regression("gentamicin_dich_num",gentamicin_regression_df,variables = "AG_1d",first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)   
+AMK_lr <- phyloaware_regression("AMK_dich_num",AMK_regression_df,variables = "AG_1d",first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)
+CST_lr <- phyloaware_regression("CST_dich_num",CST_regression_df,variables = "poly_colistin_1d",first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)
+blbli_lr <- phyloaware_regression("blbli_dich_num",blbli_regression_df,variables ="carbapenem_1d",first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)  
+```
+
+# Genreate descriptive stats
+```{r} 
+TMP_SMX_descriptive <- generate_descriptive_stats("TMP_SMX",TMP_SMX_lr$datasets,variables = "bactrim_1d",factorVars = "bactrim_1d")
+TMP_SMX_results <- create_mv_table(datasets = TMP_SMX_descriptive,lr_results=TMP_SMX_lr$univariable)   
+
+gentamicin_descriptive <- generate_descriptive_stats("gentamicin",gentamicin_lr$datasets,"AG_1d",factorVars = "AG_1d")
+gentamicin_results <- create_mv_table(datasets = gentamicin_descriptive,lr_results=gentamicin_lr$univariable)
+
+AMK_descriptive <- generate_descriptive_stats("AMK",AMK_lr$datasets,"AG_1d",factorVars = "AG_1d")
+AMK_results <- create_mv_table(datasets = AMK_descriptive,lr_results=AMK_lr$univariable)
+
+CST_descriptive <- generate_descriptive_stats("CST",CST_lr$datasets,"poly_colistin_1d",factorVars = "poly_colistin_1d")
+CST_results <- create_mv_table(datasets = CST_descriptive,lr_results=CST_lr$univariable)
+
+blbli_descriptive <- generate_descriptive_stats("blbli",blbli_lr$datasets,"carbapenem_1d",factorVars = "carbapenem_1d")
+blbli_results <- create_mv_table(datasets = blbli_descriptive,lr_results=blbli_lr$univariable)
+```
+
+```{r}  
+combined_dataset <- rbind(TMP_SMX_results,gentamicin_results,AMK_results,CST_results,blbli_results)
+```
+
+# Forest plot
+```{r,fig.height=8.4,fig.width=14}
+agent_string <- c("TMP-SMX","","","","Gentamicin","","","","Amikacin","","","","Colistin","","","","BL/BLI Agents","","","")
+susceptible_string <- c("",subset(TMP_SMX_results,outcome=="present") %>% .$susceptible,"","","",subset(gentamicin_results,outcome=="present") %>% .$susceptible,"","","",subset(AMK_results,outcome=="present") %>% .$susceptible,"","","",subset(CST_results,outcome=="present") %>% .$susceptible,"","","",subset(blbli_results,outcome=="present") %>% .$susceptible,"","")
+feature_string <- c("","Non-Susceptible","Emergence","Spread","","Non-Susceptible","Emergence","Spread","","Non-Susceptible","Emergence","Spread","","Non-Susceptible","Emergence","Spread","","Non-Susceptible","Emergence","Spread")
+resistance_string <- c("",TMP_SMX_results$non_susceptible,"",gentamicin_results$non_susceptible,"",AMK_results$non_susceptible,"",CST_results$non_susceptible,"",blbli_results$non_susceptible)
+OR_string <- c("",TMP_SMX_results$`OR (95% CI)`,"",gentamicin_results$`OR (95% CI)`,"",AMK_results$`OR (95% CI)`,"",CST_results$`OR (95% CI)`,"",blbli_results$`OR (95% CI)`)
+ 
+tabletext <- cbind.data.frame(agent_string,susceptible_string,feature_string,resistance_string,OR_string) %>% `colnames<-`(c("agent","susceptible","feature","resistance","OR"))
+
+# Metadata
+OR_stat <- c("",TMP_SMX_results$`OR (95% CI)`,"",gentamicin_results$`OR (95% CI)`,"",AMK_results$`OR (95% CI)`,"",CST_results$`OR (95% CI)`,"",blbli_results$`OR (95% CI)`)
+OR <- sapply(OR_stat,FUN=function(x){str_split(x," ",simplify=T) %>% .[,1] %>% as.numeric})
+lower <- sapply(OR_stat,FUN=function(x){
+    initial_split <- str_split(x," ",simplify=T)
+    if(ncol(initial_split)==1){
+        ""
+    } else {
+        initial_split[,2] %>% str_split(.,"\\-",simplify=T) %>% .[,1] %>% gsub("\\(","",.) %>% as.numeric
+    }})
+upper <- sapply(OR_stat,FUN=function(x){
+    initial_split <- str_split(x," ",simplify=T)
+    if(ncol(initial_split)==1){
+        ""
+    } else {
+        initial_split[,2] %>% str_split(.,"\\-",simplify=T) %>% .[,2] %>% gsub("\\)","",.) %>% as.numeric
+}})    
+    
+ 
+fp_rmetadata <- cbind.data.frame(OR,lower,upper)  %>% mutate_all(as.numeric)
+  
+forest_plot <- res_forest_plot(tabletext = tabletext,fp_rmetadata = fp_rmetadata,outcome_name="Cognate Antibacterial") 
+forest_plot
+```
+
+# Save in regression data folder
+```{r}
+saveRDS(forest_plot,"./data/regression/unadjusted_regression_cognate_figure.RDS")
+```
