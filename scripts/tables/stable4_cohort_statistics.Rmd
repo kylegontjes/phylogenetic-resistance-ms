@@ -45,10 +45,27 @@ first_df <- df %>% group_by(Patient_ID)%>% arrange(Cx_date) %>% filter(row_numbe
 
 all_vars <- c("age","sex.female","LOSbeforeCx","device_ct","any_device",device_vars,"comorb_ct","multimorbid",comorb_vars,"any_antibiotic_1d",abx_vars_of_interest_sorted)
 
-convert_tableone_into_df(first_df,vars=all_vars,factorVars=c(all_vars %>% subset(!.%in% c("age","device_ct","comorb_ct","LOSbeforeCx")))) %>% favorite_kable()
+data_table <- convert_tableone_into_df(first_df,vars=all_vars,factorVars=c(all_vars %>% subset(!.%in% c("age","device_ct","comorb_ct","LOSbeforeCx"))))  
 
-fivenum(first_df$age) %>% t %>%as.data.frame %>% `colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower)
-fivenum(first_df$LOSbeforeCx) %>% t %>%  as.data.frame %>%`colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower)
-fivenum(first_df$device_ct) %>% t %>%as.data.frame %>% `colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower)
-fivenum(first_df$comorb_ct) %>% t %>%as.data.frame %>% `colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower)
+age_median_IQR <- fivenum(first_df$age) %>% round(.,2) %>% t %>%as.data.frame %>% `colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower) %>% paste0(.$median," (",.$IQR,")")
+LOSbeforeCx_median_IQR <- fivenum(first_df$LOSbeforeCx) %>% t %>%  as.data.frame %>%`colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower )%>% paste0(.$median," (",.$IQR,")")
+device_ct_median_IQR <- fivenum(first_df$device_ct) %>% t %>%as.data.frame %>% `colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower )%>% paste0(.$median," (",.$IQR,")")
+comorb_ct_median_IQR <- fivenum(first_df$comorb_ct) %>% t %>%as.data.frame %>% `colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower) %>% paste0(.$median," (",.$IQR,")") 
+
+data_table$`Overall (n=312)` <- ifelse(grepl('age',data_table$Variable),age_median_IQR,
+                                       ifelse(grepl('LOSbeforeCx',data_table$Variable),LOSbeforeCx_median_IQR,ifelse(
+                                         grepl("device_ct",data_table$Variable),device_ct_median_IQR,ifelse(
+                                           grepl("comorb_ct",data_table$Variable),comorb_ct_median_IQR,data_table$`Overall (n=312)`
+                                         ))))
+
+data_table$Variable <- gsub(" \\(mean \\(SD\\)\\)",", median (IQR)",data_table$Variable)
+data_table$Variable <- gsub(" \\= 1 \\(\\%\\)","",data_table$Variable)
 ```
+
+# Print and save
+```{r}
+favorite_kable(data_table)
+saveRDS(data_table,"./tables/stable4.RDS")
+write_csv(data_table,"./tables/stable4.csv")
+```
+
