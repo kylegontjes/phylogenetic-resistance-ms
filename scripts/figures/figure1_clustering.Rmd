@@ -1,0 +1,132 @@
+---
+title: "Figure 1"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+ 
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+
+# Environment
+```{r environment, echo=F, message=FALSE, include=F, results=F}
+#Packages
+packages <- c("tidyverse","devtools","kableExtra","cowplot","gridExtra",'hues','magick','ggtree','phytools','ape','ggnewscale')   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T))
+
+#Themes
+source("./lib/consistent_themes.R")
+
+# Scripts
+source("./lib/common_functions.R")
+
+# Print environment
+Sys.info()
+sessionInfo()
+```
+
+# Load data
+```{r load data,include=T,echo=T,results=F,message=F}
+# Patient Metadata & Phylogeny
+df <- readRDS("./data/dataset/df.RDS")
+tr <- read.tree("./data/tree/tree.treefile")   
+df<- df %>% .[match(tr$tip.label,.$isolate_no),] 
+# Best model call
+pclustering_df <- readRDS("./data/asr_clustering/asr_clustering_df.RDS")
+df <- left_join(df,pclustering_df)
+```
+
+# Conceptual diagram
+```{r}
+F1A <- magick::image_read("./figures/clustering_algorithm_conceptual_figure.png") %>% image_ggplot
+```
+
+# Create phylogenies
+```{r}
+phenotypes <- c("TMP_SMX","gentamicin","AMK","CST","blbli") %>% paste0(.,"_asr_cluster")
+sizes <- c()
+for(i in phenotypes){
+  sizes[i] <- table(df[,i])  %>% subset(names(.) != "singleton" & grepl("cluster",names(.))) %>% as.numeric %>%length
+}
+
+ncluster <- max(sizes)
+color_palette <- grDevices::colors() %>% subset(grepl("red",.)==F)
+clusters_col <- iwanthue(ncluster,hmin=15,hmax=360,lmin = 5,lmax = 95,cmin=5,cmax=90,random = F,plot = T)
+
+clusters_name <- paste0("Non-Susceptible Cluster ",1:ncluster)
+names(clusters_col) <- clusters_name
+
+# Clustering scales
+## Clade scale
+clade_scale <- scale_fill_manual(breaks =c("Clade I","Clade II"),values=c("red","blue" ),name="Clade", guide = guide_legend(ncol=1, title.position = "top", label.position = "right",order=1))
+## Non-susceptible 
+NS_scale <- scale_fill_manual(breaks = c("Susceptible","Non-Susceptible"),values=c("white","black"),labels = c("Susceptible","Non-susceptible (NS)"),name="Resistance Profile",guide = guide_legend(title.position = "top", label.position = "right",nrow=2),drop = FALSE )
+
+## cluster_scale
+cluster_scale <- scale_fill_manual(breaks =c("Susceptible","Non-Susceptible Singleton",names(clusters_col)),values=c("Susceptible" = "white","Non-Susceptible Singleton" = "red",clusters_col),labels=c("Susceptible","NS Singleton",gsub("Non-Susceptible","NS",clusters_name)),name="Phylogenetics of Resistance", guide = guide_legend(ncol=4, title.position = "top", label.position = "right"))
+```
+
+```{r} 
+rownames(df) <- df$isolate_no
+# Clade
+F1B.0 <- gheatmap(ggtree(tr),df %>% select(clade_I) %>% `colnames<-`("Clade") %>% mutate_all(as.factor) , colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .15) + ylim(NA,565)  + clade_scale + consistent_theme
+F1B.1 <- F1B.0 + ggnewscale::new_scale_fill()
+# Non-susceptibility
+F1B <- gheatmap(F1B.1,df %>% select(TMP_SMX_dich,gentamicin_dich,AMK_dich,CST_dich,blbli_dich) %>% `colnames<-`(c("TMP-SMX NS","Gentamicin NS","Amikacin NS","Colistin NS","BL/BLI NS")) %>% mutate_all(as.factor) , colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .75,offset =0.00004) + NS_scale  + ylim(NA,565)  + consistent_theme
+
+# Clustering
+F1C <- gheatmap(ggtree(tr),df %>%  select(TMP_SMX_asr_cluster_renamed_ns,gentamicin_asr_cluster_renamed_ns,AMK_asr_cluster_renamed_ns,CST_asr_cluster_renamed_ns,blbli_asr_cluster_renamed_ns) %>% `colnames<-`(c("TMP-SMX Clustering","Gentamicin Clustering","Amikacin Clustering","Colistin Clustering","BL/BLI Clustering")) %>% mutate_all(as.factor), colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .75) + ylim(NA,565) + cluster_scale + consistent_theme 
+ 
+# Figure 
+F1BC <- plot_grid(F1B,F1C,labels=c("B.","C."),label_size=24,align = "hv", ncol=2) + theme(plot.margin = unit(c(0,0,-.5,0), "cm")) 
+```
+
+```{r,fig.width=15,fig.height=10.5}
+F1BC
+```
+
+# Clustering data table
+```{r}
+# TRansition data
+transition_data <- readRDS("./data/asr_clustering/transition_stats.RDS") 
+transition_data <- transition_data %>% select(pheno,transitions,gains,gains_tip,losses,losses_tip,continuations,continuations_present) %>% `colnames<-`(c("Phenotype",'Transitions','Gains','Gains (Tip)','Losses','Losses (Tip)','Continuations','Continuations (Present)'))
+
+# Clustering data
+clustering_stats <- readRDS("./data/asr_clustering/clustering_stats.RDS")
+phylosuite_analysis_tbl <- clustering_stats %>% select(pheno,present,feature_frequency,phylogenetic_frequency,clustering_frequency,phylogenetic_events,singletons,clusters,cluster_isolates,cluster_size_median,cluster_size_range)
+ 
+phylosuite_analysis_tbl$cluster_median_range <- paste0(phylosuite_analysis_tbl$cluster_size_median," (",phylosuite_analysis_tbl$cluster_size_range,")")
+phylosuite_analysis_tbl <- phylosuite_analysis_tbl%>% select(-cluster_size_median,-cluster_size_range) 
+
+phylosuite_analysis_tbl <- phylosuite_analysis_tbl %>% `colnames<-`(c("Phenotype","No. NS","NS Frequency","Phylogenetic Frequency","Clustering Frequency","Phylogenetic Events","Singletons","Clusters","Cluster Isolates","Cluster Size, Median (Range)"))
+
+phylosuite_analysis_tbl$`NS Frequency` <- paste0(phylosuite_analysis_tbl$`NS Frequency`,"%")
+phylosuite_analysis_tbl$`Phylogenetic Frequency` <- paste0(phylosuite_analysis_tbl$`Phylogenetic Frequency`,"%")
+phylosuite_analysis_tbl$`Clustering Frequency` <- paste0(phylosuite_analysis_tbl$`Clustering Frequency`,"%")
+
+# Formatting table
+table <- transition_data %>% left_join(.,phylosuite_analysis_tbl)
+colnames(table) <- sapply(colnames(table),strwrap,width=15) %>% sapply(.,paste0,collapse="\n")
+table$Phenotype <- recode(table$Phenotype,'AMK' = 'Amikacin','blbli'='BL/BLI','CST'='Colistin','TMP_SMX'='TMP-SMX','gentamicin'='Gentamicin')                          
+```
+
+```{r ,fig.height=20,fig.width=25}
+F1D_tbl <- table %>% tableGrob(rows = NULL,theme=mytheme) 
+```
+
+# Merge figures together
+```{r ,fig.height=20,fig.width=25.5}
+F1D <- plot_grid(F1D_tbl,label_size=24,align = "hv") + theme(plot.margin = unit(c(-1,0,-1.5,0), "cm")) 
+F1 <- plot_grid(F1A,F1BC,F1D,labels = c("A.","","D."),nrow=3,label_size = 24,rel_heights = c(.5,1,.25))
+F1
+```
+
+# Save
+```{r}
+ggsave("./figures/figure1.png",F1,width=25,height=20,dpi=600,bg='white')  
+```
