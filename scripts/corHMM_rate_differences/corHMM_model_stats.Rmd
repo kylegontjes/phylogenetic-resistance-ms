@@ -1,0 +1,131 @@
+---
+title: "corHMM_multirate_analysis"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+knitr::opts_knit$set(echo = TRUE,warning = FALSE, message = FALSE)  
+knitr::opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/') 
+```
+
+# Environment
+```{r}
+packages <- c("tidyverse","kableExtra","tableone") 
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T)) 
+# Load function
+source('./lib/consistent_themes.R')
+# Print
+Sys.info()
+sessionInfo() 
+``` 
+
+# functions
+#source("./lib/")  
+
+# Print environment
+Sys.info()
+sessionInfo()
+``` 
+
+# Load corHMM output
+```{r}
+corHMM_one_rate_ER <- readRDS("./data/corHMM_rate_differences/corHMM_single_ER.RDS")
+corHMM_one_rate_ARD <-  readRDS("./data/corHMM_rate_differences/corHMM_single_ARD.RDS")
+corHMM_two_rates_ER <-  readRDS("./data/corHMM_rate_differences/corHMM_two_ER.RDS")
+corHMM_two_rates_ARD <-  readRDS("./data/corHMM_rate_differences/corHMM_two_ARD.RDS")
+```
+
+# Number of tries to get a positive AIC model...
+```{r}
+lapply(corHMM_one_rate_ER,FUN=function(x){
+  x$number_runs
+  
+}) %>% `names<-`(names(corHMM_one_rate_ER))
+
+lapply(corHMM_one_rate_ARD,FUN=function(x){
+  x$number_runs
+  
+}) %>% `names<-`(names(corHMM_one_rate_ARD))
+
+lapply(corHMM_two_rates_ER,FUN=function(x){
+  x$number_runs
+  
+}) %>% `names<-`(names(corHMM_two_rates_ER))
+
+lapply(corHMM_two_rates_ARD,FUN=function(x){
+  x$number_runs
+  
+}) %>% `names<-`(names(corHMM_two_rates_ARD))
+```
+
+# Get model statistics
+corHMM single-rate category model
+corHMM two-rate category model
+Best Model2
+Phenotype
+Model
+Rate 11
+
+Rate 21
+Log Likelihood
+AIC
+Corrected AIC
+Category I 
+Rate 1
+Category I 
+Rate 2
+Category II 
+Rate 1
+Category II 
+Rate 2
+Log Likelihood
+AIC2
+Corrected AIC
+
+
+```{r}
+pheno = names(corHMM_one_rate_ER)
+corHMM_one_rate_ER_stats <- lapply(corHMM_one_rate_ER,phylosuite::characterize_asr_model) %>% do.call(rbind,.) %>% mutate(phenotype = pheno)
+corHMM_one_rate_ARD_stats <- lapply(corHMM_one_rate_ARD,phylosuite::characterize_asr_model) %>% do.call(rbind,.) %>% mutate(phenotype = pheno)
+
+characterize_two_cat_corHMM_model <- function(corHMM_obj){
+  model <- ifelse(c(corHMM_obj[["index.mat"]] %>% as.vector() %>% subset(is.na(.)==F) %>% unique %>% length)==4,"ER","ARD")
+  category1_rate1 <- corHMM_obj$solution[2,1]
+  category2_rate1 <- corHMM_obj$solution[3,4]
+  if(model=="ER"){
+    category1_rate2 <- NA
+    category2_rate2 <- NA
+  } else {
+    category1_rate2 <- corHMM_obj$solution[1,2]
+    category2_rate2 <-   corHMM_obj$solution[4,3]
+  }  
+  multi_np = max(unlist(corHMM_obj$index.mat),na.rm=T)
+  multi_nRateCat = corHMM_obj$rate.cat
+  multi_loglik = corHMM_obj$loglik
+  multi_AIC = corHMM_obj$AIC
+  multi_AICc = corHMM_obj$AICc
+  data <- data.frame(model,multi_np,multi_nRateCat,category1_rate1,category1_rate2,category2_rate1,category2_rate2,multi_loglik,multi_AIC,multi_AICc)
+  return(data)
+}
+
+corHMM_two_rates_ER_stats <- lapply(corHMM_two_rates_ER,characterize_two_cat_corHMM_model) %>% do.call(rbind,.) %>% mutate(phenotype = pheno)
+corHMM_two_rates_ARD_stats <- lapply(corHMM_two_rates_ARD,characterize_two_cat_corHMM_model) %>% do.call(rbind,.) %>% mutate(phenotype = pheno)
+```
+
+# Curate table
+```{r}
+joint_ER_df <- left_join(corHMM_one_rate_ER_stats,corHMM_two_rates_ER_stats) 
+joint_ARD_df <-  left_join(corHMM_one_rate_ARD_stats,corHMM_two_rates_ARD_stats) 
+
+total_df <- rbind(joint_ER_df,joint_ARD_df)
+favorite_kable(total_df)
+```
+
+# Save
+```{r}
+saveRDS(total_df,'./data/corHMM_rate_differences/corHMM_model_stats.RDS')
+```

@@ -1,0 +1,13 @@
+#!/bin/sh
+# Job name
+#SBATCH --job-name=corHMM
+# User info
+#SBATCH --mail-user=kgontjes@umich.edu
+#SBATCH --mail-type=BEGIN,END
+#SBATCH --export=ALL
+#SBATCH --partition=standard
+#SBATCH --account=esnitkin1 
+#SBATCH --nodes=1  --ntasks=1 --cpus-per-task=6 --mem=60g --time=24:00:00
+#SBATCH --output=corHMM_rate_differences.out
+
+Rscript -e "rmarkdown::render('corHMM_rate_differences.Rmd')"

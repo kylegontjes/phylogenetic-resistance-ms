@@ -1,0 +1,104 @@
+---
+title: "corHMM_hidden_rates_model"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='/nfs/turbo/umms-esnitkin/Project_Penn_KPC/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+
+
+# Environment
+```{r environment, echo=F, message=FALSE, include=F, results=F}
+#Packages
+packages <- c("phytools","tidyverse",'ape','pbmcapply','corHMM')   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T))
+
+# Print environment
+set.seed(45) 
+Sys.info()
+sessionInfo()
+```
+ 
+# load data
+```{r} 
+# Standard data
+df <- readRDS("./data/dataset/df.RDS")
+tr <- read.tree("./data/tree/tree.treefile")
+tip_name_var="isolate_no"
+df<- df %>% .[match(tr$tip.label,.[[tip_name_var]]),]
+```
+
+# Run corHMM and store the number of runs
+```{r}
+pheno <- c("TMP_SMX","gentamicin","AMK","CST","blbli")  %>% paste0(.,"_dich_num")
+
+# One rate ER
+corhmm_one_rate_ER <- pbmcapply::pbmclapply(pheno,FUN=function(x){
+  number_runs = 0
+  repeat{
+    number_runs = number_runs + 1 
+    corHMM_out = corHMM::corHMM(phy=tr, data=df[, c(tip_name_var,x)], rate.cat = 1, model="ER", node.states = 'joint',upper.bound=1e100,lower.bound=1e-09)
+    
+    if(corHMM_out$AIC>0){
+      corHMM_out$number_runs = number_runs
+      return(corHMM_out)
+      break
+      
+      }    }
+},mc.cores = 5) %>% `names<-`(pheno)
+paste0("Done with corHMM single rate ER")
+saveRDS(corhmm_one_rate_ER,"./data/corHMM_rate_differences/corHMM_single_ER.RDS")
+
+# One rate ARD
+corhmm_one_rate_ARD <- pbmcapply::pbmclapply(pheno,FUN=function(x){
+  number_runs = 0
+  repeat{
+    number_runs = number_runs + 1 
+  corHMM_out = corHMM::corHMM(phy=tr, data=df[, c(tip_name_var,x)], rate.cat = 1, model="ARD", node.states = 'joint',upper.bound=1e100,lower.bound=1e-09)  
+  if(corHMM_out$AIC>0){
+    corHMM_out$number_runs = number_runs
+      return(corHMM_out)
+      break 
+      }    }
+},mc.cores = 5) %>% `names<-`(pheno)
+paste0("Done with corHMM single rates ARD")
+saveRDS(corhmm_one_rate_ARD,"./data/corHMM_rate_differences/corHMM_single_ARD.RDS")
+
+# Two rates ER
+corhmm_two_rates_ER <- pbmcapply::pbmclapply(pheno,FUN=function(x){
+  number_runs = 0
+  repeat{
+    number_runs = number_runs + 1 
+  corHMM_out = corHMM::corHMM(phy=tr, data=df[, c(tip_name_var,x)], rate.cat = 2, model="ER", node.states = 'joint',upper.bound=1e100,lower.bound=1e-09)
+     if(corHMM_out$AIC>0){
+       corHMM_out$number_runs = number_runs
+      return(corHMM_out)
+      break
+      }    }
+},mc.cores = 5) %>% `names<-`(pheno)
+paste0("Done with corHMM two rates ER")
+saveRDS(corhmm_two_rates_ER,"./data/corHMM_rate_differences/corHMM_two_ER.RDS")
+
+# Two rates ARD
+corhmm_two_rates_ARD <- pbmcapply::pbmclapply(pheno,FUN=function(x){
+  number_runs = 0
+  repeat{
+    number_runs = number_runs + 1 
+  corHMM_out = corHMM::corHMM(phy=tr, data=df[, c(tip_name_var,x)], rate.cat = 2, model="ARD", node.states = 'joint',upper.bound=1e100,lower.bound=1e-09)
+     if(corHMM_out$AIC>0){
+       corHMM_out$number_runs = number_runs
+      return(corHMM_out)
+      break
+      
+      }    }
+},mc.cores = 5) %>% `names<-`(pheno)
+paste0("Done with corHMM two rates ARD")
+saveRDS(corhmm_two_rates_ARD,"./data/corHMM_rate_differences/corHMM_two_ARD.RDS")
+```
