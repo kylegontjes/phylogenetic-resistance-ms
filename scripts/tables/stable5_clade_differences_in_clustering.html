@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2025-03-23" />
+<meta name="date" content="2025-04-07" />
 
 <title>Supplemental Table 5: Clade differences</title>
 
@@ -575,7 +575,7 @@ display: none;
 
 <h1 class="title toc-ignore">Supplemental Table 5: Clade
 differences</h1>
-<h4 class="date">2025-03-23</h4>
+<h4 class="date">2025-04-07</h4>
 
 </div>
 
@@ -583,7 +583,7 @@ differences</h1>
 <div id="environment" class="section level1">
 <h1>Environment</h1>
 <pre class="r"><code>#Packages
-packages &lt;- c(&quot;tidyverse&quot;,&#39;phylosuite&#39;,&#39;ape&#39;)   
+packages &lt;- c(&quot;tidyverse&quot;,&#39;phyloAMR&#39;,&#39;ape&#39;)   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) </code></pre>
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
@@ -655,16 +655,16 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] kableExtra_1.4.0 gridExtra_2.3    ape_5.8-1        phylosuite_0.1.0
+ [1] kableExtra_1.4.0 gridExtra_2.3    ape_5.8-1        phyloAMR_0.1.0  
  [5] lubridate_1.9.4  forcats_1.0.0    stringr_1.5.1    dplyr_1.1.4     
  [9] purrr_1.0.4      readr_2.1.5      tidyr_1.3.1      tibble_3.2.1    
 [13] ggplot2_3.5.1    tidyverse_2.0.0  knitr_1.50      
 
 loaded via a namespace (and not attached):
- [1] sass_0.4.9        generics_0.1.3    xml2_1.3.8        stringi_1.8.4    
+ [1] sass_0.4.9        generics_0.1.3    xml2_1.3.8        stringi_1.8.7    
  [5] lattice_0.22-6    hms_1.1.3         digest_0.6.37     magrittr_2.0.3   
  [9] evaluate_1.0.3    grid_4.4.3        timechange_0.3.0  fastmap_1.2.0    
-[13] jsonlite_1.9.1    viridisLite_0.4.2 scales_1.3.0      jquerylib_0.1.4  
+[13] jsonlite_2.0.0    viridisLite_0.4.2 scales_1.3.0      jquerylib_0.1.4  
 [17] cli_3.6.4         rlang_1.1.5       munsell_0.5.1     withr_3.0.2      
 [21] cachem_1.1.0      yaml_2.3.10       tools_4.4.3       parallel_4.4.3   
 [25] tzdb_0.5.0        colorspace_2.1-1  vctrs_0.6.5       R6_2.6.1         
@@ -690,8 +690,8 @@ for(i in pheno){
 clade2 &lt;- subset(df,clade_I!=&quot;Clade I&quot;) %&gt;% .$isolate_no
 
 subset_analysis_to_clade &lt;- function(phenotype,cladeI,clustering){
-  clustering_CI &lt;- asr_cluster_analysis(clustering %&gt;% subset(child_name %in% cladeI),remove_faux = &quot;yes&quot;) %&gt;% mutate(clade = &quot;Clade I&quot;)
-  clustering_CII &lt;- asr_cluster_analysis(clustering %&gt;% subset(!child_name %in% cladeI),remove_faux = &quot;yes&quot;) %&gt;% mutate(clade = &quot;Clade II&quot;)
+  clustering_CI &lt;- asr_cluster_analysis(clustering %&gt;% subset(child_name %in% cladeI),remove_faux = TRUE) %&gt;% mutate(clade = &quot;Clade I&quot;)
+  clustering_CII &lt;- asr_cluster_analysis(clustering %&gt;% subset(!child_name %in% cladeI),remove_faux = TRUE) %&gt;% mutate(clade = &quot;Clade II&quot;)
   rbind.data.frame(clustering_CI,clustering_CII )  %&gt;% mutate(pheno = phenotype)
 }
 

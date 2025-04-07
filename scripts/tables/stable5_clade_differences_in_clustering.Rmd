@@ -14,7 +14,7 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=T, message=T, include=T, results=T}
 #Packages
-packages <- c("tidyverse",'phylosuite','ape')   
+packages <- c("tidyverse",'phyloAMR','ape')   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) 
 # Load function
@@ -42,8 +42,8 @@ clade1 <- subset(df,clade_I=="Clade I") %>% .$isolate_no
 clade2 <- subset(df,clade_I!="Clade I") %>% .$isolate_no
 
 subset_analysis_to_clade <- function(phenotype,cladeI,clustering){
-  clustering_CI <- asr_cluster_analysis(clustering %>% subset(child_name %in% cladeI),remove_faux = "yes") %>% mutate(clade = "Clade I")
-  clustering_CII <- asr_cluster_analysis(clustering %>% subset(!child_name %in% cladeI),remove_faux = "yes") %>% mutate(clade = "Clade II")
+  clustering_CI <- asr_cluster_analysis(clustering %>% subset(child_name %in% cladeI),remove_faux = TRUE) %>% mutate(clade = "Clade I")
+  clustering_CII <- asr_cluster_analysis(clustering %>% subset(!child_name %in% cladeI),remove_faux = TRUE) %>% mutate(clade = "Clade II")
   rbind.data.frame(clustering_CI,clustering_CII )  %>% mutate(pheno = phenotype)
 }
 
