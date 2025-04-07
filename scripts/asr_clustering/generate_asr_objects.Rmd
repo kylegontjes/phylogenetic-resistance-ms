@@ -1,5 +1,5 @@
 ---
-title: "generate_asr_clustering"
+title: "generate_asr_objects"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
@@ -15,7 +15,7 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=T, message=T, include=T, results=T}
 #Packages
-packages <- c("tidyverse",'phylosuite','phytools','ggtree')   
+packages <- c("tidyverse",'phyloAMR','phytools','ggtree')   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T))  
 # Print
@@ -34,13 +34,13 @@ asr_best_models <- lapply(asr_model_choices,FUN=function(x){x[["best_model"]]}) 
 ```
 
 
-# Run phylosuite
+# Run ASR algorithm
 ```{r}
 pheno <- c("TMP_SMX","gentamicin","AMK","CST","blbli")
 for(i in pheno){
   pheno_dich = paste0(i,"_dich_num")
   best_model <- subset(asr_best_models,names(asr_best_models)==pheno_dich)
-  asr_model <- asr(df = df,tr = tr,tip_name_var = "isolate_no",pheno=pheno_dich,model = best_model,node_states = "joint", upper_bound=1e100, lower_bound=1e-9, conf_threshold=NULL) 
+  asr_model <- asr(df = df,tr = tr,tip_name_var = "isolate_no",pheno=pheno_dich,model = best_model,node_states = "joint", upper_bound=1e50, lower_bound=1e-9) 
   saveRDS(asr_model,paste0("./data/asr_clustering/",i,"_asr.RDS"))
 }
 ```

@@ -15,7 +15,7 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=T, message=T, include=T, results=T}
 #Packages
-packages <- c("tidyverse",'phylosuite')   
+packages <- c("tidyverse",'phyloAMR')   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) 
 # Load function
@@ -43,7 +43,7 @@ parent_dfs <- lapply(paste0(pheno,"_asr"),get) %>% lapply(.,FUN=function(x){x[["
 
 # Transition Analysis 
 ```{r}
-transition_stats <- lapply(parent_dfs,asr_transition_analysis,node_states="joint") %>% do.call(rbind,.) %>% mutate(pheno = pheno)  %>% `rownames<-`(NULL)
+transition_stats <- lapply(parent_dfs, asr_transition_analysis, node_states="joint") %>% do.call(rbind,.) %>% mutate(pheno = pheno)  %>% `rownames<-`(NULL)
 
 favorite_kable(transition_stats)
 

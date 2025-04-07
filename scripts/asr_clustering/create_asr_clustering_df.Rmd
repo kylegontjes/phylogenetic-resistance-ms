@@ -40,7 +40,7 @@ for(i in pheno){
 ```{r}
 extract_dataset <- function(pheno){
   obj <- get(paste0(pheno,"_asr_clustering") )
-  final_df <- obj %>% select("child_name","asr_cluster","asr_cluster_renamed","asr_cluster_renamed_ns","asr_cluster_collapsed") %>% `colnames<-`(c("isolate_no",paste0(pheno,"_",colnames(.[,2:5])))) %>% as.data.frame
+  final_df <- obj %>% select("child_name","asr_cluster","asr_cluster_renamed","asr_cluster_renamed_resistant","asr_cluster_collapsed") %>% `colnames<-`(c("isolate_no",paste0(pheno,"_",colnames(.[,2:5])))) %>% as.data.frame
   return(final_df)
 }
 

@@ -15,7 +15,7 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=T, message=T, include=T, results=T}
 #Packages
-packages <- c("tidyverse",'phylosuite','ape')   
+packages <- c("tidyverse",'phyloAMR','ape')   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) 
 # Load function
@@ -38,7 +38,7 @@ for(i in pheno){
 
 # Clustering Analysis  
 ```{r}
-cluster_stats <- lapply(paste0(pheno,"_asr_clustering"),get) %>% lapply(.,asr_cluster_analysis,remove_faux="yes") %>% do.call(rbind,.) %>% mutate(pheno = pheno)  %>% `rownames<-`(NULL)
+cluster_stats <- lapply(paste0(pheno,"_asr_clustering"),get) %>% lapply(.,asr_cluster_analysis,remove_faux=TRUE) %>% do.call(rbind,.) %>% mutate(pheno = pheno)  %>% `rownames<-`(NULL)
 
 # Print
 favorite_kable(cluster_stats)

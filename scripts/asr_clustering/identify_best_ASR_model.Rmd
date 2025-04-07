@@ -15,7 +15,7 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r load env,include=T,echo=T,results=T,message=T}
 #Packages
-packages <- c("tidyverse","phylosuite",'ape')   
+packages <- c("tidyverse","phyloAMR",'ape')   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T))
 # Print
@@ -36,7 +36,7 @@ df<- df %>% .[match(tr$tip.label,.$isolate_no),]
 pheno <- c("TMP_SMX","gentamicin","AMK","CST","blbli") 
 pheno_dich <- paste0(pheno,"_dich_num")
 asr_model_choices <- lapply(pheno_dich,function(x){
-  out <- phylosuite::find_best_asr_model(df,tr,tip_name_var = "isolate_no",pheno = x,node_states = "joint")  
+  out <- phyloAMR::find_best_asr_model(df,tr,tip_name_var = "isolate_no",pheno = x,node_states = "joint")  
   out$model_options$pheno  <-  x
   names(out$best_model) <- x
   return(out)

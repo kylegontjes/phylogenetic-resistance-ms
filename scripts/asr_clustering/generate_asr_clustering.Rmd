@@ -14,11 +14,9 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=T, message=T, include=T, results=T}
 #Packages
-packages <- c("tidyverse",'phylosuite','ape')   
+packages <- c("tidyverse",'phyloAMR','ape')   
 #Load Packages
-invisible(lapply(packages,library,character.only=T,quietly=T)) 
-# Load function
-source('./lib/consistent_themes.R')
+invisible(lapply(packages,library,character.only=T,quietly=T))  
 # Print
 Sys.info()
 sessionInfo() 
@@ -40,10 +38,10 @@ for(i in pheno){
 
 # Generate clustering
 ```{r}
-# reclassify text string for figure 
+# Reclassify text string for figure 
 reclassify_asr_resistance <- function(string){
   ifelse(string %in% c("No Feature"),"Susceptible",
-         paste0("Non-Susceptible ",string))  
+         paste0("Resistant ",string))  
 }
 ```
 
@@ -51,8 +49,8 @@ reclassify_asr_resistance <- function(string){
 for(i in pheno){
   pheno_dich=paste0(i,"_dich_num")
   parent_child = get(paste0(i,"_asr")) %>% .[["parent_child_df"]]
-  asr_clustering <- asr_cluster_detection(df = df,tr = tr,tip_name_var = "isolate_no",patient_id="Patient_ID",pheno = pheno_dich, parent_child_df = parent_child,node_states = "joint",confidence = NULL,faux_clusters = "remove",remove_revertant = "yes",collapse_cluster = "yes")
-  asr_clustering$asr_cluster_renamed_ns <-  reclassify_asr_resistance(asr_clustering$asr_cluster_renamed)
+  asr_clustering <- asr_cluster_detection(df = df,tr = tr,tip_name_var = "isolate_no",patient_id="Patient_ID",pheno = pheno_dich, parent_child_df = parent_child,node_states = "joint",confidence = NULL,faux_clusters = 'remove',remove_revertant = T,collapse_cluster = T)
+  asr_clustering$asr_cluster_renamed_resistant <-  reclassify_asr_resistance(asr_clustering$asr_cluster_renamed)
   saveRDS(asr_clustering,paste0("./data/asr_clustering/",i,"_asr_clustering.RDS")) 
 }
 ```
