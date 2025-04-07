@@ -48,18 +48,18 @@ create_MIC_histogram <- function(phenotype_cont,phenotype_cat = NULL,phenotype_n
 # MIC histograms
 ```{r,message=F,error=F,warning=F,fig.width=19,fig.height=9.5}
 # Figure
-sfig1a <- create_MIC_histogram(df$bactrim_mic,df$bactrim_cat,"TMP-SMX","A.")  + ylim(NA,225) + format + resistance_cat_scale
+sfig1a <- create_MIC_histogram(df$bactrim_mic,df$bactrim_cat,"TMP-SMX","A")  + ylim(NA,225) + format + resistance_cat_scale
   
-sfig1b <-  create_MIC_histogram(df$gentamicin_mic,df$gentamicin_cat,"Gentamicin","B.") + ylim(NA,225)+ format + resistance_cat_scale
+sfig1b <-  create_MIC_histogram(df$gentamicin_mic,df$gentamicin_cat,"Gentamicin","B") + ylim(NA,225)+ format + resistance_cat_scale
 
-sfig1c <-  create_MIC_histogram(df$AMK,df$AMK_cat,"Amikacin","C.") + ylim(NA,225) + format + resistance_cat_scale
+sfig1c <-  create_MIC_histogram(df$AMK,df$AMK_cat,"Amikacin","C") + ylim(NA,225) + format + resistance_cat_scale
 
-sfig1d <-  create_MIC_histogram(df$CST,df$CST_cat,"Colistin","D.") + ylim(NA,225)+ format + resistance_cat_scale
+sfig1d <-  create_MIC_histogram(df$CST,df$CST_cat,"Colistin","D") + ylim(NA,225)+ format + resistance_cat_scale
 
-sfig1e <- create_MIC_histogram(df$MVB_log_2,df$MVB_cat,"Meropenem-Vaborbactam","E.") + scale_x_continuous(breaks=c(-2,-1,0,1,2,3,4,5),
+sfig1e <- create_MIC_histogram(df$MVB_log_2,df$MVB_cat,"Meropenem-Vaborbactam","E") + scale_x_continuous(breaks=c(-2,-1,0,1,2,3,4,5),
         labels=c("≤0.25","0.5", "1","2","4","8","16","≥32"))  + ylim(NA,225) + format + resistance_cat_scale
   
-sfig1f <-  create_MIC_histogram(df$IR_log_2,df$IR_cat,"Imipenem-Relebactam","F.")+ scale_x_continuous(breaks=c(-2,-1,0,1,2,3,4,5),
+sfig1f <-  create_MIC_histogram(df$IR_log_2,df$IR_cat,"Imipenem-Relebactam","F")+ scale_x_continuous(breaks=c(-2,-1,0,1,2,3,4,5),
         labels=c("≤0.25","0.5","1","2","4","8","16","≥32"))   + ylim(NA,225)+ format + resistance_cat_scale
 # Legend
 MIC_legend <- cowplot::get_plot_component(sfig1b,"guide-box",return_all=T) %>% .[[3]]
