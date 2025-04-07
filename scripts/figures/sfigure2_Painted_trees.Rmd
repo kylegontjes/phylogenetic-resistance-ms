@@ -72,7 +72,7 @@ names(clusters_col) <- clusters_name
 Non_sus_scale <- scale_fill_manual(breaks = c(0,1),values=c("white","black"),labels = c("Susceptible","Resistant"),name="Tip State",guide = guide_legend(title.position = "top", label.position = "right",nrow=2,order=2),drop = FALSE )
 
 ## cluster_scale
-cluster_scale <- scale_fill_manual(breaks =c("Susceptible","Resistant Singleton",names(clusters_col)),values=c("Susceptible" = "white","Resistant Singleton" = "red",clusters_col),labels=c("Susceptible","R Singleton",gsub("Resistant","R",clusters_name)),name="Phylogenetics of Resistance", guide = guide_legend(ncol=3, order=3,title.position = "top", label.position = "right"))
+cluster_scale <- scale_fill_manual(breaks =c("Susceptible","Resistant Singleton",names(clusters_col)),values=c("Susceptible" = "white","Resistant Singleton" = "red",clusters_col),labels=c("Susceptible","Singleton",gsub("Resistant ","",clusters_name)),name="Phylogenetics of Resistance", guide = guide_legend(ncol=3, order=3,title.position = "top", label.position = "right"))
 
 state_parent_childs <- c()
 for(i in pheno){
