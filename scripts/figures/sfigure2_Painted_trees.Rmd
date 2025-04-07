@@ -95,7 +95,7 @@ painted_trees_w_cluster_calls_wo_legends <- lapply(painted_trees_w_cluster_calls
  
 legend_fig <- cowplot::get_legend(painted_trees_w_cluster_calls[[3]])
  
-sfigure2 <- cowplot::plot_grid(painted_trees_w_cluster_calls_wo_legends[[1]],painted_trees_w_cluster_calls_wo_legends[[2]],painted_trees_w_cluster_calls_wo_legends[[3]],painted_trees_w_cluster_calls_wo_legends[[4]],painted_trees_w_cluster_calls_wo_legends[[5]],legend_fig,ncol=3,labels =c("A TMP-SMX","B Gentamicin","C Amikacin","D Colistin","E BL/BLI",""),label_x = 0,label_size = 12)
+sfigure2 <- cowplot::plot_grid(painted_trees_w_cluster_calls_wo_legends[[1]],painted_trees_w_cluster_calls_wo_legends[[2]],painted_trees_w_cluster_calls_wo_legends[[3]],painted_trees_w_cluster_calls_wo_legends[[4]],painted_trees_w_cluster_calls_wo_legends[[5]],legend_fig,ncol=3,labels =c("TMP-SMX","Gentamicin","Amikacin","Colistin","BL/BLI",""),label_x = 0,label_size = 12)
 
 sfigure2
 ```
