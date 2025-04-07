@@ -1,39 +1,11 @@
-Variable,Overall (n=312)
-"age, median (IQR)",21.6672.72 (18.2)
-sex.female,149 (47.8)
-"LOSbeforeCx, median (IQR)",2121 (37)
-"device_ct, median (IQR)",32 (2)
-any_device,274 (87.8)
-trach,219 (70.2)
-central_line,180 (57.7)
-foley,174 (55.8)
-gastro,117 (37.5)
-"comorb_ct, median (IQR)",42 (3)
-multimorbid,201 (64.4)
-AKI,152 (48.7)
-CKD,107 (34.3)
-VDRF,96 (30.8)
-underweight,82 (26.3)
-CHF,65 (20.8)
-decub,65 (20.8)
-lung_dz,61 (19.6)
-brain_injury,59 (18.9)
-malignancy,39 (12.5)
-obese,17 (5.4)
-any_antibiotic_1d,227 (72.8)
-vanco_1d,138 (44.2)
-carbapenem_1d,99 (31.7)
-third_plus_ceph_1d,79 (25.3)
-AG_1d,63 (20.2)
-amikacin_1d,40 (12.8)
-tobra_1d,21 (6.7)
-gent_1d,11 (3.5)
-flagyl_1d,60 (19.2)
-FQ_1d,58 (18.6)
-linezolid_1d,46 (14.7)
-tigecycline_1d,42 (13.5)
-zosyn_1d,42 (13.5)
-poly_colistin_1d,37 (11.9)
-dapto_1d,12 (3.8)
-bactrim_1d,11 (3.5)
-aztreonam_1d,10 (3.2)
+Phenotype,Model,No. Parameters,Rate 1,Rate 2,Log Likelihood,AIC,Corrected AIC
+TMP-SMX,ER,1,12299.36,NA,-186.86,375.71,375.72
+TMP-SMX,ARD,2,14265.9,9771.55,-185.73,375.46,375.49
+Gentamicin,ER,1,10270.37,NA,-162.08,326.16,326.17
+Gentamicin,ARD,2,10795.42,9823.09,-162.01,328.02,328.05
+Amikacin,ER,1,23429.39,NA,-226.98,455.95,455.96
+Amikacin,ARD,2,24663.83,42358.45,-222.47,448.94,448.97
+Colistin,ER,1,8706.43,NA,-159.26,320.52,320.53
+Colistin,ARD,2,7875.22,11607.85,-158.5,320.99,321.02
+BL/BLI,ER,1,7845.05,NA,-166.53,335.05,335.06
+BL/BLI,ARD,2,12924.64,76990.62,-145.38,294.75,294.79
