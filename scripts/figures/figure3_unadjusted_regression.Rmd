@@ -1,5 +1,5 @@
 ---
-title: "figure2"
+title: "figure3"
 output: html_document
 date: "`r Sys.Date()`"
 ---
@@ -31,15 +31,15 @@ dysbiosis_forest <- readRDS("./data/regression/unadjusted_regression_dysbiotic_f
 
 # Create cowplot
 ```{r,fig.height=12.5,fig.width=22.5}
-fig2A <- ggplotify::grid2grob(plot(clade_forest))
-fig2B <- ggplotify::grid2grob(plot(cognate_forest))
-fig2C <- ggplotify::grid2grob(plot(dysbiosis_forest)) 
+fig3A <- ggplotify::grid2grob(plot(clade_forest))
+fig3B <- ggplotify::grid2grob(plot(cognate_forest))
+fig3C <- ggplotify::grid2grob(plot(dysbiosis_forest)) 
 
-figure2 <- plot_grid(fig2A,fig2B,fig2C,labels = c("A.","B.","C."),nrow=2,label_size = 16,rel_heights = c(1,1,1)) 
-figure2
+figure3 <- plot_grid(fig3A,fig3B,fig3C,labels = "AUTO",nrow=2,label_size = 16,rel_heights = c(1,1,1)) 
+figure3
 ```
 
 # Save figure
 ```{r}
-ggsave("./figures/figure2.png",figure2,dpi=600,width=22.5,height=12.5,bg='white')
+ggsave("./figures/figure3.png",figure3,dpi=600,width=22.5,height=12.5,bg='white')
 ```
