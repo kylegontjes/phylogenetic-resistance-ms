@@ -1,5 +1,5 @@
 ---
-title: 'Supplemental Figure 2: MIC Histogram'
+title: 'Supplemental Figure 1: MIC Histogram'
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
@@ -48,32 +48,32 @@ create_MIC_histogram <- function(phenotype_cont,phenotype_cat = NULL,phenotype_n
 # MIC histograms
 ```{r,message=F,error=F,warning=F,fig.width=19,fig.height=9.5}
 # Figure
-sfig2a <- create_MIC_histogram(df$bactrim_mic,df$bactrim_cat,"TMP-SMX","A.")  + ylim(NA,225) + format + resistance_cat_scale
+sfig1a <- create_MIC_histogram(df$bactrim_mic,df$bactrim_cat,"TMP-SMX","A.")  + ylim(NA,225) + format + resistance_cat_scale
   
-sfig2b <-  create_MIC_histogram(df$gentamicin_mic,df$gentamicin_cat,"Gentamicin","B.") + ylim(NA,225)+ format + resistance_cat_scale
+sfig1b <-  create_MIC_histogram(df$gentamicin_mic,df$gentamicin_cat,"Gentamicin","B.") + ylim(NA,225)+ format + resistance_cat_scale
 
-sfig2c <-  create_MIC_histogram(df$AMK,df$AMK_cat,"Amikacin","C.") + ylim(NA,225) + format + resistance_cat_scale
+sfig1c <-  create_MIC_histogram(df$AMK,df$AMK_cat,"Amikacin","C.") + ylim(NA,225) + format + resistance_cat_scale
 
-sfig2d <-  create_MIC_histogram(df$CST,df$CST_cat,"Colistin","D.") + ylim(NA,225)+ format + resistance_cat_scale
+sfig1d <-  create_MIC_histogram(df$CST,df$CST_cat,"Colistin","D.") + ylim(NA,225)+ format + resistance_cat_scale
 
-sfig2e <- create_MIC_histogram(df$MVB_log_2,df$MVB_cat,"Meropenem-Vaborbactam","E.") + scale_x_continuous(breaks=c(-2,-1,0,1,2,3,4,5),
+sfig1e <- create_MIC_histogram(df$MVB_log_2,df$MVB_cat,"Meropenem-Vaborbactam","E.") + scale_x_continuous(breaks=c(-2,-1,0,1,2,3,4,5),
         labels=c("≤0.25","0.5", "1","2","4","8","16","≥32"))  + ylim(NA,225) + format + resistance_cat_scale
   
-sfig2f <-  create_MIC_histogram(df$IR_log_2,df$IR_cat,"Imipenem-Relebactam","F.")+ scale_x_continuous(breaks=c(-2,-1,0,1,2,3,4,5),
+sfig1f <-  create_MIC_histogram(df$IR_log_2,df$IR_cat,"Imipenem-Relebactam","F.")+ scale_x_continuous(breaks=c(-2,-1,0,1,2,3,4,5),
         labels=c("≤0.25","0.5","1","2","4","8","16","≥32"))   + ylim(NA,225)+ format + resistance_cat_scale
 # Legend
-MIC_legend <- cowplot::get_plot_component(sfig2b,"guide-box",return_all=T) %>% .[[3]]
-sfig2_legend_plot <- plot_grid(MIC_legend) + theme(plot.margin = unit(c(t=-1, 0, 0, b=0), "cm"))
+MIC_legend <- cowplot::get_plot_component(sfig1b,"guide-box",return_all=T) %>% .[[3]]
+sfig1_legend_plot <- plot_grid(MIC_legend) + theme(plot.margin = unit(c(t=-1, 0, 0, b=0), "cm"))
 
 # Create cowplot Figure
-sfig2_wo_legend <- plot_grid(sfig2a + theme(legend.position = "none"),sfig2b + theme(legend.position = "none"),
-                            sfig2c + theme(legend.position = "none"),sfig2d + theme(legend.position = "none"),
-                            sfig2e + theme(legend.position = "none"),sfig2f + theme(legend.position = "none"),ncol=3)
-sfig2 <- plot_grid(sfig2_wo_legend,sfig2_legend_plot, ncol=1,rel_heights = c(1,.2))
-sfig2
+sfig1_wo_legend <- plot_grid(sfig1a + theme(legend.position = "none"),sfig1b + theme(legend.position = "none"),
+                            sfig1c + theme(legend.position = "none"),sfig1d + theme(legend.position = "none"),
+                            sfig1e + theme(legend.position = "none"),sfig1f + theme(legend.position = "none"),ncol=3)
+sfig1 <- plot_grid(sfig1_wo_legend,sfig1_legend_plot, ncol=1,rel_heights = c(1,.2))
+sfig1
 ```
 
 ## Save file
 ```{r}
-ggsave(filename = "~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/figures/sfigure2.png",plot=sfig2,width = 19,height=9.5,dpi = 600,units = 'in',bg="white") 
+ggsave(filename = "~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/figures/sfigure1.png",plot=sfig1,width = 19,height=9.5,dpi = 600,units = 'in',bg="white") 
 ```
