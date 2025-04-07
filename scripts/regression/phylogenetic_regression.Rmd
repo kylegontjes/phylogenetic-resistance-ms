@@ -16,7 +16,7 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=T, message=T, include=T, results=T}
 #Packages
-packages <- c("tidyverse","phylosuite")   
+packages <- c("tidyverse","phyloAMR")   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) 
 # Functions
@@ -51,7 +51,7 @@ for(i in pheno){
 purposeful_output <- lapply(pheno,FUN=function(x){
   phenotype = paste0(x,"_dich_num")
   phenotype_df = get(paste0(x,"_regression_df"))
-  phylosuite::phyloaware_regression(phenotype,variables =eligible_variables,df=phenotype_df,first_present=T,patient_id="Patient_ID",culture_date="Cx_date",multivariable='purposeful',stepwise_direction = NULL,entry_criteria = 0.2,retention_criteria = 0.1,confounding_criteria = 0.2)
+  phyloaware_regression(phenotype,variables =eligible_variables,df=phenotype_df,first_present=T,patient_id="Patient_ID",culture_date="Cx_date",multivariable='purposeful',stepwise_direction = NULL,entry_criteria = 0.2,retention_criteria = 0.1,confounding_criteria = 0.2)
 }) %>% `names<-`(pheno)
 
 saveRDS(purposeful_output,"./data/regression/purposeful_regression_results.RDS")
