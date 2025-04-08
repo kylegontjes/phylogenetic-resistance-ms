@@ -1,5 +1,5 @@
 ---
-title: "stable7_corHMM_rate_differences"
+title: "stable 7: corHMM hidden rate modeling"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
@@ -15,7 +15,7 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=T, message=T, include=T, results=F}
 #Packages
-packages <- c("tidyverse",'phylosuite','kableExtra','gridExtra','readr')   
+packages <- c("tidyverse",'kableExtra','gridExtra','readr')   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) 
 # Load function
@@ -29,7 +29,7 @@ sessionInfo()
 ```{r}
 rate_differences_table <- readRDS('./data/corHMM_rate_differences/corHMM_model_stats.RDS')
 
-rate_differences_table_formatted <- rate_differences_table %>% select(phenotype,model) %>% cbind(.,rate_differences_table %>% select(-phenotype,-model,-np,-multi_np,-nRateCat,-multi_nRateCat) %>% mutate_all(as.numeric) %>% round(.,2)) 
+rate_differences_table_formatted <- rate_differences_table %>% select(phenotype,model) %>% cbind(.,rate_differences_table %>% select(-phenotype,-model,-np,-multi_np,-nRateCat,-multi_nRateCat,-best_model) %>% mutate_all(as.numeric) %>% round(.,2) %>% cbind(.,rate_differences_table %>% select(best_model))) 
 
 rate_differences_table_formatted$phenotype <- recode(rate_differences_table_formatted$phenotype,'AMK_dich_num' = 'Amikacin','blbli_dich_num'='BL/BLI','CST_dich_num'='Colistin','TMP_SMX_dich_num'='TMP-SMX','gentamicin_dich_num'='Gentamicin')    
 
@@ -50,12 +50,14 @@ colnames(rate_differences_table_formatted) <- c("Phenotype",
 "Category II Rate 2",
 "Multi-rate Log Likelihood",
 "Multi-rate AIC",
-"Multi-rate AICc" )
+"Multi-rate AICc",
+'Best model')
+
 favorite_kable(rate_differences_table_formatted)
 ```
 
 # Save table
 ```{r}
-saveRDS(rate_differences_table_formatted,"./tables/stable7_corHMM_rate_differences.RDS")
-write_csv(rate_differences_table_formatted,"./tables/stable7_corHMM_rate_differences.csv")
+saveRDS(rate_differences_table_formatted,"./tables/stable7.RDS")
+write_csv(rate_differences_table_formatted,"./tables/stable7.csv")
 ```

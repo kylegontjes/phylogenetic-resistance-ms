@@ -11,9 +11,9 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-03-24" />
+<meta name="date" content="2025-04-07" />
 
-<title>stable7_corHMM_rate_differences</title>
+<title>stable 7: corHMM hidden rate modeling</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -574,9 +574,9 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">stable7_corHMM_rate_differences</h1>
+<h1 class="title toc-ignore">stable 7: corHMM hidden rate modeling</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-03-24</h4>
+<h4 class="date">2025-04-07</h4>
 
 </div>
 
@@ -584,7 +584,7 @@ display: none;
 <div id="environment" class="section level1">
 <h1>Environment</h1>
 <pre class="r"><code>#Packages
-packages &lt;- c(&quot;tidyverse&quot;,&#39;phylosuite&#39;,&#39;kableExtra&#39;,&#39;gridExtra&#39;,&#39;readr&#39;)   
+packages &lt;- c(&quot;tidyverse&quot;,&#39;kableExtra&#39;,&#39;gridExtra&#39;,&#39;readr&#39;)   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) </code></pre>
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
@@ -623,7 +623,7 @@ sessionInfo() </code></pre>
 <h1>Create table</h1>
 <pre class="r"><code>rate_differences_table &lt;- readRDS(&#39;./data/corHMM_rate_differences/corHMM_model_stats.RDS&#39;)
 
-rate_differences_table_formatted &lt;- rate_differences_table %&gt;% select(phenotype,model) %&gt;% cbind(.,rate_differences_table %&gt;% select(-phenotype,-model,-np,-multi_np,-nRateCat,-multi_nRateCat) %&gt;% mutate_all(as.numeric) %&gt;% round(.,2)) 
+rate_differences_table_formatted &lt;- rate_differences_table %&gt;% select(phenotype,model) %&gt;% cbind(.,rate_differences_table %&gt;% select(-phenotype,-model,-np,-multi_np,-nRateCat,-multi_nRateCat,-best_model) %&gt;% mutate_all(as.numeric) %&gt;% round(.,2) %&gt;% cbind(.,rate_differences_table %&gt;% select(best_model))) 
 
 rate_differences_table_formatted$phenotype &lt;- recode(rate_differences_table_formatted$phenotype,&#39;AMK_dich_num&#39; = &#39;Amikacin&#39;,&#39;blbli_dich_num&#39;=&#39;BL/BLI&#39;,&#39;CST_dich_num&#39;=&#39;Colistin&#39;,&#39;TMP_SMX_dich_num&#39;=&#39;TMP-SMX&#39;,&#39;gentamicin_dich_num&#39;=&#39;Gentamicin&#39;)    
 
@@ -644,7 +644,9 @@ colnames(rate_differences_table_formatted) &lt;- c(&quot;Phenotype&quot;,
 &quot;Category II Rate 2&quot;,
 &quot;Multi-rate Log Likelihood&quot;,
 &quot;Multi-rate AIC&quot;,
-&quot;Multi-rate AICc&quot; )
+&quot;Multi-rate AICc&quot;,
+&#39;Best model&#39;)
+
 favorite_kable(rate_differences_table_formatted)</code></pre>
 <table style="width:100%; color: black; margin-left: auto; margin-right: auto;" class="table table-striped table-hover table-condensed table-responsive">
 <thead>
@@ -691,6 +693,9 @@ Multi-rate AIC
 <th style="text-align:right;">
 Multi-rate AICc
 </th>
+<th style="text-align:left;">
+Best model
+</th>
 </tr>
 </thead>
 <tbody>
@@ -702,7 +707,7 @@ TMP-SMX
 ER
 </td>
 <td style="text-align:right;">
-12299.91
+12300.29
 </td>
 <td style="text-align:right;">
 NA
@@ -717,7 +722,7 @@ NA
 375.72
 </td>
 <td style="text-align:right;">
-3.856158e+12
+4.216999e+18
 </td>
 <td style="text-align:right;">
 NA
@@ -729,13 +734,16 @@ NA
 NA
 </td>
 <td style="text-align:right;">
--162.37
+-160.52
 </td>
 <td style="text-align:right;">
-332.74
+329.04
 </td>
 <td style="text-align:right;">
-332.84
+329.15
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 <tr>
@@ -746,10 +754,10 @@ TMP-SMX
 ARD
 </td>
 <td style="text-align:right;">
-14263.97
+14264.30
 </td>
 <td style="text-align:right;">
-9770.09
+9772.39
 </td>
 <td style="text-align:right;">
 -185.73
@@ -761,13 +769,13 @@ ARD
 375.49
 </td>
 <td style="text-align:right;">
-1.346874e+15
+1.268987e+09
 </td>
 <td style="text-align:right;">
-1.662987e+15
+1.567103e+09
 </td>
 <td style="text-align:right;">
-3244.94
+3260.49
 </td>
 <td style="text-align:right;">
 0.00
@@ -781,6 +789,9 @@ ARD
 <td style="text-align:right;">
 332.73
 </td>
+<td style="text-align:left;">
+Two rate categories
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -790,7 +801,7 @@ Gentamicin
 ER
 </td>
 <td style="text-align:right;">
-10270.94
+10271.17
 </td>
 <td style="text-align:right;">
 NA
@@ -805,7 +816,7 @@ NA
 326.17
 </td>
 <td style="text-align:right;">
-3.004613e+12
+2.337381e+14
 </td>
 <td style="text-align:right;">
 NA
@@ -817,13 +828,16 @@ NA
 NA
 </td>
 <td style="text-align:right;">
--157.22
+-157.21
 </td>
 <td style="text-align:right;">
-322.45
+322.41
 </td>
 <td style="text-align:right;">
-322.55
+322.52
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 <tr>
@@ -834,10 +848,10 @@ Gentamicin
 ARD
 </td>
 <td style="text-align:right;">
-10793.20
+10791.85
 </td>
 <td style="text-align:right;">
-9822.41
+9820.50
 </td>
 <td style="text-align:right;">
 -162.01
@@ -849,25 +863,28 @@ ARD
 328.05
 </td>
 <td style="text-align:right;">
-1.126797e+12
+4.228194e+11
 </td>
 <td style="text-align:right;">
-3.590801e+12
+5.718461e+12
 </td>
 <td style="text-align:right;">
-0.21
+7466.01
 </td>
 <td style="text-align:right;">
-4543.10
+18136.12
 </td>
 <td style="text-align:right;">
--156.66
+-156.68
 </td>
 <td style="text-align:right;">
-325.33
+325.37
 </td>
 <td style="text-align:right;">
-325.55
+325.59
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 <tr>
@@ -878,7 +895,7 @@ Amikacin
 ER
 </td>
 <td style="text-align:right;">
-23429.25
+23429.33
 </td>
 <td style="text-align:right;">
 NA
@@ -893,25 +910,28 @@ NA
 455.96
 </td>
 <td style="text-align:right;">
-5.763180e+13
+6.478678e+19
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-3173.07
+47.02
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--202.38
+-116.89
 </td>
 <td style="text-align:right;">
-412.75
+241.79
 </td>
 <td style="text-align:right;">
-412.86
+241.89
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 <tr>
@@ -922,10 +942,10 @@ Amikacin
 ARD
 </td>
 <td style="text-align:right;">
-24661.17
+24662.76
 </td>
 <td style="text-align:right;">
-42364.06
+42365.61
 </td>
 <td style="text-align:right;">
 -222.47
@@ -937,16 +957,16 @@ ARD
 448.97
 </td>
 <td style="text-align:right;">
-4.849576e+05
+4.820531e+05
 </td>
 <td style="text-align:right;">
-7.480230e+05
+7.433099e+05
 </td>
 <td style="text-align:right;">
-4939.83
+4999.71
 </td>
 <td style="text-align:right;">
-50996.96
+50938.42
 </td>
 <td style="text-align:right;">
 -197.35
@@ -957,6 +977,9 @@ ARD
 <td style="text-align:right;">
 406.92
 </td>
+<td style="text-align:left;">
+Two rate categories
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -966,7 +989,7 @@ Colistin
 ER
 </td>
 <td style="text-align:right;">
-8707.29
+8707.68
 </td>
 <td style="text-align:right;">
 NA
@@ -981,25 +1004,28 @@ NA
 320.53
 </td>
 <td style="text-align:right;">
-5.914759e+15
+1.669737e+17
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-0.40
+0.15
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--152.18
+-152.13
 </td>
 <td style="text-align:right;">
-312.36
+312.26
 </td>
 <td style="text-align:right;">
-312.47
+312.37
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 <tr>
@@ -1010,10 +1036,10 @@ Colistin
 ARD
 </td>
 <td style="text-align:right;">
-7875.98
+7874.45
 </td>
 <td style="text-align:right;">
-11608.59
+11609.94
 </td>
 <td style="text-align:right;">
 -158.50
@@ -1025,16 +1051,16 @@ ARD
 321.02
 </td>
 <td style="text-align:right;">
-1.714730e+06
+1.719268e+06
 </td>
 <td style="text-align:right;">
-1.312258e+05
+1.315421e+05
 </td>
 <td style="text-align:right;">
-43771.24
+43720.94
 </td>
 <td style="text-align:right;">
-296.15
+271.54
 </td>
 <td style="text-align:right;">
 -147.27
@@ -1045,6 +1071,9 @@ ARD
 <td style="text-align:right;">
 306.76
 </td>
+<td style="text-align:left;">
+Two rate categories
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -1054,7 +1083,7 @@ BL/BLI
 ER
 </td>
 <td style="text-align:right;">
-7843.07
+7843.50
 </td>
 <td style="text-align:right;">
 NA
@@ -1069,25 +1098,28 @@ NA
 335.06
 </td>
 <td style="text-align:right;">
-2.191713e+16
+3.662822e+18
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-0.18
+175.19
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--134.84
+-132.99
 </td>
 <td style="text-align:right;">
-277.68
+273.98
 </td>
 <td style="text-align:right;">
-277.79
+274.08
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 <tr>
@@ -1098,10 +1130,10 @@ BL/BLI
 ARD
 </td>
 <td style="text-align:right;">
-12925.44
+12922.95
 </td>
 <td style="text-align:right;">
-76994.07
+76973.41
 </td>
 <td style="text-align:right;">
 -145.38
@@ -1113,25 +1145,28 @@ ARD
 294.79
 </td>
 <td style="text-align:right;">
-1.336087e+06
+3.489360e+06
 </td>
 <td style="text-align:right;">
-4.600323e+05
+2.001005e+05
 </td>
 <td style="text-align:right;">
-0.00
+393422.35
 </td>
 <td style="text-align:right;">
-1912.91
+160563.53
 </td>
 <td style="text-align:right;">
--129.65
+-131.01
 </td>
 <td style="text-align:right;">
-271.30
+274.02
 </td>
 <td style="text-align:right;">
-271.53
+274.24
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 </tbody>
@@ -1139,8 +1174,8 @@ ARD
 </div>
 <div id="save-table" class="section level1">
 <h1>Save table</h1>
-<pre class="r"><code>saveRDS(rate_differences_table_formatted,&quot;./tables/stable7_corHMM_rate_differences.RDS&quot;)
-write_csv(rate_differences_table_formatted,&quot;./tables/stable7_corHMM_rate_differences.csv&quot;)</code></pre>
+<pre class="r"><code>saveRDS(rate_differences_table_formatted,&quot;./tables/stable7.RDS&quot;)
+write_csv(rate_differences_table_formatted,&quot;./tables/stable7.csv&quot;)</code></pre>
 </div>
 
 

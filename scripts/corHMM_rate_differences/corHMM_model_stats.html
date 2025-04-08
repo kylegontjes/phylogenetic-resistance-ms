@@ -11,9 +11,9 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-03-24" />
+<meta name="date" content="2025-04-07" />
 
-<title>corHMM_multirate_analysis</title>
+<title>corHMM Model Statistics</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -574,9 +574,9 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">corHMM_multirate_analysis</h1>
+<h1 class="title toc-ignore">corHMM Model Statistics</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-03-24</h4>
+<h4 class="date">2025-04-07</h4>
 
 </div>
 
@@ -654,10 +654,10 @@ Sys.info()</code></pre>
 ## [13] tidyverse_2.0.0  knitr_1.50      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] sass_0.4.9        generics_0.1.3    xml2_1.3.8        stringi_1.8.4    
+##  [1] sass_0.4.9        generics_0.1.3    xml2_1.3.8        stringi_1.8.7    
 ##  [5] lattice_0.22-6    hms_1.1.3         digest_0.6.37     magrittr_2.0.3   
 ##  [9] evaluate_1.0.3    grid_4.4.3        timechange_0.3.0  fastmap_1.2.0    
-## [13] jsonlite_1.9.1    Matrix_1.7-3      DBI_1.2.3         survival_3.8-3   
+## [13] jsonlite_2.0.0    Matrix_1.7-3      DBI_1.2.3         survival_3.8-3   
 ## [17] viridisLite_0.4.2 scales_1.3.0      jquerylib_0.1.4   cli_3.6.4        
 ## [21] mitools_2.4       rlang_1.1.5       munsell_0.5.1     splines_4.4.3    
 ## [25] withr_3.0.2       cachem_1.1.0      yaml_2.3.10       tools_4.4.3      
@@ -667,108 +667,21 @@ Sys.info()</code></pre>
 ## [41] xfun_0.51         tidyselect_1.2.1  rstudioapi_0.17.1 htmltools_0.5.8.1
 ## [45] survey_4.4-2      rmarkdown_2.29    svglite_2.1.3     compiler_4.4.3</code></pre>
 </div>
-<div id="functions" class="section level1">
-<h1>functions</h1>
-<p>#source(“./lib/”)</p>
-</div>
-<div id="print-environment" class="section level1">
-<h1>Print environment</h1>
-<p>Sys.info() sessionInfo()</p>
-<pre><code>
-# Load corHMM output
-
-``` r
-corHMM_one_rate_ER &lt;- readRDS(&quot;./data/corHMM_rate_differences/corHMM_single_ER.RDS&quot;)
+<div id="load-corhmm-output" class="section level1">
+<h1>Load corHMM output</h1>
+<pre class="r"><code>corHMM_one_rate_ER &lt;- readRDS(&quot;./data/corHMM_rate_differences/corHMM_single_ER.RDS&quot;)
 corHMM_one_rate_ARD &lt;-  readRDS(&quot;./data/corHMM_rate_differences/corHMM_single_ARD.RDS&quot;)
 corHMM_two_rates_ER &lt;-  readRDS(&quot;./data/corHMM_rate_differences/corHMM_two_ER.RDS&quot;)
 corHMM_two_rates_ARD &lt;-  readRDS(&quot;./data/corHMM_rate_differences/corHMM_two_ARD.RDS&quot;)</code></pre>
 </div>
-<div id="number-of-tries-to-get-a-positive-aic-model" class="section level1">
-<h1>Number of tries to get a positive AIC model…</h1>
-<pre class="r"><code>lapply(corHMM_one_rate_ER,FUN=function(x){
-  x$number_runs
-  
-}) %&gt;% `names&lt;-`(names(corHMM_one_rate_ER))</code></pre>
-<pre><code>## $TMP_SMX_dich_num
-## [1] 1
-## 
-## $gentamicin_dich_num
-## [1] 1
-## 
-## $AMK_dich_num
-## [1] 2
-## 
-## $CST_dich_num
-## [1] 1
-## 
-## $blbli_dich_num
-## [1] 1</code></pre>
-<pre class="r"><code>lapply(corHMM_one_rate_ARD,FUN=function(x){
-  x$number_runs
-  
-}) %&gt;% `names&lt;-`(names(corHMM_one_rate_ARD))</code></pre>
-<pre><code>## $TMP_SMX_dich_num
-## [1] 1
-## 
-## $gentamicin_dich_num
-## [1] 1
-## 
-## $AMK_dich_num
-## [1] 1
-## 
-## $CST_dich_num
-## [1] 1
-## 
-## $blbli_dich_num
-## [1] 1</code></pre>
-<pre class="r"><code>lapply(corHMM_two_rates_ER,FUN=function(x){
-  x$number_runs
-  
-}) %&gt;% `names&lt;-`(names(corHMM_two_rates_ER))</code></pre>
-<pre><code>## $TMP_SMX_dich_num
-## [1] 6
-## 
-## $gentamicin_dich_num
-## [1] 2
-## 
-## $AMK_dich_num
-## [1] 11
-## 
-## $CST_dich_num
-## [1] 8
-## 
-## $blbli_dich_num
-## [1] 39</code></pre>
-<pre class="r"><code>lapply(corHMM_two_rates_ARD,FUN=function(x){
-  x$number_runs
-  
-}) %&gt;% `names&lt;-`(names(corHMM_two_rates_ARD))</code></pre>
-<pre><code>## $TMP_SMX_dich_num
-## [1] 2
-## 
-## $gentamicin_dich_num
-## [1] 1
-## 
-## $AMK_dich_num
-## [1] 1
-## 
-## $CST_dich_num
-## [1] 1
-## 
-## $blbli_dich_num
-## [1] 3</code></pre>
-</div>
 <div id="get-model-statistics" class="section level1">
 <h1>Get model statistics</h1>
-<p>corHMM single-rate category model corHMM two-rate category model Best
-Model2 Phenotype Model Rate 11</p>
-<p>Rate 21 Log Likelihood AIC Corrected AIC Category I Rate 1 Category I
-Rate 2 Category II Rate 1 Category II Rate 2 Log Likelihood AIC2
-Corrected AIC</p>
 <pre class="r"><code>pheno = names(corHMM_one_rate_ER)
-corHMM_one_rate_ER_stats &lt;- lapply(corHMM_one_rate_ER,phylosuite::characterize_asr_model) %&gt;% do.call(rbind,.) %&gt;% mutate(phenotype = pheno)
-corHMM_one_rate_ARD_stats &lt;- lapply(corHMM_one_rate_ARD,phylosuite::characterize_asr_model) %&gt;% do.call(rbind,.) %&gt;% mutate(phenotype = pheno)
+# One rates
+corHMM_one_rate_ER_stats &lt;- lapply(corHMM_one_rate_ER,phyloAMR::characterize_asr_model) %&gt;% do.call(rbind,.) %&gt;% mutate(phenotype = pheno)
+corHMM_one_rate_ARD_stats &lt;- lapply(corHMM_one_rate_ARD,phyloAMR::characterize_asr_model) %&gt;% do.call(rbind,.) %&gt;% mutate(phenotype = pheno)
 
+# Two rates
 characterize_two_cat_corHMM_model &lt;- function(corHMM_obj){
   model &lt;- ifelse(c(corHMM_obj[[&quot;index.mat&quot;]] %&gt;% as.vector() %&gt;% subset(is.na(.)==F) %&gt;% unique %&gt;% length)==4,&quot;ER&quot;,&quot;ARD&quot;)
   category1_rate1 &lt;- corHMM_obj$solution[2,1]
@@ -790,6 +703,7 @@ characterize_two_cat_corHMM_model &lt;- function(corHMM_obj){
 }
 
 corHMM_two_rates_ER_stats &lt;- lapply(corHMM_two_rates_ER,characterize_two_cat_corHMM_model) %&gt;% do.call(rbind,.) %&gt;% mutate(phenotype = pheno)
+
 corHMM_two_rates_ARD_stats &lt;- lapply(corHMM_two_rates_ARD,characterize_two_cat_corHMM_model) %&gt;% do.call(rbind,.) %&gt;% mutate(phenotype = pheno)</code></pre>
 </div>
 <div id="curate-table" class="section level1">
@@ -799,6 +713,7 @@ corHMM_two_rates_ARD_stats &lt;- lapply(corHMM_two_rates_ARD,characterize_two_ca
 <pre class="r"><code>joint_ARD_df &lt;-  left_join(corHMM_one_rate_ARD_stats,corHMM_two_rates_ARD_stats) </code></pre>
 <pre><code>## Joining with `by = join_by(model, phenotype)`</code></pre>
 <pre class="r"><code>total_df &lt;- rbind(joint_ER_df,joint_ARD_df)
+total_df$best_model &lt;- ifelse(total_df$AIC &lt; total_df$multi_AIC,&quot;One rate category&quot;,&quot;Two rate categories&quot;)
 favorite_kable(total_df)</code></pre>
 <table style="width:100%; color: black; margin-left: auto; margin-right: auto;" class="table table-striped table-hover table-condensed table-responsive">
 <thead>
@@ -857,6 +772,9 @@ multi_AIC
 <th style="text-align:right;">
 multi_AICc
 </th>
+<th style="text-align:left;">
+best_model
+</th>
 </tr>
 </thead>
 <tbody>
@@ -871,7 +789,7 @@ ER
 1
 </td>
 <td style="text-align:right;">
-12299.91
+12300.29
 </td>
 <td style="text-align:right;">
 NA
@@ -895,25 +813,28 @@ TMP_SMX_dich_num
 2
 </td>
 <td style="text-align:right;">
-3.856158e+12
+4.216999e+18
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-1.000000e-07
+2.883000e-04
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--162.3686
+-160.5222
 </td>
 <td style="text-align:right;">
-332.7372
+329.0444
 </td>
 <td style="text-align:right;">
-332.8422
+329.1494
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 <tr>
@@ -927,7 +848,7 @@ ER
 1
 </td>
 <td style="text-align:right;">
-10270.94
+10271.17
 </td>
 <td style="text-align:right;">
 NA
@@ -951,25 +872,28 @@ gentamicin_dich_num
 2
 </td>
 <td style="text-align:right;">
-3.004613e+12
+2.337381e+14
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-1.303000e-03
+4.682000e-04
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--157.2232
+-157.2075
 </td>
 <td style="text-align:right;">
-322.4465
+322.4150
 </td>
 <td style="text-align:right;">
-322.5515
+322.5200
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 <tr>
@@ -983,7 +907,7 @@ ER
 1
 </td>
 <td style="text-align:right;">
-23429.25
+23429.33
 </td>
 <td style="text-align:right;">
 NA
@@ -1007,25 +931,28 @@ AMK_dich_num
 2
 </td>
 <td style="text-align:right;">
-5.763180e+13
+6.478678e+19
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-3.173070e+03
+4.702121e+01
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--202.3760
+-116.8925
 </td>
 <td style="text-align:right;">
-412.7520
+241.7851
 </td>
 <td style="text-align:right;">
-412.8570
+241.8901
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 <tr>
@@ -1039,7 +966,7 @@ ER
 1
 </td>
 <td style="text-align:right;">
-8707.29
+8707.68
 </td>
 <td style="text-align:right;">
 NA
@@ -1063,25 +990,28 @@ CST_dich_num
 2
 </td>
 <td style="text-align:right;">
-5.914759e+15
+1.669737e+17
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-3.985643e-01
+1.531731e-01
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--152.1807
+-152.1301
 </td>
 <td style="text-align:right;">
-312.3614
+312.2601
 </td>
 <td style="text-align:right;">
-312.4664
+312.3651
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 <tr>
@@ -1095,7 +1025,7 @@ ER
 1
 </td>
 <td style="text-align:right;">
-7843.07
+7843.50
 </td>
 <td style="text-align:right;">
 NA
@@ -1119,25 +1049,28 @@ blbli_dich_num
 2
 </td>
 <td style="text-align:right;">
-2.191713e+16
+3.662822e+18
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-1.767004e-01
+1.751942e+02
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--134.8415
+-132.9898
 </td>
 <td style="text-align:right;">
-277.6831
+273.9795
 </td>
 <td style="text-align:right;">
-277.7880
+274.0845
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 <tr>
@@ -1151,10 +1084,10 @@ ARD
 1
 </td>
 <td style="text-align:right;">
-14263.97
+14264.30
 </td>
 <td style="text-align:right;">
-9770.09
+9772.39
 </td>
 <td style="text-align:right;">
 -185.7299
@@ -1175,25 +1108,28 @@ TMP_SMX_dich_num
 2
 </td>
 <td style="text-align:right;">
-1.346874e+15
+1.268987e+09
 </td>
 <td style="text-align:right;">
-1.662987e+15
+1.567103e+09
 </td>
 <td style="text-align:right;">
-3.244943e+03
+3.260488e+03
 </td>
 <td style="text-align:right;">
 0.0000
 </td>
 <td style="text-align:right;">
--160.2519
+-160.2524
 </td>
 <td style="text-align:right;">
-332.5037
+332.5048
 </td>
 <td style="text-align:right;">
-332.7254
+332.7265
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 <tr>
@@ -1207,10 +1143,10 @@ ARD
 1
 </td>
 <td style="text-align:right;">
-10793.20
+10791.85
 </td>
 <td style="text-align:right;">
-9822.41
+9820.50
 </td>
 <td style="text-align:right;">
 -162.0099
@@ -1231,25 +1167,28 @@ gentamicin_dich_num
 2
 </td>
 <td style="text-align:right;">
-1.126797e+12
+4.228194e+11
 </td>
 <td style="text-align:right;">
-3.590801e+12
+5.718461e+12
 </td>
 <td style="text-align:right;">
-2.083655e-01
+7.466010e+03
 </td>
 <td style="text-align:right;">
-4543.0999
+18136.1208
 </td>
 <td style="text-align:right;">
--156.6647
+-156.6846
 </td>
 <td style="text-align:right;">
-325.3294
+325.3692
 </td>
 <td style="text-align:right;">
-325.5510
+325.5909
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 <tr>
@@ -1263,10 +1202,10 @@ ARD
 1
 </td>
 <td style="text-align:right;">
-24661.17
+24662.76
 </td>
 <td style="text-align:right;">
-42364.06
+42365.61
 </td>
 <td style="text-align:right;">
 -222.4716
@@ -1287,25 +1226,28 @@ AMK_dich_num
 2
 </td>
 <td style="text-align:right;">
-4.849576e+05
+4.820531e+05
 </td>
 <td style="text-align:right;">
-7.480230e+05
+7.433099e+05
 </td>
 <td style="text-align:right;">
-4.939829e+03
+4.999708e+03
 </td>
 <td style="text-align:right;">
-50996.9551
+50938.4156
 </td>
 <td style="text-align:right;">
--197.3504
+-197.3507
 </td>
 <td style="text-align:right;">
-406.7008
+406.7014
 </td>
 <td style="text-align:right;">
-406.9224
+406.9230
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 <tr>
@@ -1319,10 +1261,10 @@ ARD
 1
 </td>
 <td style="text-align:right;">
-7875.98
+7874.45
 </td>
 <td style="text-align:right;">
-11608.59
+11609.94
 </td>
 <td style="text-align:right;">
 -158.4957
@@ -1343,25 +1285,28 @@ CST_dich_num
 2
 </td>
 <td style="text-align:right;">
-1.714730e+06
+1.719268e+06
 </td>
 <td style="text-align:right;">
-1.312258e+05
+1.315421e+05
 </td>
 <td style="text-align:right;">
-4.377124e+04
+4.372094e+04
 </td>
 <td style="text-align:right;">
-296.1496
+271.5371
 </td>
 <td style="text-align:right;">
 -147.2699
 </td>
 <td style="text-align:right;">
-306.5399
+306.5398
 </td>
 <td style="text-align:right;">
 306.7615
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 <tr>
@@ -1375,10 +1320,10 @@ ARD
 1
 </td>
 <td style="text-align:right;">
-12925.44
+12922.95
 </td>
 <td style="text-align:right;">
-76994.07
+76973.41
 </td>
 <td style="text-align:right;">
 -145.3771
@@ -1399,25 +1344,28 @@ blbli_dich_num
 2
 </td>
 <td style="text-align:right;">
-1.336087e+06
+3.489360e+06
 </td>
 <td style="text-align:right;">
-4.600323e+05
+2.001006e+05
 </td>
 <td style="text-align:right;">
-0.000000e+00
+3.934224e+05
 </td>
 <td style="text-align:right;">
-1912.9129
+160563.5256
 </td>
 <td style="text-align:right;">
--129.6518
+-131.0095
 </td>
 <td style="text-align:right;">
-271.3036
+274.0189
 </td>
 <td style="text-align:right;">
-271.5253
+274.2405
+</td>
+<td style="text-align:left;">
+Two rate categories
 </td>
 </tr>
 </tbody>
