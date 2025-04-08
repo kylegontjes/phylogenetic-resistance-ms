@@ -1,5 +1,5 @@
 ---
-title: "stable9_purposeful_hitss"
+title: "stable8_purposeful_hitss"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
@@ -14,7 +14,7 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=T, message=T, include=T, results=T}
 #Packages
-packages <- c("tidyverse","phylosuite")   
+packages <- c("tidyverse")   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) 
 # Functions
@@ -80,11 +80,11 @@ blbli_tbl <- print_final_model(phyloaware_regression_obj$blbli$multivariable)  %
 ```{r}
 print_data <- function(drug,df){
   dich <- paste0(drug,"_dich_num")
-  cluster <- paste0("asr_cluster_renamed_ns")  
+  cluster <- paste0("asr_cluster_renamed_resistant")  
   
   present <- subset(df,get(dich) ==1) %>% nrow %>% paste0("Present: ",.) 
-  singleton <- subset(df,get(cluster)=="Non-Susceptible Singleton") %>% nrow  %>% paste0("Singleton: ",.)
-  cluster <-  subset(df,get(dich)==1 & get(cluster)!="Non-Susceptible Singleton") %>% nrow  %>% paste0("Cluster: ",.)
+  singleton <- subset(df,get(cluster)=="Resistant Singleton") %>% nrow  %>% paste0("Singleton: ",.)
+  cluster <-  subset(df,get(dich)==1 & get(cluster)!="Resistant Singleton") %>% nrow  %>% paste0("Cluster: ",.)
   
   results <- cbind.data.frame(drug,present,var1="",singleton,var2="",var3="",cluster,var6="",var5="")
   return(results)
@@ -101,14 +101,14 @@ blbli_ct <- print_data("blbli",phyloaware_regression_obj$blbli$datasets$present)
 # Final table
 ```{r}
 list_df <- list(TMP_SMX_ct,header = TMP_SMX_tbl,gentamicin_ct,gentamicin_tbl,AMK_ct,AMK_tbl,CST_ct,CST_tbl,blbli_ct,blbli_tbl)
-stable9 <- lapply(list_df,FUN=function(x){
+stable8 <- lapply(list_df,FUN=function(x){
   as.matrix(x)
 }) %>% do.call(rbind,.) %>% as.data.frame  
 ```
 
 # Save final table
 ```{r}
-favorite_kable(stable9)
-saveRDS(stable9,"./tables/stable9.RDS")
-write_csv(stable9,"./tables/stable9.csv")
+favorite_kable(stable8)
+saveRDS(stable8,"./tables/stable8.RDS")
+write_csv(stable8,"./tables/stable8.csv")
 ```
