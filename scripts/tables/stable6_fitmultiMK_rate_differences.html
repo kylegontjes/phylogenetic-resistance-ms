@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-03-23" />
+<meta name="date" content="2025-04-07" />
 
 <title>Supplemental Table 6: Evaluation of single-regime and clade-specific evolutionary rate model using fitmultiMK</title>
 
@@ -578,7 +578,7 @@ display: none;
 single-regime and clade-specific evolutionary rate model using
 fitmultiMK</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-03-23</h4>
+<h4 class="date">2025-04-07</h4>
 
 </div>
 
@@ -586,7 +586,7 @@ fitmultiMK</h1>
 <div id="environment" class="section level1">
 <h1>Environment</h1>
 <pre class="r"><code>#Packages
-packages &lt;- c(&quot;tidyverse&quot;,&#39;phylosuite&#39;,&#39;kableExtra&#39;,&#39;gridExtra&#39;,&#39;readr&#39;)   
+packages &lt;- c(&quot;tidyverse&quot;,&#39;kableExtra&#39;,&#39;gridExtra&#39;,&#39;readr&#39;)   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) </code></pre>
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
@@ -847,10 +847,10 @@ ARD
 328.04
 </td>
 <td style="text-align:right;">
-18208.25
+18208.26
 </td>
 <td style="text-align:right;">
-41250.15
+41250.17
 </td>
 <td style="text-align:right;">
 9512.24
@@ -891,7 +891,7 @@ NA
 455.95
 </td>
 <td style="text-align:right;">
-398076.00
+398076.01
 </td>
 <td style="text-align:right;">
 NA
@@ -935,25 +935,25 @@ ARD
 448.94
 </td>
 <td style="text-align:right;">
-299729.24
+175891.50
 </td>
 <td style="text-align:right;">
-210935.81
+123423.15
 </td>
 <td style="text-align:right;">
-15803.35
+16284.14
 </td>
 <td style="text-align:right;">
-54109.08
+55470.30
 </td>
 <td style="text-align:right;">
--202.59
+-202.94
 </td>
 <td style="text-align:right;">
-413.19
+413.88
 </td>
 <td style="text-align:right;">
-39.76
+39.07
 </td>
 <td style="text-align:right;">
 0.000
@@ -1023,10 +1023,10 @@ ARD
 321.04
 </td>
 <td style="text-align:right;">
-184613.79
+184613.99
 </td>
 <td style="text-align:right;">
-1097806.71
+1097808.16
 </td>
 <td style="text-align:right;">
 8487.38
@@ -1102,7 +1102,7 @@ ARD
 12926.43
 </td>
 <td style="text-align:right;">
-77010.14
+77010.13
 </td>
 <td style="text-align:right;">
 -145.38
@@ -1111,28 +1111,28 @@ ARD
 294.75
 </td>
 <td style="text-align:right;">
-45249.49
+44859.27
 </td>
 <td style="text-align:right;">
-137427.49
+135890.93
 </td>
 <td style="text-align:right;">
-8516.91
+8670.99
 </td>
 <td style="text-align:right;">
-82396.74
+84734.03
 </td>
 <td style="text-align:right;">
--142.29
+-142.10
 </td>
 <td style="text-align:right;">
-292.58
+292.19
 </td>
 <td style="text-align:right;">
-6.18
+6.56
 </td>
 <td style="text-align:right;">
-0.046
+0.038
 </td>
 </tr>
 </tbody>
@@ -1140,8 +1140,8 @@ ARD
 </div>
 <div id="save-table" class="section level1">
 <h1>Save table</h1>
-<pre class="r"><code>saveRDS(rate_differences_table_formatted,&quot;./tables/stable6_fitmultiMK_rate_differences.RDS&quot;)
-write_csv(rate_differences_table_formatted,&quot;./tables/stable6_fitmultiMK_rate_differences.csv&quot;)</code></pre>
+<pre class="r"><code>saveRDS(rate_differences_table_formatted,&quot;./tables/stable6.RDS&quot;)
+write_csv(rate_differences_table_formatted,&quot;./tables/stable6.csv&quot;)</code></pre>
 </div>
 
 

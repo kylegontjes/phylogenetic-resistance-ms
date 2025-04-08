@@ -11,11 +11,12 @@ opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
 opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
 opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
 ```
+
 # Environment
 
 ```{r environment, echo=F, message=FALSE, include=F, results=F}
 # Packages
-packages <- c("tidyverse",'phylosuite',"lmtest")   
+packages <- c("tidyverse","lmtest")   
 # Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) 
 # Load function

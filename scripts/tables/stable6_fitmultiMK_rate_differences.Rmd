@@ -16,7 +16,7 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=T, message=T, include=T, results=F}
 #Packages
-packages <- c("tidyverse",'phylosuite','kableExtra','gridExtra','readr')   
+packages <- c("tidyverse",'kableExtra','gridExtra','readr')   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) 
 # Load function
@@ -56,6 +56,6 @@ favorite_kable(rate_differences_table_formatted)
 
 # Save table
 ```{r}
-saveRDS(rate_differences_table_formatted,"./tables/stable6_fitmultiMK_rate_differences.RDS")
-write_csv(rate_differences_table_formatted,"./tables/stable6_fitmultiMK_rate_differences.csv")
+saveRDS(rate_differences_table_formatted,"./tables/stable6.RDS")
+write_csv(rate_differences_table_formatted,"./tables/stable6.csv")
 ```
