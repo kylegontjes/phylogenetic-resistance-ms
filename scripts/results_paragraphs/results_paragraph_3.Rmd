@@ -1,6 +1,7 @@
 ---
-title: "results_paragraph_3"
+title: "Results Section 3: Whole-genome sequencing revealed variable phylogenetic clustering of resistance"
 output: html_document
+author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 ---
 
@@ -15,16 +16,9 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=F, message=FALSE, include=F, results=F}
 #Packages
-packages <- c("tidyverse","kableExtra","phylosuite")   
+packages <- c("tidyverse","kableExtra","phyloAMR")   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T))
-
-#Themes
-source("./lib/consistent_themes.R")
-
-# Scripts
-source("./lib/common_functions.R")
-source("./scripts/figures/figure2.R")
 
 # Print environment
 Sys.info()
@@ -57,7 +51,7 @@ phenotypes <- c(paste0(drugs,"_dich_num"))
 # Convert specified columns to factor
 resistance <- df %>% select(phenotypes) %>% mutate_all(as.factor) 
 
-df_fin <- cbind.data.frame(resistance,factor_vars_df,df %>% select(isolate_no,Patient_ID,Cx_date))
+df_fin <- cbind.data.frame(resistance,factor_vars_df,df %>% select(isolate_no,Patient_ID,Cx_date,age,sex))
 ```
 
 # Load ASR
@@ -77,36 +71,38 @@ for(i in pheno){
 ```
 
 # LR analyses 
-## Modeling  Clade I
+## Modeling Clade I
 ```{r,warning=F,message=F}
-TMP_SMX_lr_CI <- phyloaware_regression("TMP_SMX_dich_num",df = TMP_SMX_regression_df,variables = "clade_I",first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)
-gentamicin_lr_CI <- phyloaware_regression("gentamicin_dich_num",gentamicin_regression_df,variables = "clade_I",first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)   
-AMK_lr_CI <- phyloaware_regression("AMK_dich_num",AMK_regression_df,variables = "clade_I",first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)
-CST_lr_CI <- phyloaware_regression("CST_dich_num",CST_regression_df,variables = "clade_I",first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)
-blbli_lr_CI <- phyloaware_regression("blbli_dich_num",blbli_regression_df,variables ="clade_I",first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)  
+variables_of_interest <- c("age","sex","clade_I")
+TMP_SMX_lr_CI <- phyloaware_regression("TMP_SMX_dich_num",df = TMP_SMX_regression_df,variables = variables_of_interest,first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = 'multivariable')
+gentamicin_lr_CI <- phyloaware_regression("gentamicin_dich_num",gentamicin_regression_df,variables = variables_of_interest,first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = 'multivariable')   
+AMK_lr_CI <- phyloaware_regression("AMK_dich_num",AMK_regression_df,variables = variables_of_interest,first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = 'multivariable')
+CST_lr_CI <- phyloaware_regression("CST_dich_num",CST_regression_df,variables = variables_of_interest,first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = 'multivariable')
+blbli_lr_CI <- phyloaware_regression("blbli_dich_num",blbli_regression_df,variables =variables_of_interest,first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = 'multivariable')  
 ```
 
 ```{r}
-TMP_SMX_lr_CI$univariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="TMP-SMX")
-gentamicin_lr_CI$univariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="Gentamicin")
-AMK_lr_CI$univariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="Amikacin")
-CST_lr_CI$univariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="Colistin")
-blbli_lr_CI$univariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="BL/BLI")
+TMP_SMX_lr_CI$multivariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="TMP-SMX")
+gentamicin_lr_CI$multivariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="Gentamicin")
+AMK_lr_CI$multivariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="Amikacin")
+CST_lr_CI$multivariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="Colistin")
+blbli_lr_CI$multivariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="BL/BLI")
 ```
 
-## Modeling  Clade II
+## Modeling Clade II
 ```{r,warning=F,message=F}
-TMP_SMX_lr_CII <- phyloaware_regression("TMP_SMX_dich_num",df = TMP_SMX_regression_df,variables = "clade_II",first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)
-gentamicin_lr_CII <- phyloaware_regression("gentamicin_dich_num",gentamicin_regression_df,variables = "clade_II",first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)   
-AMK_lr_CII <- phyloaware_regression("AMK_dich_num",AMK_regression_df,variables = "clade_II",first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)
-CST_lr_CII <- phyloaware_regression("CST_dich_num",CST_regression_df,variables = "clade_II",first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)
-blbli_lr_CII <- phyloaware_regression("blbli_dich_num",blbli_regression_df,variables ="clade_II",first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)  
+variables_of_interest_II <- c("age","sex","clade_II")
+TMP_SMX_lr_CII <- phyloaware_regression("TMP_SMX_dich_num",df = TMP_SMX_regression_df,variables = variables_of_interest_II,first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = 'multivariable')
+gentamicin_lr_CII <- phyloaware_regression("gentamicin_dich_num",gentamicin_regression_df,variables = variables_of_interest_II,first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = 'multivariable')   
+AMK_lr_CII <- phyloaware_regression("AMK_dich_num",AMK_regression_df,variables = variables_of_interest_II,first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = 'multivariable')
+CST_lr_CII <- phyloaware_regression("CST_dich_num",CST_regression_df,variables = variables_of_interest_II,first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = 'multivariable')
+blbli_lr_CII <- phyloaware_regression("blbli_dich_num",blbli_regression_df,variables =variables_of_interest_II,first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = 'multivariable')  
 ```
 
 ```{r}
-TMP_SMX_lr_CII$univariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="TMP-SMX")
-gentamicin_lr_CII$univariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="Gentamicin")
-AMK_lr_CII$univariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="Amikacin")
-CST_lr_CII$univariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="Colistin")
-blbli_lr_CII$univariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="BL/BLI")
+TMP_SMX_lr_CII$multivariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="TMP-SMX")
+gentamicin_lr_CII$multivariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="Gentamicin")
+AMK_lr_CII$multivariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="Amikacin")
+CST_lr_CII$multivariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="Colistin")
+blbli_lr_CII$multivariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="BL/BLI")
 ```
