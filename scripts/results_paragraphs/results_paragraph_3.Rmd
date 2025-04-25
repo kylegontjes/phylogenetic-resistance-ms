@@ -1,8 +1,8 @@
 ---
 title: "Results Section 3: Whole-genome sequencing revealed variable phylogenetic clustering of resistance"
-output: html_document
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
