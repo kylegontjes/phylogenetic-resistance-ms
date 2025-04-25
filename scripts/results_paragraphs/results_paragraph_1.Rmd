@@ -37,9 +37,11 @@ df <- readRDS("./data/dataset/df.RDS")
 paste0("Number of isolates: ",nrow(df))
 paste0("Number of unique patients: ",df$Patient_ID %>% unique %>% length)
 paste0("Number of LTACHs: ",df$LTACH %>% unique %>% length)
+paste0("Dates of sample collection for the WGS QC-passing genomes: ",min(df$Cx_date),"-",max(df$Cx_date))
 ```
 
 # Sampling data highlights dense sampling  
+
 ```{r}
 patient_summaries <- df %>% group_by(Patient_ID) %>% summarise(n=n())
 patient_summaries$more_than_one <- ifelse(patient_summaries$n >1,1,0)
@@ -48,4 +50,4 @@ paste0("Number of patients contributing more than one isolate: ",sum(patient_sum
 paste0("Proportion of patients contributing more than one isolate: ",round(sum(patient_summaries$more_than_one) / nrow(patient_summaries) *100,2))
 ```
 
-# For cohort statistics mentioned in this section, please see supplemental table 3
+# Cohort statistics from this section are provided in Supplemental Table 3
