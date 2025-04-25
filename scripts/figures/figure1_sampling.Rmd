@@ -41,23 +41,14 @@ get_legend <- function(plot){
 phenos <- c("TMP_SMX_dich","gentamicin_dich","AMK_dich",'CST_dich','blbli_dich')
 # Study histogram
 A <- ggplot(data=df,aes(x=Cx_date)) + geom_histogram(fill='black', bins = 65) + theme_bw_me + xlab("Date of culture collection") + ylab ("No. specimens") + scale_y_continuous(limits = c(0, 20)) + theme(axis.ticks = element_line(color = "black"), axis.text = element_text(color = "black", size = 12), axis.title = element_text(size = 15))
-
-## Tasks
-### 1. Increase bin size!
-
+ 
 # Histogram by facility 
-B <- ggplot(data=df,aes(x=LTACH_Recode))+ geom_bar(fill='black',stat='count') + theme_bw_me + xlab("Facility") + ylab ("No. specimens") + theme(axis.ticks = element_line(color = "black"), axis.text = element_text(color = "black", size = 12), axis.title = element_text(size = 15))
+B <- ggplot(data=df,aes(x=LTACH_Recode))+ geom_bar(fill='black',stat='count') + theme_bw_me + xlab("Facility") + ylab ("No. specimens") + theme(axis.ticks = element_line(color = "black"), axis.text = element_text(color = "black", size = 12), axis.title = element_text(size = 15)) +geom_text(stat='count', aes(label=..count..), vjust=-1, size = 4.5) + ylim(NA,max(max(table(df$LTACH_Recode)))+2)
 # Number specimens per patients
-patient_summaries <- df %>% group_by(Patient_ID) %>% summarise(n=n())
+patient_summaries <- df %>% group_by(Patient_ID) %>% summarise(n=n()) 
 C <- ggplot(data=patient_summaries,aes(x=n)) + geom_bar(fill = "black", width = 0.7, stat = "count") + theme_bw_me + xlab("No. specimens") + ylab ("No. patients") + scale_y_continuous(limits = c(0, 300)) + theme(axis.ticks = element_line(color = "black"), axis.text = element_text(color = "black", size = 12), axis.title = element_text(size = 15)) +geom_text(stat='count', aes(label=..count..), vjust=-1, size = 4.5)
 
-# Resistance proportion 
-## Tasks
-### 1. Change names of antibiotics to actual names
-### 2. Change fill of NS to black, S = gray
-### 3. Change NS to resistant and S to susceptible
-### 4. Change value to a name like "Resistance Profile"
-### 4. have the legend on right or at bottom...
+# Resistance proportion  
 resistance_metl <- reshape2::melt(df %>% select(isolate_no,phenos),'isolate_no')
 antibiotic_lookup <- c(
   TMP_SMX_dich = "TMP-SMX",
@@ -74,7 +65,7 @@ res_order <- resistance_metl %>% group_by(variable) %>% summarise(prop_resistant
 
 resistance_metl <- resistance_metl %>% mutate(variable = factor(variable, levels = res_order$variable))
 
-D <- ggplot(data=resistance_metl,aes(x=variable,fill=value)) + geom_bar(width = 0.7, stat = "count") + scale_fill_manual(values = c("Resistant" = "black", "Susceptible" = "darkgray"), name = "Resistance Profile") + theme_bw_me + xlab("") + ylab ("No. isolates") + theme(
+D <- ggplot(data=resistance_metl,aes(x=variable,fill=value)) + geom_bar(width = 0.7, stat = "count") + scale_fill_manual(values = c("Resistant" = "black", "Susceptible" = "darkgray"), name = "Resistance Profile") + theme_bw_me + xlab("") + ylab ("No. specimens") + theme(
   legend.title = element_text(size = 13),
   legend.text = element_text(size = 12),
   legend.key.size = unit(0.3, "cm"),
