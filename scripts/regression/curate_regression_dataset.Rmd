@@ -1,5 +1,5 @@
 ---
-title: "curate_regression_dataset"
+title: "Curate dataset for phylogenetically-aware regression"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
@@ -125,4 +125,3 @@ df_final <- df_fin %>% select(variables,isolate_no,source,clade_I,Patient_ID,Cx_
 saveRDS(df_final,"~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/data/regression/regression_df.RDS")
 writeLines(variables,"~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/data/regression/eligible_variables.txt")
 ```
-

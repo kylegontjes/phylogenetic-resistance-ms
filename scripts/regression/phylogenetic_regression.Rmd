@@ -1,5 +1,5 @@
 ---
-title: "purposeful_selection"
+title: "Multivariable regression using modified purposeful selection algorithm using phylogenetically-aware outcomes"
 author: "Kyle Gontjes"
 date: '`r Sys.Date()`'
 output: html_document
@@ -47,11 +47,12 @@ for(i in pheno){
 ```
 
 # Purposeful selection algorithm
+## Without confounding (i.e., set confounding_criteria to a very high number)  
 ```{r} 
 purposeful_output <- lapply(pheno,FUN=function(x){
   phenotype = paste0(x,"_dich_num")
   phenotype_df = get(paste0(x,"_regression_df"))
-  phyloaware_regression(phenotype,variables =eligible_variables,df=phenotype_df,first_present=T,patient_id="Patient_ID",culture_date="Cx_date",multivariable='purposeful',stepwise_direction = NULL,entry_criteria = 0.2,retention_criteria = 0.1,confounding_criteria = 0.2)
+  phyloaware_regression(phenotype,variables =eligible_variables,df=phenotype_df,first_present=T,patient_id="Patient_ID",culture_date="Cx_date",multivariable='purposeful',stepwise_direction = NULL,entry_criteria = 0.20,retention_criteria = 0.1,confounding_criteria = 1000e100)
 }) %>% `names<-`(pheno)
 
 saveRDS(purposeful_output,"./data/regression/purposeful_regression_results.RDS")

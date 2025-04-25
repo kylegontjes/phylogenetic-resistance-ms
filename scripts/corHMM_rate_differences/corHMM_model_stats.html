@@ -11,9 +11,9 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-07" />
+<meta name="date" content="2025-04-25" />
 
-<title>corHMM Model Statistics</title>
+<title>Generate statistics for one- and two-rate corHMM models</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -574,9 +574,10 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">corHMM Model Statistics</h1>
+<h1 class="title toc-ignore">Generate statistics for one- and two-rate
+corHMM models</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-04-07</h4>
+<h4 class="date">2025-04-25</h4>
 
 </div>
 
@@ -589,7 +590,7 @@ invisible(lapply(packages,library,character.only=T,quietly=T)) </code></pre>
 <pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+## ✔ ggplot2   3.5.2     ✔ tibble    3.2.1
 ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
 ## ✔ purrr     1.0.4     
 ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
@@ -613,30 +614,30 @@ source(&#39;./lib/consistent_themes.R&#39;)</code></pre>
 ##     combine</code></pre>
 <pre class="r"><code># Print
 Sys.info()</code></pre>
-<pre><code>##                                                                                            sysname 
-##                                                                                           &quot;Darwin&quot; 
-##                                                                                            release 
-##                                                                                           &quot;24.3.0&quot; 
-##                                                                                            version 
-## &quot;Darwin Kernel Version 24.3.0: Thu Jan  2 20:22:00 PST 2025; root:xnu-11215.81.4~3/RELEASE_X86_64&quot; 
-##                                                                                           nodename 
-##                                                                                   &quot;msla0572.local&quot; 
-##                                                                                            machine 
-##                                                                                           &quot;x86_64&quot; 
-##                                                                                              login 
-##                                                                                             &quot;root&quot; 
-##                                                                                               user 
-##                                                                                         &quot;kgontjes&quot; 
-##                                                                                     effective_user 
-##                                                                                         &quot;kgontjes&quot;</code></pre>
+<pre><code>##                                                                                              sysname 
+##                                                                                             &quot;Darwin&quot; 
+##                                                                                              release 
+##                                                                                             &quot;24.4.0&quot; 
+##                                                                                              version 
+## &quot;Darwin Kernel Version 24.4.0: Wed Mar 19 21:16:31 PDT 2025; root:xnu-11417.101.15~1/RELEASE_X86_64&quot; 
+##                                                                                             nodename 
+##                                                                                     &quot;msla0572.local&quot; 
+##                                                                                              machine 
+##                                                                                             &quot;x86_64&quot; 
+##                                                                                                login 
+##                                                                                               &quot;root&quot; 
+##                                                                                                 user 
+##                                                                                           &quot;kgontjes&quot; 
+##                                                                                       effective_user 
+##                                                                                           &quot;kgontjes&quot;</code></pre>
 <pre class="r"><code>sessionInfo() </code></pre>
-<pre><code>## R version 4.4.3 (2025-02-28)
+<pre><code>## R version 4.5.0 (2025-04-11)
 ## Platform: x86_64-apple-darwin20
-## Running under: macOS Sequoia 15.3.2
+## Running under: macOS Sequoia 15.4
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
-## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -650,22 +651,22 @@ Sys.info()</code></pre>
 ## other attached packages:
 ##  [1] gridExtra_2.3    tableone_0.13.2  kableExtra_1.4.0 lubridate_1.9.4 
 ##  [5] forcats_1.0.0    stringr_1.5.1    dplyr_1.1.4      purrr_1.0.4     
-##  [9] readr_2.1.5      tidyr_1.3.1      tibble_3.2.1     ggplot2_3.5.1   
+##  [9] readr_2.1.5      tidyr_1.3.1      tibble_3.2.1     ggplot2_3.5.2   
 ## [13] tidyverse_2.0.0  knitr_1.50      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] sass_0.4.9        generics_0.1.3    xml2_1.3.8        stringi_1.8.7    
-##  [5] lattice_0.22-6    hms_1.1.3         digest_0.6.37     magrittr_2.0.3   
-##  [9] evaluate_1.0.3    grid_4.4.3        timechange_0.3.0  fastmap_1.2.0    
-## [13] jsonlite_2.0.0    Matrix_1.7-3      DBI_1.2.3         survival_3.8-3   
-## [17] viridisLite_0.4.2 scales_1.3.0      jquerylib_0.1.4   cli_3.6.4        
-## [21] mitools_2.4       rlang_1.1.5       munsell_0.5.1     splines_4.4.3    
-## [25] withr_3.0.2       cachem_1.1.0      yaml_2.3.10       tools_4.4.3      
-## [29] tzdb_0.5.0        colorspace_2.1-1  vctrs_0.6.5       R6_2.6.1         
-## [33] lifecycle_1.0.4   pkgconfig_2.0.3   pillar_1.10.1     bslib_0.9.0      
-## [37] gtable_0.3.6      Rcpp_1.0.14       glue_1.8.0        systemfonts_1.2.1
-## [41] xfun_0.51         tidyselect_1.2.1  rstudioapi_0.17.1 htmltools_0.5.8.1
-## [45] survey_4.4-2      rmarkdown_2.29    svglite_2.1.3     compiler_4.4.3</code></pre>
+##  [1] sass_0.4.10        generics_0.1.3     xml2_1.3.8         stringi_1.8.7     
+##  [5] lattice_0.22-7     hms_1.1.3          digest_0.6.37      magrittr_2.0.3    
+##  [9] evaluate_1.0.3     grid_4.5.0         timechange_0.3.0   RColorBrewer_1.1-3
+## [13] fastmap_1.2.0      jsonlite_2.0.0     Matrix_1.7-3       DBI_1.2.3         
+## [17] survival_3.8-3     viridisLite_0.4.2  scales_1.4.0       jquerylib_0.1.4   
+## [21] cli_3.6.5          mitools_2.4        rlang_1.1.6        splines_4.5.0     
+## [25] withr_3.0.2        cachem_1.1.0       yaml_2.3.10        tools_4.5.0       
+## [29] tzdb_0.5.0         vctrs_0.6.5        R6_2.6.1           lifecycle_1.0.4   
+## [33] pkgconfig_2.0.3    pillar_1.10.2      bslib_0.9.0        gtable_0.3.6      
+## [37] Rcpp_1.0.14        glue_1.8.0         systemfonts_1.2.2  xfun_0.52         
+## [41] tidyselect_1.2.1   rstudioapi_0.17.1  farver_2.1.2       htmltools_0.5.8.1 
+## [45] survey_4.4-2       rmarkdown_2.29     svglite_2.1.3      compiler_4.5.0</code></pre>
 </div>
 <div id="load-corhmm-output" class="section level1">
 <h1>Load corHMM output</h1>
@@ -789,7 +790,7 @@ ER
 1
 </td>
 <td style="text-align:right;">
-12300.29
+12301.22
 </td>
 <td style="text-align:right;">
 NA
@@ -813,25 +814,25 @@ TMP_SMX_dich_num
 2
 </td>
 <td style="text-align:right;">
-4.216999e+18
+1.803033e+14
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-2.883000e-04
+1.747920e-02
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--160.5222
+-162.3686
 </td>
 <td style="text-align:right;">
-329.0444
+332.7371
 </td>
 <td style="text-align:right;">
-329.1494
+332.8421
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -848,7 +849,7 @@ ER
 1
 </td>
 <td style="text-align:right;">
-10271.17
+10270.87
 </td>
 <td style="text-align:right;">
 NA
@@ -872,25 +873,25 @@ gentamicin_dich_num
 2
 </td>
 <td style="text-align:right;">
-2.337381e+14
+6.555807e+14
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-4.682000e-04
+2.831567e-01
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--157.2075
+-157.2074
 </td>
 <td style="text-align:right;">
-322.4150
+322.4149
 </td>
 <td style="text-align:right;">
-322.5200
+322.5198
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -907,7 +908,7 @@ ER
 1
 </td>
 <td style="text-align:right;">
-23429.33
+23422.45
 </td>
 <td style="text-align:right;">
 NA
@@ -931,25 +932,25 @@ AMK_dich_num
 2
 </td>
 <td style="text-align:right;">
-6.478678e+19
+1.952841e+14
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-4.702121e+01
+3.082431e+03
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--116.8925
+-202.3760
 </td>
 <td style="text-align:right;">
-241.7851
+412.7521
 </td>
 <td style="text-align:right;">
-241.8901
+412.8571
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -966,7 +967,7 @@ ER
 1
 </td>
 <td style="text-align:right;">
-8707.68
+8708.53
 </td>
 <td style="text-align:right;">
 NA
@@ -990,25 +991,25 @@ CST_dich_num
 2
 </td>
 <td style="text-align:right;">
-1.669737e+17
+2.973586e+14
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-1.531731e-01
+1.025383e-01
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--152.1301
+-152.1824
 </td>
 <td style="text-align:right;">
-312.2601
+312.3648
 </td>
 <td style="text-align:right;">
-312.3651
+312.4697
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -1025,7 +1026,7 @@ ER
 1
 </td>
 <td style="text-align:right;">
-7843.50
+7843.07
 </td>
 <td style="text-align:right;">
 NA
@@ -1049,25 +1050,25 @@ blbli_dich_num
 2
 </td>
 <td style="text-align:right;">
-3.662822e+18
+1.821032e+19
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-1.751942e+02
+8.624378e+00
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--132.9898
+-110.2846
 </td>
 <td style="text-align:right;">
-273.9795
+228.5692
 </td>
 <td style="text-align:right;">
-274.0845
+228.6742
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -1084,10 +1085,10 @@ ARD
 1
 </td>
 <td style="text-align:right;">
-14264.30
+14265.83
 </td>
 <td style="text-align:right;">
-9772.39
+9776.72
 </td>
 <td style="text-align:right;">
 -185.7299
@@ -1108,25 +1109,25 @@ TMP_SMX_dich_num
 2
 </td>
 <td style="text-align:right;">
-1.268987e+09
+1.609744e+12
 </td>
 <td style="text-align:right;">
-1.567103e+09
+1.986425e+12
 </td>
 <td style="text-align:right;">
-3.260488e+03
+3.278109e+03
 </td>
 <td style="text-align:right;">
-0.0000
+0.000
 </td>
 <td style="text-align:right;">
 -160.2524
 </td>
 <td style="text-align:right;">
-332.5048
+332.5047
 </td>
 <td style="text-align:right;">
-332.7265
+332.7263
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -1143,10 +1144,10 @@ ARD
 1
 </td>
 <td style="text-align:right;">
-10791.85
+10791.87
 </td>
 <td style="text-align:right;">
-9820.50
+9820.39
 </td>
 <td style="text-align:right;">
 -162.0099
@@ -1167,16 +1168,16 @@ gentamicin_dich_num
 2
 </td>
 <td style="text-align:right;">
-4.228194e+11
+1.719886e+12
 </td>
 <td style="text-align:right;">
-5.718461e+12
+2.326660e+13
 </td>
 <td style="text-align:right;">
-7.466010e+03
+7.467863e+03
 </td>
 <td style="text-align:right;">
-18136.1208
+18147.693
 </td>
 <td style="text-align:right;">
 -156.6846
@@ -1185,7 +1186,7 @@ gentamicin_dich_num
 325.3692
 </td>
 <td style="text-align:right;">
-325.5909
+325.5908
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -1202,10 +1203,10 @@ ARD
 1
 </td>
 <td style="text-align:right;">
-24662.76
+24657.66
 </td>
 <td style="text-align:right;">
-42365.61
+42350.99
 </td>
 <td style="text-align:right;">
 -222.4716
@@ -1226,25 +1227,25 @@ AMK_dich_num
 2
 </td>
 <td style="text-align:right;">
-4.820531e+05
+4.852068e+05
 </td>
 <td style="text-align:right;">
-7.433099e+05
+7.476839e+05
 </td>
 <td style="text-align:right;">
-4.999708e+03
+4.945507e+03
 </td>
 <td style="text-align:right;">
-50938.4156
+50807.925
 </td>
 <td style="text-align:right;">
--197.3507
+-197.3504
 </td>
 <td style="text-align:right;">
-406.7014
+406.7008
 </td>
 <td style="text-align:right;">
-406.9230
+406.9224
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -1261,10 +1262,10 @@ ARD
 1
 </td>
 <td style="text-align:right;">
-7874.45
+7876.02
 </td>
 <td style="text-align:right;">
-11609.94
+11611.03
 </td>
 <td style="text-align:right;">
 -158.4957
@@ -1285,22 +1286,22 @@ CST_dich_num
 2
 </td>
 <td style="text-align:right;">
-1.719268e+06
+1.715912e+06
 </td>
 <td style="text-align:right;">
-1.315421e+05
+1.312699e+05
 </td>
 <td style="text-align:right;">
-4.372094e+04
+4.381928e+04
 </td>
 <td style="text-align:right;">
-271.5371
+278.792
 </td>
 <td style="text-align:right;">
 -147.2699
 </td>
 <td style="text-align:right;">
-306.5398
+306.5399
 </td>
 <td style="text-align:right;">
 306.7615
@@ -1320,10 +1321,10 @@ ARD
 1
 </td>
 <td style="text-align:right;">
-12922.95
+12922.02
 </td>
 <td style="text-align:right;">
-76973.41
+76983.84
 </td>
 <td style="text-align:right;">
 -145.3771
@@ -1344,25 +1345,25 @@ blbli_dich_num
 2
 </td>
 <td style="text-align:right;">
-3.489360e+06
+1.334794e+06
 </td>
 <td style="text-align:right;">
-2.001006e+05
+4.597336e+05
 </td>
 <td style="text-align:right;">
-3.934224e+05
+0.000000e+00
 </td>
 <td style="text-align:right;">
-160563.5256
+1886.081
 </td>
 <td style="text-align:right;">
--131.0095
+-129.6518
 </td>
 <td style="text-align:right;">
-274.0189
+271.3037
 </td>
 <td style="text-align:right;">
-274.2405
+271.5253
 </td>
 <td style="text-align:left;">
 Two rate categories

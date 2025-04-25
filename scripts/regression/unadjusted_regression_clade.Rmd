@@ -1,5 +1,5 @@
 ---
-title: "figure3A_clade"
+title: "Unadjusted regression for resistance outcomes and clade"
 output: html_document
 date: "`r Sys.Date()`"
 --- 

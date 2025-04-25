@@ -1,5 +1,5 @@
 ---
-title: "generate_asr_objects"
+title: "Generate ancestral state reconstructions using phyloAMR"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document

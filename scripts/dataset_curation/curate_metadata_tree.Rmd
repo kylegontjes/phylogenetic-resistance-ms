@@ -81,8 +81,7 @@ metadata <- metadata %>% mutate(# Recode LTACH Variable (Alphabetical Coding)
 ## Create new days of therapy (DOT) variables
 metadata$AG_day <- metadata %>% select(amikacin_day,gent_day,tobra_day) %>% rowSums()
 metadata$third_plus_ceph_day <- metadata %>% select(ceftazidime_day,ctx_day,ceftaroline_day,cefepime_day) %>% rowSums()
-metadata$FQ_day <- metadata %>% select(cipro_day,levo_day) %>% rowSums() 
-metadata$pseudoPCN_day <- metadata %>% select(zosyn_day,ceftazidime_day) %>% rowSums() 
+metadata$FQ_day <- metadata %>% select(cipro_day,levo_day) %>% rowSums()  
 
 ## Binarize antibiotic exposure history (1 day was chosen)
 DOT_vars <- colnames(metadata) %>% subset(grepl("day",.))
@@ -99,8 +98,7 @@ metadata$any_antibiotic_1d <- ifelse(rowSums(metadata %>% select(any_of(DOT_vars
 Source; Custom SENSITITRE broth microdilution assay
 
 NFS Paths:
-/nfs/turbo/umms-esnitkin/Project_Penn_KPC/Analysis/Antibiotic_resistance/data/SENSITITRE
-MICs.xlsx
+/nfs/turbo/umms-esnitkin/Project_Penn_KPC/Analysis/Antibiotic_resistance/data/SENSITITRE MICs.xlsx
 
 ## Load data
 

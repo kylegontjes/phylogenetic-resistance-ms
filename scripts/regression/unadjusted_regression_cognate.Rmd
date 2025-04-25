@@ -1,5 +1,5 @@
 ---
-title: "figure3_cognate"
+title: "Unadjusted regression for resistance outcomes and cognate antibiotic exposure"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document

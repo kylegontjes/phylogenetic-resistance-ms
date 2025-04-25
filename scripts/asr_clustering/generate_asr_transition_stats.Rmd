@@ -1,5 +1,5 @@
 ---
-title: "generate_asr_transition_stats"
+title: "Generation transition statistics from ancestral state reconstruction using phyloAMR"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document

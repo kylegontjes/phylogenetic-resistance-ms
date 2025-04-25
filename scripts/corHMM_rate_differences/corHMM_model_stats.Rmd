@@ -1,5 +1,5 @@
 ---
-title: "corHMM Model Statistics"
+title: "Generate statistics for one- and two-rate corHMM models"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document

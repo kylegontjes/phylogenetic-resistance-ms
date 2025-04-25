@@ -1,5 +1,5 @@
 ---
-title: "corHMM_hidden_rates_model"
+title: "Perform one- and two-rate modeling using corHMM"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
