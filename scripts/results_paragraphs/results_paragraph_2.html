@@ -11,9 +11,9 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-03-21" />
+<meta name="date" content="2025-04-25" />
 
-<title>Results Section 2: Antibacterial susceptibility testing</title>
+<title>Results Section 2: Antibiotic susceptibility profiles of clinical carbapenem-resistant Klebsiella pneumoniae isolates</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -574,10 +574,11 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Results Section 2: Antibacterial
-susceptibility testing</h1>
+<h1 class="title toc-ignore">Results Section 2: Antibiotic
+susceptibility profiles of clinical carbapenem-resistant Klebsiella
+pneumoniae isolates</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-03-21</h4>
+<h4 class="date">2025-04-25</h4>
 
 </div>
 
@@ -590,10 +591,10 @@ susceptibility testing</h1>
 <pre class="r"><code># Patient Metadata
 df &lt;- readRDS(&quot;./data/dataset/df.RDS&quot;)</code></pre>
 </div>
-<div id="describe-non-susceptibility" class="section level1">
-<h1>Describe non-susceptibility</h1>
+<div id="describe-resistance" class="section level1">
+<h1>Describe resistance</h1>
 <ul>
-<li>Note: 1 indicates non-susceptibility</li>
+<li>Note: 1 indicates resistance</li>
 </ul>
 <pre class="r"><code>pheno_vars &lt;- c(&quot;TMP_SMX_dich_num&quot;,&quot;gentamicin_dich_num&quot;,&quot;AMK_dich_num&quot;,&quot;CST_dich_num&quot;,&quot;blbli_dich_num&quot;,&quot;MVB_dich_num&quot;,&quot;IR_dich_num&quot;)
 convert_tableone_into_df(df,vars=pheno_vars,factorVars = pheno_vars) %&gt;% favorite_kable</code></pre>

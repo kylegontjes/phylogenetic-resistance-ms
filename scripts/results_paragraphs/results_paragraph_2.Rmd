@@ -1,5 +1,5 @@
 ---
-title: 'Results Section 2: Antibacterial susceptibility testing'
+title: 'Results Section 2: Antibiotic susceptibility profiles of clinical carbapenem-resistant Klebsiella pneumoniae isolates'
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
@@ -38,9 +38,9 @@ sessionInfo()
 df <- readRDS("./data/dataset/df.RDS")
 ```
 
-# Describe non-susceptibility
+# Describe resistance
 
--   Note: 1 indicates non-susceptibility
+-   Note: 1 indicates resistance
 
 ```{r}
 pheno_vars <- c("TMP_SMX_dich_num","gentamicin_dich_num","AMK_dich_num","CST_dich_num","blbli_dich_num","MVB_dich_num","IR_dich_num")
