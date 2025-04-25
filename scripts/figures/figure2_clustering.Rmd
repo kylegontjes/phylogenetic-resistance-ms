@@ -1,5 +1,6 @@
 ---
-title: "Figure 1"
+title: "Figure 2. Phylogenetic characterization of resistance revealed differential patterns of resistance emergence and spread for five antibiotic phenotypes among clinical carbapenem-resistant Klebsiella pneumoniae sequence type 258 isolates"
+author: "Kyle Gontjes"
 output: html_document
 date: "`r Sys.Date()`"
 ---
@@ -92,7 +93,7 @@ F2BC
 
 # Clustering data table
 ```{r}
-# TRansition data
+# Transition data
 transition_data <- readRDS("./data/asr_clustering/transition_stats.RDS") 
 transition_data <- transition_data %>% select(pheno,transitions,gains,gains_tip,losses,losses_tip,continuations,continuations_present) %>% `colnames<-`(c("Phenotype",'Transitions','Gains','Gains (Tip)','Losses','Losses (Tip)','Continuations','Continuations (Present)'))
 

@@ -1,5 +1,6 @@
 ---
 title: "Figure 1: Comprehensive sampling of carbapenem-resistant Klebsiella pneumoniae that are resistant to last-resort or recently-introduced antibiotics"
+author: "Kyle Gontjes & Aryan Singh"
 date: "`r Sys.Date()`"
 output: html_document
 ---
