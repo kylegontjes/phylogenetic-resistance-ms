@@ -120,7 +120,7 @@ F2D_tbl <- table %>% tableGrob(rows = NULL,theme=mytheme)
 ```
 
 # Merge figures together
-```{r ,fig.height=20,fig.width=25.5}
+```{r ,fig.height=20,fig.width=25}
 F2D <- plot_grid(F2D_tbl,label_size=24,align = "hv") + theme(plot.margin = unit(c(-1,0,-1.5,0), "cm")) 
 F2 <- plot_grid(F2A,F2BC,F2D,labels = c("A","","D"),nrow=3,label_size = 24,rel_heights = c(.5,1,.25))
 F2
