@@ -1,0 +1,142 @@
+---
+title: "figure4_model_component_analysis"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+# Environment
+```{r environment, echo=F, message=FALSE, include=F, results=F}
+#Packages
+packages <- c("tidyverse","cowplot",'ComplexHeatmap')   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T))
+
+# Functions
+source("./lib/common_functions.R")
+source('./lib/consistent_themes.R')
+
+# Print environment
+Sys.info()
+sessionInfo()
+```
+
+# Load data
+```{r}
+phyloaware_regression_obj <- readRDS("./data/regression/purposeful_regression_results.RDS")
+```
+
+# Get model components
+```{r}
+print_final_model <- function(x){
+  tables <- lapply(x,FUN=function(list){
+    list[['final_model_table']] %>% arrange(p_value)
+  })  %>% `names<-`(c("present","singleton","spread")) 
+  
+  lapply(tables,function(y){
+   if(y %>% as.data.frame %>% nrow()==0){
+      paste0(names(y))
+      cbind.data.frame(Variable ='No model',`OR (95% CI)` = 'NA',p_value ='NA')
+    } 
+    if(y %>% as.data.frame %>% nrow()>0){
+      paste0(names(y))
+      y %>% arrange(p_value) %>% rownames_to_column(.,'Variable') %>% select("Variable","OR (95% CI)","p_value")
+    } 
+  })
+}
+
+cbind_na <- function(df_list) { 
+  max_rows <- max(lapply(df_list, nrow) %>% unlist) 
+  lapply(df_list,function(x){
+    rbind(x,as.data.frame(matrix(NA,nrow = (max_rows - nrow(x)),ncol=ncol(x))) %>% mutate_all(as.character) %>% `colnames<-`(c("Variable","OR (95% CI)","p_value")))
+  }) %>% do.call(cbind,.)
+}
+```
+
+```{r}
+drugs <- c("TMP_SMX",'gentamicin','AMK','CST','blbli')
+mv_tables <- lapply(drugs,FUN=function(x){
+  print_final_model(phyloaware_regression_obj[[x]]$multivariable)  %>% cbind_na
+}) %>% `names<-`(drugs)
+```
+
+# List model components
+```{r}
+get_list_of_components <- function(tbl){
+  Present =  tbl$present.Variable  %>% subset(.!='NA')
+  Emergence = tbl$singleton.Variable   %>% subset(.!='NA')
+  Spread = tbl$spread.Variable  %>% subset(.!='NA')
+  results <- list(A_Present=Present,B_Emergence=Emergence,C_Spread=Spread)
+  return(results)
+}
+
+model_lists <- lapply(mv_tables,get_list_of_components) %>% `names<-`(drugs)
+```
+
+# Get matrix of demographics, antibiotics, comorbidities
+```{r}
+eligible_variables <- readLines("./data/regression/eligible_variables.txt")
+eligible_variables
+demographics <- c("age","LOSbeforeCx",'sex.female')
+length_of_stay <- c("LOSbeforeCx")
+devices <-c("trach","central_line",'foley','gastro')
+exposures <- subset(eligible_variables,grepl("_1d",eligible_variables))
+comorbidities <- subset(eligible_variables,!eligible_variables %in% c(demographics,length_of_stay,devices,exposures))
+
+permutations <- combn(c(1,0,1,0,1,0), 3)  %>% t %>% as.data.frame() %>% distinct() %>% subset(rowSums(.)>0)   %>% apply(.,1,paste0,collapse='') %>% as.character()  %>% sort %>% factor(.,levels = c('111','110','101','011','100','010','001')) 
+
+create_matrix_of_comb_components <- function(x,perumtations,demographics,length_of_stay,devices,comorbidities,exposures){
+   combs <- make_comb_mat(x,mode='distinct') %>% normalize_comb_mat(.,full_comb_sets = T)
+   lapply(levels(permutations),FUN=function(y){
+     vars <- extract_comb(combs ,y)
+    num_dem <- sum(vars %in% demographics)
+    num_LOS <- sum(vars %in% length_of_stay)
+    num_devices <- sum(vars %in% devices)
+    num_comorb <- sum(vars %in% comorbidities)
+    num_exposures <- sum(vars %in% exposures)
+    cbind.data.frame(num_dem,num_LOS,num_devices,num_comorb,num_exposures )
+    
+   }) %>% do.call(rbind,.) %>% `rownames<-`(levels(permutations))
+}
+
+category_matrices <- lapply(model_lists,create_matrix_of_comb_components,permutations,demographics,length_of_stay,devices,comorbidities,exposures) 
+```
+
+
+# Generate upset plots
+```{r,fig.height=8.5,fig.width=7.5}
+distinct_colors = hues::iwanthue(5,hmin = 40,plot=T)
+
+lgd = Legend(labels = c("Demographics","Length of stay","Devices","Comorbidities","Antibiotic exposures"), legend_gp = gpar(fill = distinct_colors), title = "Variable type", 
+    ncol = 1, title_position = "topcenter",labels_gp = gpar(fontsize = 10),title_gp = gpar(fontsize=12,fontface="bold"))
+
+top_a_diverse = HeatmapAnnotation(
+    "TMP-SMX" = anno_barplot(category_matrices[[1]], 
+        gp = gpar(fill = distinct_colors), height = unit(3, "cm"),ylim = c(0,6),add_numbers = T,comb_order = c(1:7),numbers_rot=0), 
+    "Gentamicin" = anno_barplot(category_matrices[[2]], 
+        gp = gpar(fill = distinct_colors), height = unit(3, "cm"),ylim = c(0,6),add_numbers = T,comb_order = c(1:7),numbers_rot=0), 
+    "Amikacin" = anno_barplot(category_matrices[[3]], 
+        gp = gpar(fill = distinct_colors), height = unit(3, "cm"),ylim = c(0,6),add_numbers = T,comb_order = c(1:7),numbers_rot=0), 
+    "Colistin" = anno_barplot(category_matrices[[4]], 
+        gp = gpar(fill = distinct_colors), height = unit(3, "cm"),ylim = c(0,6),add_numbers = T,comb_order = c(1:7),numbers_rot=0), 
+    "BL/BLI" = anno_barplot(category_matrices[[5]], 
+        gp = gpar(fill = distinct_colors), height = unit(3, "cm"),ylim = c(0,6),add_numbers = T,comb_order = c(1:7),numbers_rot=0), 
+    gap = unit(2, "mm"), annotation_name_side = "left", annotation_name_rot = 0,annotation_legend_param  = lgd)
+
+fake <- list(Presence = c("shared",'pres+emerge','pres+spread','present'),
+             Emergence = c("shared",'pres+emerge','emerge+spread','emergence'),
+            Spread = c("shared",'pres+spread','emerge+spread','spread'))
+ 
+F4 <- UpSet(make_comb_mat(fake),right_annotation = NULL,top_annotation = top_a_diverse,comb_order = c(1:7), height = unit(4.5, "cm"))  
+
+ComplexHeatmap::draw(F4,annotation_legend_list = list(lgd),
+     annotation_legend_side = "right") 
+
+ggsave("./figures/figure4.png",width=7.5,height=8.5,dpi=600,bg='white')  
+```
