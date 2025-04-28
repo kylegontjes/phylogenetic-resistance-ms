@@ -1,5 +1,5 @@
 ---
-title: 'Supplemental Figure 1: MIC Histogram'
+title: 'Supplemental Figure 1: MIC Histograms'
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
@@ -40,13 +40,13 @@ df <- readRDS("./data/dataset/df.RDS")
 create_MIC_histogram <- function(phenotype_cont,phenotype_cat = NULL,phenotype_name,title){ 
     data <- bind_cols(phenotype_cont,phenotype_cat,quiet = TRUE)
     colnames(data) <- c("phenotype_cont","phenotype_cat")
-    histogram <-  ggplot(data) +geom_bar(aes(x=phenotype_cont,fill=phenotype_cat)) + ylab("Number of Isolates") + labs(fill="Resistance Profile") +ylab("Number of Isolates") +xlab(paste0(phenotype_name," MIC (µg/mL)"))  +  ggtitle(paste0(title))  +theme_bw_me 
+    histogram <-  ggplot(data) +geom_bar(aes(x=phenotype_cont,fill=phenotype_cat)) + ylab("No. specimens") + labs(fill="Resistance profile") +xlab(paste0(phenotype_name," MIC (µg/mL)"))  +  ggtitle(paste0(title))  +theme_bw_me 
   return(histogram)
 } 
 ```
 
 # MIC histograms
-```{r,message=F,error=F,warning=F,fig.width=19,fig.height=9.5}
+```{r,message=F,error=F,warning=F,fig.width=18.5,fig.height=9}
 # Figure
 sfig1a <- create_MIC_histogram(df$bactrim_mic,df$bactrim_cat,"TMP-SMX","A")  + ylim(NA,225) + format + resistance_cat_scale
   
@@ -56,10 +56,10 @@ sfig1c <-  create_MIC_histogram(df$AMK,df$AMK_cat,"Amikacin","C") + ylim(NA,225)
 
 sfig1d <-  create_MIC_histogram(df$CST,df$CST_cat,"Colistin","D") + ylim(NA,225)+ format + resistance_cat_scale
 
-sfig1e <- create_MIC_histogram(df$MVB_log_2,df$MVB_cat,"Meropenem-Vaborbactam","E") + scale_x_continuous(breaks=c(-2,-1,0,1,2,3,4,5),
+sfig1e <- create_MIC_histogram(df$MVB_log_2,df$MVB_cat,"Meropenem-vaborbactam","E") + scale_x_continuous(breaks=c(-2,-1,0,1,2,3,4,5),
         labels=c("≤0.25","0.5", "1","2","4","8","16","≥32"))  + ylim(NA,225) + format + resistance_cat_scale
   
-sfig1f <-  create_MIC_histogram(df$IR_log_2,df$IR_cat,"Imipenem-Relebactam","F")+ scale_x_continuous(breaks=c(-2,-1,0,1,2,3,4,5),
+sfig1f <-  create_MIC_histogram(df$IR_log_2,df$IR_cat,"Imipenem-relebactam","F")+ scale_x_continuous(breaks=c(-2,-1,0,1,2,3,4,5),
         labels=c("≤0.25","0.5","1","2","4","8","16","≥32"))   + ylim(NA,225)+ format + resistance_cat_scale
 # Legend
 MIC_legend <- cowplot::get_plot_component(sfig1b,"guide-box",return_all=T) %>% .[[3]]
@@ -75,5 +75,5 @@ sfig1
 
 ## Save file
 ```{r}
-ggsave(filename = "~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/figures/sfigure1.png",plot=sfig1,width = 19,height=9.5,dpi = 600,units = 'in',bg="white") 
+ggsave(filename = "~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/figures/sfigure1.png",plot=sfig1,width = 18.5,height=9,dpi = 600,units = 'in',bg="white") 
 ```

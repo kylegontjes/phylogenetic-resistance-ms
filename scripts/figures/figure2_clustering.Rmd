@@ -66,10 +66,10 @@ names(clusters_col) <- clusters_name
 ## Clade scale
 clade_scale <- scale_fill_manual(breaks =c("Clade I","Clade II"),values=c("red","blue" ),name="Clade", guide = guide_legend(ncol=1, title.position = "top", label.position = "right",order=1))
 ## Non-susceptible 
-NS_scale <- scale_fill_manual(breaks = c("Susceptible","Non-Susceptible"),values=c("white","black"),labels = c("Susceptible","Resistant"),name="Resistance Profile",guide = guide_legend(title.position = "top", label.position = "right",nrow=2),drop = FALSE )
+NS_scale <- scale_fill_manual(breaks = c("Susceptible","Non-Susceptible"),values=c("white","black"),labels = c("Susceptible","Resistant"),name="Resistance profile",guide = guide_legend(title.position = "top", label.position = "right",nrow=2),drop = FALSE )
 
 ## cluster_scale
-cluster_scale <- scale_fill_manual(breaks =c("Susceptible","Resistant Singleton",names(clusters_col)),values=c("Susceptible" = "white","Resistant Singleton" = "red",clusters_col),labels=c("Susceptible","Singleton",gsub("Resistant ","",clusters_name)),name="Phylogenetics of Resistance", guide = guide_legend(ncol=4, title.position = "top", label.position = "right"))
+cluster_scale <- scale_fill_manual(breaks =c("Susceptible","Resistant Singleton",names(clusters_col)),values=c("Susceptible" = "white","Resistant Singleton" = "red",clusters_col),labels=c("Susceptible","Singleton",gsub("Resistant ","",clusters_name)),name="Phylogenetics of resistance", guide = guide_legend(ncol=4, title.position = "top", label.position = "right"))
 ```
 
 ```{r} 
@@ -78,10 +78,10 @@ rownames(df) <- df$isolate_no
 F2B.0 <- gheatmap(ggtree(tr),df %>% select(clade_I) %>% `colnames<-`("Clade") %>% mutate_all(as.factor) , colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .15) + ylim(NA,565)  + clade_scale + consistent_theme
 F2B.1 <- F2B.0 + ggnewscale::new_scale_fill()
 # Non-susceptibility
-F2B <- gheatmap(F2B.1,df %>% select(TMP_SMX_dich,gentamicin_dich,AMK_dich,CST_dich,blbli_dich) %>% `colnames<-`(c("TMP-SMX Resistance","Gentamicin Resistance","Amikacin Resistance","Colistin Resistance","BL/BLI Resistance")) %>% mutate_all(as.factor) , colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .75,offset =0.00004) + NS_scale  + ylim(NA,565)  + consistent_theme
+F2B <- gheatmap(F2B.1,df %>% select(TMP_SMX_dich,gentamicin_dich,AMK_dich,CST_dich,blbli_dich) %>% `colnames<-`(c("TMP-SMX resistance","Gentamicin resistance","Amikacin resistance","Colistin resistance","BL/BLI resistance")) %>% mutate_all(as.factor) , colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .75,offset =0.00004) + NS_scale  + ylim(NA,560)  + consistent_theme
 
 # Clustering
-F2C <- gheatmap(ggtree(tr),df %>%  select(TMP_SMX_asr_cluster_renamed_resistant,gentamicin_asr_cluster_renamed_resistant,AMK_asr_cluster_renamed_resistant,CST_asr_cluster_renamed_resistant,blbli_asr_cluster_renamed_resistant) %>% `colnames<-`(c("TMP-SMX Clustering","Gentamicin Clustering","Amikacin Clustering","Colistin Clustering","BL/BLI Clustering")) %>% mutate_all(as.factor), colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .75) + ylim(NA,565) + cluster_scale + consistent_theme 
+F2C <- gheatmap(ggtree(tr),df %>%  select(TMP_SMX_asr_cluster_renamed_resistant,gentamicin_asr_cluster_renamed_resistant,AMK_asr_cluster_renamed_resistant,CST_asr_cluster_renamed_resistant,blbli_asr_cluster_renamed_resistant) %>% `colnames<-`(c("TMP-SMX clustering","Gentamicin clustering","Amikacin clustering","Colistin clustering","BL/BLI clustering")) %>% mutate_all(as.factor), colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .75) + ylim(NA,560) + cluster_scale + consistent_theme 
  
 # Figure 
 F2BC <- plot_grid(F2B,F2C,labels=c("B","C"),label_size=24,align = "hv", ncol=2) + theme(plot.margin = unit(c(0,0,-.5,0), "cm")) 
@@ -95,20 +95,20 @@ F2BC
 ```{r}
 # Transition data
 transition_data <- readRDS("./data/asr_clustering/transition_stats.RDS") 
-transition_data <- transition_data %>% select(pheno,transitions,gains,gains_tip,losses,losses_tip,continuations,continuations_present) %>% `colnames<-`(c("Phenotype",'Transitions','Gains','Gains (Tip)','Losses','Losses (Tip)','Continuations','Continuations (Present)'))
+transition_data <- transition_data %>% select(pheno,transitions,gains,gains_tip,losses,losses_tip,continuations,continuations_present) %>% `colnames<-`(c("Phenotype",'Transitions','Gains','Gains (tip)','Losses','Losses (tip)','Continuations','Continuations (resistance)'))
 
 # Clustering data
 clustering_stats <- readRDS("./data/asr_clustering/clustering_stats.RDS")
-phylosuite_analysis_tbl <- clustering_stats %>% select(pheno,present,feature_frequency,phylogenetic_frequency,clustering_frequency,phylogenetic_events,singletons,clusters,cluster_isolates,cluster_size_median,cluster_size_range)
+phylosuite_analysis_tbl <- clustering_stats %>% select(pheno,present,phylogenetic_events,singletons,clusters,cluster_isolates,cluster_size_median,cluster_size_range,feature_frequency,phylogenetic_frequency,clustering_frequency)
  
 phylosuite_analysis_tbl$cluster_median_range <- paste0(phylosuite_analysis_tbl$cluster_size_median," (",phylosuite_analysis_tbl$cluster_size_range,")")
-phylosuite_analysis_tbl <- phylosuite_analysis_tbl%>% select(-cluster_size_median,-cluster_size_range) 
+phylosuite_analysis_tbl <- phylosuite_analysis_tbl%>% select(-cluster_size_median,-cluster_size_range)  %>% select(pheno,present,feature_frequency,phylogenetic_events,singletons,clusters,cluster_isolates,cluster_median_range,phylogenetic_frequency,clustering_frequency)
 
-phylosuite_analysis_tbl <- phylosuite_analysis_tbl %>% `colnames<-`(c("Phenotype","No. NS","NS Frequency","Phylogenetic Frequency","Clustering Frequency","Phylogenetic Events","Singletons","Clusters","Cluster Isolates","Cluster Size, Median (Range)"))
+phylosuite_analysis_tbl <- phylosuite_analysis_tbl %>% `colnames<-`(c("Phenotype","Resistant isolates","Resistance frequency","Phylogenetic events","Singletons","Clusters","Cluster isolates","Cluster size, median (range)","Phylogenetic frequency","Clustering frequency"))
 
-phylosuite_analysis_tbl$`NS Frequency` <- paste0(phylosuite_analysis_tbl$`NS Frequency`,"%")
-phylosuite_analysis_tbl$`Phylogenetic Frequency` <- paste0(phylosuite_analysis_tbl$`Phylogenetic Frequency`,"%")
-phylosuite_analysis_tbl$`Clustering Frequency` <- paste0(phylosuite_analysis_tbl$`Clustering Frequency`,"%")
+phylosuite_analysis_tbl$`Resistance frequency` <- paste0(sprintf("%.2f", phylosuite_analysis_tbl$`Resistance frequency`),"%")
+phylosuite_analysis_tbl$`Phylogenetic frequency` <- paste0(sprintf("%.2f", phylosuite_analysis_tbl$`Phylogenetic frequency`),"%")
+phylosuite_analysis_tbl$`Clustering frequency` <- paste0(sprintf("%.2f", phylosuite_analysis_tbl$`Clustering frequency`),"%")
 
 # Formatting table
 table <- transition_data %>% left_join(.,phylosuite_analysis_tbl)

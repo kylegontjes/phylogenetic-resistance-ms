@@ -1,10 +1,9 @@
 ---
-title: "sfigure_3_paint_trees"
+title: "Supplemental Figure 2: Ancestral state reconstruction and evolutionary history inferences on the phylogenetic tree"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
 ---
-
 
 ```{r setup, include=FALSE}
 require(knitr)
@@ -69,10 +68,10 @@ names(clusters_col) <- clusters_name
 
 # Clustering scales
 ## Non-susceptible 
-Non_sus_scale <- scale_fill_manual(breaks = c(0,1),values=c("white","black"),labels = c("Susceptible","Resistant"),name="Tip State",guide = guide_legend(title.position = "top", label.position = "right",nrow=2,order=2),drop = FALSE )
+Non_sus_scale <- scale_fill_manual(breaks = c(0,1),values=c("white","black"),labels = c("Susceptible","Resistant"),name="Tip state",guide = guide_legend(title.position = "top", label.position = "right",nrow=2,order=2),drop = FALSE )
 
 ## cluster_scale
-cluster_scale <- scale_fill_manual(breaks =c("Susceptible","Resistant Singleton",names(clusters_col)),values=c("Susceptible" = "white","Resistant Singleton" = "red",clusters_col),labels=c("Susceptible","Singleton",gsub("Resistant ","",clusters_name)),name="Phylogenetics of Resistance", guide = guide_legend(ncol=3, order=3,title.position = "top", label.position = "right"))
+cluster_scale <- scale_fill_manual(breaks =c("Susceptible","Resistant Singleton",names(clusters_col)),values=c("Susceptible" = "white","Resistant Singleton" = "red",clusters_col),labels=c("Susceptible","Singleton",gsub("Resistant ","",clusters_name)),name="Phylogenetics of resistance", guide = guide_legend(ncol=3, order=3,title.position = "top", label.position = "right"))
 
 state_parent_childs <- c()
 for(i in pheno){
