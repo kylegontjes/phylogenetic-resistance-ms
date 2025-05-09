@@ -1,5 +1,6 @@
 ---
-title: "stable3"
+title: "stable3: Characteristics of the study population at the time of first isolate collection"
+author: "Kyle Gontjes"
 output: html_document
 date: "`r Sys.Date()`"
 ---
@@ -13,19 +14,21 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 ```{r environment, echo=T, message=T, include=T, results=T}
 #Packages
 packages <- c("tidyverse","tableone")   
+
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) 
+
 # Functions
 source("./lib/common_functions.R")
 source('./lib/consistent_themes.R')
+
 # Print
 Sys.info()
 sessionInfo() 
 ``` 
 
-# Load dataset
-```{r load data,include=T,echo=T,results=F,message=F} 
-# Patient Metadata
+# Load patient metadata
+```{r load data,include=T,echo=T,results=F,message=F}  
 df <- readRDS("./data/regression/regression_df.RDS") 
 ```
 
@@ -46,10 +49,15 @@ all_vars <- c("age","sex.female","LOSbeforeCx","device_ct","any_device",device_v
 
 data_table <- convert_tableone_into_df(first_df,vars=all_vars,factorVars=c(all_vars %>% subset(!.%in% c("age","device_ct","comorb_ct","LOSbeforeCx"))))  
 
-age_median_IQR <- fivenum(first_df$age) %>% round(.,2) %>% t %>%as.data.frame %>% `colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower) %>% paste0(.$median," (",.$IQR,")")
-LOSbeforeCx_median_IQR <- fivenum(first_df$LOSbeforeCx) %>% t %>%  as.data.frame %>%`colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower )%>% paste0(.$median," (",.$IQR,")")
-device_ct_median_IQR <- fivenum(first_df$device_ct) %>% t %>%as.data.frame %>% `colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower )%>% paste0(.$median," (",.$IQR,")")
-comorb_ct_median_IQR <- fivenum(first_df$comorb_ct) %>% t %>%as.data.frame %>% `colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower) %>% paste0(.$median," (",.$IQR,")") 
+get_median_IQR <- function(variable){
+  data <-  fivenum(variable) %>% round(.,2) %>% t %>% as.data.frame %>% `colnames<-`(c("min","lower","median","upper","max")) %>% mutate(IQR = upper - lower) 
+  paste0(data$median," (",data$IQR,")")
+}
+
+age_median_IQR <- get_median_IQR(first_df$age) 
+LOSbeforeCx_median_IQR <- get_median_IQR(first_df$LOSbeforeCx) 
+device_ct_median_IQR <- get_median_IQR(first_df$device_ct)  
+comorb_ct_median_IQR <- get_median_IQR(first_df$comorb_ct) 
 
 data_table$`Overall (n=312)` <- ifelse(grepl('age',data_table$Variable),age_median_IQR,
                                        ifelse(grepl('LOSbeforeCx',data_table$Variable),LOSbeforeCx_median_IQR,ifelse(

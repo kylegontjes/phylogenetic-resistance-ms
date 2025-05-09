@@ -9,10 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-07" />
+<meta name="date" content="2025-04-28" />
 
-<title>stable3</title>
+<title>stable3: Characteristics of the study population at the time of first isolate collection</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -573,8 +574,10 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">stable3</h1>
-<h4 class="date">2025-04-07</h4>
+<h1 class="title toc-ignore">stable3: Characteristics of the study
+population at the time of first isolate collection</h1>
+<h4 class="author">Kyle Gontjes</h4>
+<h4 class="date">2025-04-28</h4>
 
 </div>
 
@@ -583,12 +586,13 @@ display: none;
 <h1>Environment</h1>
 <pre class="r"><code>#Packages
 packages &lt;- c(&quot;tidyverse&quot;,&quot;tableone&quot;)   
+
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) </code></pre>
 <pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+## ✔ ggplot2   3.5.2     ✔ tibble    3.2.1
 ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
 ## ✔ purrr     1.0.4     
 ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
@@ -613,30 +617,30 @@ source(&#39;./lib/consistent_themes.R&#39;)</code></pre>
 ##     group_rows</code></pre>
 <pre class="r"><code># Print
 Sys.info()</code></pre>
-<pre><code>##                                                                                            sysname 
-##                                                                                           &quot;Darwin&quot; 
-##                                                                                            release 
-##                                                                                           &quot;24.3.0&quot; 
-##                                                                                            version 
-## &quot;Darwin Kernel Version 24.3.0: Thu Jan  2 20:22:00 PST 2025; root:xnu-11215.81.4~3/RELEASE_X86_64&quot; 
-##                                                                                           nodename 
-##                                                                                   &quot;msla0572.local&quot; 
-##                                                                                            machine 
-##                                                                                           &quot;x86_64&quot; 
-##                                                                                              login 
-##                                                                                             &quot;root&quot; 
-##                                                                                               user 
-##                                                                                         &quot;kgontjes&quot; 
-##                                                                                     effective_user 
-##                                                                                         &quot;kgontjes&quot;</code></pre>
+<pre><code>##                                                                                              sysname 
+##                                                                                             &quot;Darwin&quot; 
+##                                                                                              release 
+##                                                                                             &quot;24.4.0&quot; 
+##                                                                                              version 
+## &quot;Darwin Kernel Version 24.4.0: Wed Mar 19 21:16:31 PDT 2025; root:xnu-11417.101.15~1/RELEASE_X86_64&quot; 
+##                                                                                             nodename 
+##                                                                                     &quot;msla0572.local&quot; 
+##                                                                                              machine 
+##                                                                                             &quot;x86_64&quot; 
+##                                                                                                login 
+##                                                                                               &quot;root&quot; 
+##                                                                                                 user 
+##                                                                                           &quot;kgontjes&quot; 
+##                                                                                       effective_user 
+##                                                                                           &quot;kgontjes&quot;</code></pre>
 <pre class="r"><code>sessionInfo() </code></pre>
-<pre><code>## R version 4.4.3 (2025-02-28)
+<pre><code>## R version 4.5.0 (2025-04-11)
 ## Platform: x86_64-apple-darwin20
-## Running under: macOS Sequoia 15.3.2
+## Running under: macOS Sequoia 15.4
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
-## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -650,27 +654,26 @@ Sys.info()</code></pre>
 ## other attached packages:
 ##  [1] kableExtra_1.4.0 gridExtra_2.3    tableone_0.13.2  lubridate_1.9.4 
 ##  [5] forcats_1.0.0    stringr_1.5.1    dplyr_1.1.4      purrr_1.0.4     
-##  [9] readr_2.1.5      tidyr_1.3.1      tibble_3.2.1     ggplot2_3.5.1   
+##  [9] readr_2.1.5      tidyr_1.3.1      tibble_3.2.1     ggplot2_3.5.2   
 ## [13] tidyverse_2.0.0  knitr_1.50      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] sass_0.4.9        generics_0.1.3    xml2_1.3.8        stringi_1.8.7    
-##  [5] lattice_0.22-6    hms_1.1.3         digest_0.6.37     magrittr_2.0.3   
-##  [9] evaluate_1.0.3    grid_4.4.3        timechange_0.3.0  fastmap_1.2.0    
-## [13] jsonlite_2.0.0    Matrix_1.7-3      DBI_1.2.3         survival_3.8-3   
-## [17] viridisLite_0.4.2 scales_1.3.0      jquerylib_0.1.4   cli_3.6.4        
-## [21] mitools_2.4       rlang_1.1.5       munsell_0.5.1     splines_4.4.3    
-## [25] withr_3.0.2       cachem_1.1.0      yaml_2.3.10       tools_4.4.3      
-## [29] tzdb_0.5.0        colorspace_2.1-1  vctrs_0.6.5       R6_2.6.1         
-## [33] lifecycle_1.0.4   pkgconfig_2.0.3   pillar_1.10.1     bslib_0.9.0      
-## [37] gtable_0.3.6      glue_1.8.0        Rcpp_1.0.14       systemfonts_1.2.1
-## [41] xfun_0.51         tidyselect_1.2.1  rstudioapi_0.17.1 htmltools_0.5.8.1
-## [45] survey_4.4-2      svglite_2.1.3     rmarkdown_2.29    compiler_4.4.3</code></pre>
+##  [1] sass_0.4.10        generics_0.1.3     xml2_1.3.8         stringi_1.8.7     
+##  [5] lattice_0.22-7     hms_1.1.3          digest_0.6.37      magrittr_2.0.3    
+##  [9] evaluate_1.0.3     grid_4.5.0         timechange_0.3.0   RColorBrewer_1.1-3
+## [13] fastmap_1.2.0      jsonlite_2.0.0     Matrix_1.7-3       DBI_1.2.3         
+## [17] survival_3.8-3     viridisLite_0.4.2  scales_1.4.0       jquerylib_0.1.4   
+## [21] cli_3.6.5          mitools_2.4        rlang_1.1.6        splines_4.5.0     
+## [25] withr_3.0.2        cachem_1.1.0       yaml_2.3.10        tools_4.5.0       
+## [29] tzdb_0.5.0         vctrs_0.6.5        R6_2.6.1           lifecycle_1.0.4   
+## [33] pkgconfig_2.0.3    pillar_1.10.2      bslib_0.9.0        gtable_0.3.6      
+## [37] glue_1.8.0         Rcpp_1.0.14        systemfonts_1.2.2  xfun_0.52         
+## [41] tidyselect_1.2.1   rstudioapi_0.17.1  farver_2.1.2       htmltools_0.5.8.1 
+## [45] survey_4.4-2       rmarkdown_2.29     svglite_2.1.3      compiler_4.5.0</code></pre>
 </div>
-<div id="load-dataset" class="section level1">
-<h1>Load dataset</h1>
-<pre class="r"><code># Patient Metadata
-df &lt;- readRDS(&quot;./data/regression/regression_df.RDS&quot;) </code></pre>
+<div id="load-patient-metadata" class="section level1">
+<h1>Load patient metadata</h1>
+<pre class="r"><code>df &lt;- readRDS(&quot;./data/regression/regression_df.RDS&quot;) </code></pre>
 </div>
 <div id="variables-of-interest-here" class="section level1">
 <h1>Variables of interest here</h1>
@@ -689,10 +692,15 @@ all_vars &lt;- c(&quot;age&quot;,&quot;sex.female&quot;,&quot;LOSbeforeCx&quot;,
 
 data_table &lt;- convert_tableone_into_df(first_df,vars=all_vars,factorVars=c(all_vars %&gt;% subset(!.%in% c(&quot;age&quot;,&quot;device_ct&quot;,&quot;comorb_ct&quot;,&quot;LOSbeforeCx&quot;))))  
 
-age_median_IQR &lt;- fivenum(first_df$age) %&gt;% round(.,2) %&gt;% t %&gt;%as.data.frame %&gt;% `colnames&lt;-`(c(&quot;min&quot;,&quot;lower&quot;,&quot;median&quot;,&quot;upper&quot;,&quot;max&quot;)) %&gt;% mutate(IQR = upper - lower) %&gt;% paste0(.$median,&quot; (&quot;,.$IQR,&quot;)&quot;)
-LOSbeforeCx_median_IQR &lt;- fivenum(first_df$LOSbeforeCx) %&gt;% t %&gt;%  as.data.frame %&gt;%`colnames&lt;-`(c(&quot;min&quot;,&quot;lower&quot;,&quot;median&quot;,&quot;upper&quot;,&quot;max&quot;)) %&gt;% mutate(IQR = upper - lower )%&gt;% paste0(.$median,&quot; (&quot;,.$IQR,&quot;)&quot;)
-device_ct_median_IQR &lt;- fivenum(first_df$device_ct) %&gt;% t %&gt;%as.data.frame %&gt;% `colnames&lt;-`(c(&quot;min&quot;,&quot;lower&quot;,&quot;median&quot;,&quot;upper&quot;,&quot;max&quot;)) %&gt;% mutate(IQR = upper - lower )%&gt;% paste0(.$median,&quot; (&quot;,.$IQR,&quot;)&quot;)
-comorb_ct_median_IQR &lt;- fivenum(first_df$comorb_ct) %&gt;% t %&gt;%as.data.frame %&gt;% `colnames&lt;-`(c(&quot;min&quot;,&quot;lower&quot;,&quot;median&quot;,&quot;upper&quot;,&quot;max&quot;)) %&gt;% mutate(IQR = upper - lower) %&gt;% paste0(.$median,&quot; (&quot;,.$IQR,&quot;)&quot;) 
+get_median_IQR &lt;- function(variable){
+  data &lt;-  fivenum(variable) %&gt;% round(.,2) %&gt;% t %&gt;% as.data.frame %&gt;% `colnames&lt;-`(c(&quot;min&quot;,&quot;lower&quot;,&quot;median&quot;,&quot;upper&quot;,&quot;max&quot;)) %&gt;% mutate(IQR = upper - lower) 
+  paste0(data$median,&quot; (&quot;,data$IQR,&quot;)&quot;)
+}
+
+age_median_IQR &lt;- get_median_IQR(first_df$age) 
+LOSbeforeCx_median_IQR &lt;- get_median_IQR(first_df$LOSbeforeCx) 
+device_ct_median_IQR &lt;- get_median_IQR(first_df$device_ct)  
+comorb_ct_median_IQR &lt;- get_median_IQR(first_df$comorb_ct) 
 
 data_table$`Overall (n=312)` &lt;- ifelse(grepl(&#39;age&#39;,data_table$Variable),age_median_IQR,
                                        ifelse(grepl(&#39;LOSbeforeCx&#39;,data_table$Variable),LOSbeforeCx_median_IQR,ifelse(
@@ -723,7 +731,7 @@ Overall (n=312)
 age, median (IQR)
 </td>
 <td style="text-align:left;">
-21.6672.72 (18.2)
+72.72 (18.2)
 </td>
 </tr>
 <tr>
@@ -739,7 +747,7 @@ sex.female
 LOSbeforeCx, median (IQR)
 </td>
 <td style="text-align:left;">
-2121 (37)
+21 (37)
 </td>
 </tr>
 <tr>
@@ -747,7 +755,7 @@ LOSbeforeCx, median (IQR)
 device_ct, median (IQR)
 </td>
 <td style="text-align:left;">
-32 (2)
+2 (2)
 </td>
 </tr>
 <tr>
@@ -795,7 +803,7 @@ gastro
 comorb_ct, median (IQR)
 </td>
 <td style="text-align:left;">
-42 (3)
+2 (3)
 </td>
 </tr>
 <tr>
