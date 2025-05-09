@@ -1,5 +1,6 @@
 ---
-title: 'Supplemental Table 5: Clade differences'
+title: 'Supplemental Table 5: Differences in phylogenetic clustering of antibiotic resistance across clades of Klebsiella pneumoniae sequence type 258'
+author: "Kyle Gontjes"
 output: html_document
 date: "`r Sys.Date()`"
 ---
@@ -15,10 +16,13 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 ```{r environment, echo=T, message=T, include=T, results=T}
 #Packages
 packages <- c("tidyverse",'phyloAMR','ape')   
+
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) 
+
 # Load function
 source('./lib/consistent_themes.R')
+
 # Print
 Sys.info()
 sessionInfo() 
@@ -60,14 +64,15 @@ cluster_stats_clades <- rbind(TMP_SMX,gent,AMK,CST,blbli)
 ```{r}
 stable5 <- cluster_stats_clades %>% select(pheno,clade,present,feature_frequency,phylogenetic_frequency,clustering_frequency,phylogenetic_events,singletons,clusters,cluster_isolates,cluster_size_median,cluster_size_range)
  
-stable5$cluster_median_range <- paste0(stable5$cluster_size_median," (",stable5$cluster_size_range,")")
-stable5 <- stable5%>% select(-cluster_size_median,-cluster_size_range) 
+stable5$cluster_median_range <- paste0(stable5$cluster_size_median," (",stable5$cluster_size_range,")") 
 
-stable5 <- stable5 %>% `colnames<-`(c("Phenotype","Clade","No. NS","NS Frequency","Phylogenetic Frequency","Clustering Frequency","Phylogenetic Events","No. Singletons","No. Clusters","No. Cluster Isolates","Cluster Size, Median (Range)"))
+stable5 <- stable5%>% select(-cluster_size_median,-cluster_size_range)  %>% select(pheno,present,feature_frequency,phylogenetic_events,singletons,clusters,cluster_isolates,cluster_median_range,phylogenetic_frequency,clustering_frequency)
 
-stable5$`NS Frequency` <- paste0(stable5$`NS Frequency`,"%")
-stable5$`Phylogenetic Frequency` <- paste0(stable5$`Phylogenetic Frequency`,"%")
-stable5$`Clustering Frequency` <- paste0(stable5$`Clustering Frequency`,"%")
+stable5 <- stable5 %>% `colnames<-`(c("Phenotype","Resistant isolates","Resistance frequency","Phylogenetic events","Singletons","Clusters","Cluster isolates","Cluster size, median (range)","Phylogenetic frequency","Clustering frequency"))
+
+stable5$`Resistance frequency` <- paste0(sprintf("%.2f", stable5$`Resistance frequency`),"%")
+stable5$`Phylogenetic frequency` <- paste0(sprintf("%.2f", stable5$`Phylogenetic frequency`),"%")
+stable5$`Clustering frequency` <- paste0(sprintf("%.2f", stable5$`Clustering frequency`),"%")
 ```
 
 # Save results

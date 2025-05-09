@@ -9,10 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-07" />
+<meta name="date" content="2025-04-28" />
 
-<title>Supplemental Table 5: Clade differences</title>
+<title>Supplemental Table 5: Differences in phylogenetic clustering of antibiotic resistance across clades of Klebsiella pneumoniae sequence type 258</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -573,9 +574,11 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Supplemental Table 5: Clade
-differences</h1>
-<h4 class="date">2025-04-07</h4>
+<h1 class="title toc-ignore">Supplemental Table 5: Differences in
+phylogenetic clustering of antibiotic resistance across clades of
+Klebsiella pneumoniae sequence type 258</h1>
+<h4 class="author">Kyle Gontjes</h4>
+<h4 class="date">2025-04-28</h4>
 
 </div>
 
@@ -584,12 +587,13 @@ differences</h1>
 <h1>Environment</h1>
 <pre class="r"><code>#Packages
 packages &lt;- c(&quot;tidyverse&quot;,&#39;phyloAMR&#39;,&#39;ape&#39;)   
+
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) </code></pre>
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ ggplot2   3.5.2     ✔ tibble    3.2.1
 ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
 ✔ purrr     1.0.4     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
@@ -620,30 +624,30 @@ The following object is masked from &#39;package:dplyr&#39;:
     group_rows</code></pre>
 <pre class="r"><code># Print
 Sys.info()</code></pre>
-<pre><code>                                                                                           sysname 
-                                                                                          &quot;Darwin&quot; 
-                                                                                           release 
-                                                                                          &quot;24.3.0&quot; 
-                                                                                           version 
-&quot;Darwin Kernel Version 24.3.0: Thu Jan  2 20:22:00 PST 2025; root:xnu-11215.81.4~3/RELEASE_X86_64&quot; 
-                                                                                          nodename 
-                                                                                  &quot;msla0572.local&quot; 
-                                                                                           machine 
-                                                                                          &quot;x86_64&quot; 
-                                                                                             login 
-                                                                                            &quot;root&quot; 
-                                                                                              user 
-                                                                                        &quot;kgontjes&quot; 
-                                                                                    effective_user 
-                                                                                        &quot;kgontjes&quot; </code></pre>
+<pre><code>                                                                                             sysname 
+                                                                                            &quot;Darwin&quot; 
+                                                                                             release 
+                                                                                            &quot;24.4.0&quot; 
+                                                                                             version 
+&quot;Darwin Kernel Version 24.4.0: Wed Mar 19 21:16:31 PDT 2025; root:xnu-11417.101.15~1/RELEASE_X86_64&quot; 
+                                                                                            nodename 
+                                                                                    &quot;msla0572.local&quot; 
+                                                                                             machine 
+                                                                                            &quot;x86_64&quot; 
+                                                                                               login 
+                                                                                              &quot;root&quot; 
+                                                                                                user 
+                                                                                          &quot;kgontjes&quot; 
+                                                                                      effective_user 
+                                                                                          &quot;kgontjes&quot; </code></pre>
 <pre class="r"><code>sessionInfo() </code></pre>
-<pre><code>R version 4.4.3 (2025-02-28)
+<pre><code>R version 4.5.0 (2025-04-11)
 Platform: x86_64-apple-darwin20
-Running under: macOS Sequoia 15.3.2
+Running under: macOS Sequoia 15.4
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -658,20 +662,20 @@ other attached packages:
  [1] kableExtra_1.4.0 gridExtra_2.3    ape_5.8-1        phyloAMR_0.1.0  
  [5] lubridate_1.9.4  forcats_1.0.0    stringr_1.5.1    dplyr_1.1.4     
  [9] purrr_1.0.4      readr_2.1.5      tidyr_1.3.1      tibble_3.2.1    
-[13] ggplot2_3.5.1    tidyverse_2.0.0  knitr_1.50      
+[13] ggplot2_3.5.2    tidyverse_2.0.0  knitr_1.50      
 
 loaded via a namespace (and not attached):
- [1] sass_0.4.9        generics_0.1.3    xml2_1.3.8        stringi_1.8.7    
- [5] lattice_0.22-6    hms_1.1.3         digest_0.6.37     magrittr_2.0.3   
- [9] evaluate_1.0.3    grid_4.4.3        timechange_0.3.0  fastmap_1.2.0    
-[13] jsonlite_2.0.0    viridisLite_0.4.2 scales_1.3.0      jquerylib_0.1.4  
-[17] cli_3.6.4         rlang_1.1.5       munsell_0.5.1     withr_3.0.2      
-[21] cachem_1.1.0      yaml_2.3.10       tools_4.4.3       parallel_4.4.3   
-[25] tzdb_0.5.0        colorspace_2.1-1  vctrs_0.6.5       R6_2.6.1         
-[29] lifecycle_1.0.4   pkgconfig_2.0.3   pillar_1.10.1     bslib_0.9.0      
-[33] gtable_0.3.6      glue_1.8.0        Rcpp_1.0.14       systemfonts_1.2.1
-[37] xfun_0.51         tidyselect_1.2.1  rstudioapi_0.17.1 htmltools_0.5.8.1
-[41] nlme_3.1-167      rmarkdown_2.29    svglite_2.1.3     compiler_4.4.3   </code></pre>
+ [1] sass_0.4.10        generics_0.1.3     xml2_1.3.8         stringi_1.8.7     
+ [5] lattice_0.22-7     hms_1.1.3          digest_0.6.37      magrittr_2.0.3    
+ [9] evaluate_1.0.3     grid_4.5.0         timechange_0.3.0   RColorBrewer_1.1-3
+[13] fastmap_1.2.0      jsonlite_2.0.0     viridisLite_0.4.2  scales_1.4.0      
+[17] jquerylib_0.1.4    cli_3.6.5          rlang_1.1.6        withr_3.0.2       
+[21] cachem_1.1.0       yaml_2.3.10        tools_4.5.0        parallel_4.5.0    
+[25] tzdb_0.5.0         vctrs_0.6.5        R6_2.6.1           lifecycle_1.0.4   
+[29] pkgconfig_2.0.3    pillar_1.10.2      bslib_0.9.0        gtable_0.3.6      
+[33] glue_1.8.0         Rcpp_1.0.14        systemfonts_1.2.2  xfun_0.52         
+[37] tidyselect_1.2.1   rstudioapi_0.17.1  farver_2.1.2       htmltools_0.5.8.1 
+[41] nlme_3.1-168       rmarkdown_2.29     svglite_2.1.3      compiler_4.5.0    </code></pre>
 </div>
 <div id="load-data" class="section level1">
 <h1>Load data</h1>
@@ -707,14 +711,15 @@ cluster_stats_clades &lt;- rbind(TMP_SMX,gent,AMK,CST,blbli)</code></pre>
 <h1>Make supplemental table</h1>
 <pre class="r"><code>stable5 &lt;- cluster_stats_clades %&gt;% select(pheno,clade,present,feature_frequency,phylogenetic_frequency,clustering_frequency,phylogenetic_events,singletons,clusters,cluster_isolates,cluster_size_median,cluster_size_range)
  
-stable5$cluster_median_range &lt;- paste0(stable5$cluster_size_median,&quot; (&quot;,stable5$cluster_size_range,&quot;)&quot;)
-stable5 &lt;- stable5%&gt;% select(-cluster_size_median,-cluster_size_range) 
+stable5$cluster_median_range &lt;- paste0(stable5$cluster_size_median,&quot; (&quot;,stable5$cluster_size_range,&quot;)&quot;) 
 
-stable5 &lt;- stable5 %&gt;% `colnames&lt;-`(c(&quot;Phenotype&quot;,&quot;Clade&quot;,&quot;No. NS&quot;,&quot;NS Frequency&quot;,&quot;Phylogenetic Frequency&quot;,&quot;Clustering Frequency&quot;,&quot;Phylogenetic Events&quot;,&quot;No. Singletons&quot;,&quot;No. Clusters&quot;,&quot;No. Cluster Isolates&quot;,&quot;Cluster Size, Median (Range)&quot;))
+stable5 &lt;- stable5%&gt;% select(-cluster_size_median,-cluster_size_range)  %&gt;% select(pheno,present,feature_frequency,phylogenetic_events,singletons,clusters,cluster_isolates,cluster_median_range,phylogenetic_frequency,clustering_frequency)
 
-stable5$`NS Frequency` &lt;- paste0(stable5$`NS Frequency`,&quot;%&quot;)
-stable5$`Phylogenetic Frequency` &lt;- paste0(stable5$`Phylogenetic Frequency`,&quot;%&quot;)
-stable5$`Clustering Frequency` &lt;- paste0(stable5$`Clustering Frequency`,&quot;%&quot;)</code></pre>
+stable5 &lt;- stable5 %&gt;% `colnames&lt;-`(c(&quot;Phenotype&quot;,&quot;Resistant isolates&quot;,&quot;Resistance frequency&quot;,&quot;Phylogenetic events&quot;,&quot;Singletons&quot;,&quot;Clusters&quot;,&quot;Cluster isolates&quot;,&quot;Cluster size, median (range)&quot;,&quot;Phylogenetic frequency&quot;,&quot;Clustering frequency&quot;))
+
+stable5$`Resistance frequency` &lt;- paste0(sprintf(&quot;%.2f&quot;, stable5$`Resistance frequency`),&quot;%&quot;)
+stable5$`Phylogenetic frequency` &lt;- paste0(sprintf(&quot;%.2f&quot;, stable5$`Phylogenetic frequency`),&quot;%&quot;)
+stable5$`Clustering frequency` &lt;- paste0(sprintf(&quot;%.2f&quot;, stable5$`Clustering frequency`),&quot;%&quot;)</code></pre>
 </div>
 <div id="save-results" class="section level1">
 <h1>Save results</h1>
@@ -725,35 +730,32 @@ stable5$`Clustering Frequency` &lt;- paste0(stable5$`Clustering Frequency`,&quot
 <th style="text-align:left;">
 Phenotype
 </th>
-<th style="text-align:left;">
-Clade
-</th>
 <th style="text-align:right;">
-No. NS
+Resistant isolates
 </th>
 <th style="text-align:left;">
-NS Frequency
+Resistance frequency
+</th>
+<th style="text-align:right;">
+Phylogenetic events
+</th>
+<th style="text-align:right;">
+Singletons
+</th>
+<th style="text-align:right;">
+Clusters
+</th>
+<th style="text-align:right;">
+Cluster isolates
 </th>
 <th style="text-align:left;">
-Phylogenetic Frequency
+Cluster size, median (range)
 </th>
 <th style="text-align:left;">
-Clustering Frequency
-</th>
-<th style="text-align:right;">
-Phylogenetic Events
-</th>
-<th style="text-align:right;">
-No. Singletons
-</th>
-<th style="text-align:right;">
-No. Clusters
-</th>
-<th style="text-align:right;">
-No. Cluster Isolates
+Phylogenetic frequency
 </th>
 <th style="text-align:left;">
-Cluster Size, Median (Range)
+Clustering frequency
 </th>
 </tr>
 </thead>
@@ -762,20 +764,11 @@ Cluster Size, Median (Range)
 <td style="text-align:left;">
 TMP-SMX
 </td>
-<td style="text-align:left;">
-Clade I
-</td>
 <td style="text-align:right;">
 40
 </td>
 <td style="text-align:left;">
 29.85%
-</td>
-<td style="text-align:left;">
-19.66%
-</td>
-<td style="text-align:left;">
-21.74%
 </td>
 <td style="text-align:right;">
 23
@@ -792,25 +785,22 @@ Clade I
 <td style="text-align:left;">
 4 (2-8)
 </td>
+<td style="text-align:left;">
+19.66%
+</td>
+<td style="text-align:left;">
+21.74%
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 TMP-SMX
-</td>
-<td style="text-align:left;">
-Clade II
 </td>
 <td style="text-align:right;">
 167
 </td>
 <td style="text-align:left;">
 66.27%
-</td>
-<td style="text-align:left;">
-9.33%
-</td>
-<td style="text-align:left;">
-22.22%
 </td>
 <td style="text-align:right;">
 18
@@ -827,25 +817,22 @@ Clade II
 <td style="text-align:left;">
 2.5 (2-146)
 </td>
+<td style="text-align:left;">
+9.33%
+</td>
+<td style="text-align:left;">
+22.22%
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Gentamicin
-</td>
-<td style="text-align:left;">
-Clade I
 </td>
 <td style="text-align:right;">
 36
 </td>
 <td style="text-align:left;">
 26.87%
-</td>
-<td style="text-align:left;">
-13.41%
-</td>
-<td style="text-align:left;">
-22.73%
 </td>
 <td style="text-align:right;">
 22
@@ -862,25 +849,22 @@ Clade I
 <td style="text-align:left;">
 3 (2-7)
 </td>
+<td style="text-align:left;">
+13.41%
+</td>
+<td style="text-align:left;">
+22.73%
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Gentamicin
-</td>
-<td style="text-align:left;">
-Clade II
 </td>
 <td style="text-align:right;">
 163
 </td>
 <td style="text-align:left;">
 64.68%
-</td>
-<td style="text-align:left;">
-6.29%
-</td>
-<td style="text-align:left;">
-33.33%
 </td>
 <td style="text-align:right;">
 9
@@ -897,25 +881,22 @@ Clade II
 <td style="text-align:left;">
 8 (2-147)
 </td>
+<td style="text-align:left;">
+6.29%
+</td>
+<td style="text-align:left;">
+33.33%
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Amikacin
-</td>
-<td style="text-align:left;">
-Clade I
 </td>
 <td style="text-align:right;">
 79
 </td>
 <td style="text-align:left;">
 58.96%
-</td>
-<td style="text-align:left;">
-6.45%
-</td>
-<td style="text-align:left;">
-36.36%
 </td>
 <td style="text-align:right;">
 22
@@ -932,25 +913,22 @@ Clade I
 <td style="text-align:left;">
 7 (2-25)
 </td>
+<td style="text-align:left;">
+6.45%
+</td>
+<td style="text-align:left;">
+36.36%
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Amikacin
-</td>
-<td style="text-align:left;">
-Clade II
 </td>
 <td style="text-align:right;">
 53
 </td>
 <td style="text-align:left;">
 21.03%
-</td>
-<td style="text-align:left;">
-9.21%
-</td>
-<td style="text-align:left;">
-17.24%
 </td>
 <td style="text-align:right;">
 29
@@ -967,25 +945,22 @@ Clade II
 <td style="text-align:left;">
 4 (2-15)
 </td>
+<td style="text-align:left;">
+9.21%
+</td>
+<td style="text-align:left;">
+17.24%
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Colistin
-</td>
-<td style="text-align:left;">
-Clade I
 </td>
 <td style="text-align:right;">
 19
 </td>
 <td style="text-align:left;">
 14.18%
-</td>
-<td style="text-align:left;">
-8.92%
-</td>
-<td style="text-align:left;">
-7.14%
 </td>
 <td style="text-align:right;">
 14
@@ -1002,13 +977,16 @@ Clade I
 <td style="text-align:left;">
 6 (6-6)
 </td>
+<td style="text-align:left;">
+8.92%
+</td>
+<td style="text-align:left;">
+7.14%
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Colistin
-</td>
-<td style="text-align:left;">
-Clade II
 </td>
 <td style="text-align:right;">
 110
@@ -1016,46 +994,37 @@ Clade II
 <td style="text-align:left;">
 43.65%
 </td>
-<td style="text-align:left;">
-6.47%
-</td>
-<td style="text-align:left;">
-46.67%
-</td>
 <td style="text-align:right;">
-15
-</td>
-<td style="text-align:right;">
-8
+14
 </td>
 <td style="text-align:right;">
 7
 </td>
 <td style="text-align:right;">
-102
+7
+</td>
+<td style="text-align:right;">
+103
 </td>
 <td style="text-align:left;">
 4 (2-71)
+</td>
+<td style="text-align:left;">
+5.83%
+</td>
+<td style="text-align:left;">
+50.00%
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 BL/BLI
 </td>
-<td style="text-align:left;">
-Clade I
-</td>
 <td style="text-align:right;">
 37
 </td>
 <td style="text-align:left;">
 27.61%
-</td>
-<td style="text-align:left;">
-15.6%
-</td>
-<td style="text-align:left;">
-22.73%
 </td>
 <td style="text-align:right;">
 22
@@ -1072,25 +1041,22 @@ Clade I
 <td style="text-align:left;">
 2 (2-10)
 </td>
+<td style="text-align:left;">
+15.60%
+</td>
+<td style="text-align:left;">
+22.73%
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 BL/BLI
-</td>
-<td style="text-align:left;">
-Clade II
 </td>
 <td style="text-align:right;">
 19
 </td>
 <td style="text-align:left;">
 7.54%
-</td>
-<td style="text-align:left;">
-7.17%
-</td>
-<td style="text-align:left;">
-5.56%
 </td>
 <td style="text-align:right;">
 18
@@ -1106,6 +1072,12 @@ Clade II
 </td>
 <td style="text-align:left;">
 2 (2-2)
+</td>
+<td style="text-align:left;">
+7.17%
+</td>
+<td style="text-align:left;">
+5.56%
 </td>
 </tr>
 </tbody>
