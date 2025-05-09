@@ -11,9 +11,9 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-07" />
+<meta name="date" content="2025-04-28" />
 
-<title>stable8_purposeful_hitss</title>
+<title>Supplemental Table 8: Purposeful selection hits</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -574,9 +574,10 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">stable8_purposeful_hitss</h1>
+<h1 class="title toc-ignore">Supplemental Table 8: Purposeful selection
+hits</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-04-07</h4>
+<h4 class="date">2025-04-28</h4>
 
 </div>
 
@@ -585,12 +586,13 @@ display: none;
 <h1>Environment</h1>
 <pre class="r"><code>#Packages
 packages &lt;- c(&quot;tidyverse&quot;)   
+
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) </code></pre>
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ ggplot2   3.5.2     ✔ tibble    3.2.1
 ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
 ✔ purrr     1.0.4     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
@@ -615,30 +617,30 @@ The following object is masked from &#39;package:dplyr&#39;:
     group_rows</code></pre>
 <pre class="r"><code># Print
 Sys.info()</code></pre>
-<pre><code>                                                                                           sysname 
-                                                                                          &quot;Darwin&quot; 
-                                                                                           release 
-                                                                                          &quot;24.3.0&quot; 
-                                                                                           version 
-&quot;Darwin Kernel Version 24.3.0: Thu Jan  2 20:22:00 PST 2025; root:xnu-11215.81.4~3/RELEASE_X86_64&quot; 
-                                                                                          nodename 
-                                                                                  &quot;msla0572.local&quot; 
-                                                                                           machine 
-                                                                                          &quot;x86_64&quot; 
-                                                                                             login 
-                                                                                            &quot;root&quot; 
-                                                                                              user 
-                                                                                        &quot;kgontjes&quot; 
-                                                                                    effective_user 
-                                                                                        &quot;kgontjes&quot; </code></pre>
+<pre><code>                                                                                             sysname 
+                                                                                            &quot;Darwin&quot; 
+                                                                                             release 
+                                                                                            &quot;24.4.0&quot; 
+                                                                                             version 
+&quot;Darwin Kernel Version 24.4.0: Wed Mar 19 21:16:31 PDT 2025; root:xnu-11417.101.15~1/RELEASE_X86_64&quot; 
+                                                                                            nodename 
+                                                                                    &quot;msla0572.local&quot; 
+                                                                                             machine 
+                                                                                            &quot;x86_64&quot; 
+                                                                                               login 
+                                                                                              &quot;root&quot; 
+                                                                                                user 
+                                                                                          &quot;kgontjes&quot; 
+                                                                                      effective_user 
+                                                                                          &quot;kgontjes&quot; </code></pre>
 <pre class="r"><code>sessionInfo() </code></pre>
-<pre><code>R version 4.4.3 (2025-02-28)
+<pre><code>R version 4.5.0 (2025-04-11)
 Platform: x86_64-apple-darwin20
-Running under: macOS Sequoia 15.3.2
+Running under: macOS Sequoia 15.4
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -652,20 +654,20 @@ attached base packages:
 other attached packages:
  [1] kableExtra_1.4.0 gridExtra_2.3    lubridate_1.9.4  forcats_1.0.0   
  [5] stringr_1.5.1    dplyr_1.1.4      purrr_1.0.4      readr_2.1.5     
- [9] tidyr_1.3.1      tibble_3.2.1     ggplot2_3.5.1    tidyverse_2.0.0 
+ [9] tidyr_1.3.1      tibble_3.2.1     ggplot2_3.5.2    tidyverse_2.0.0 
 [13] knitr_1.50      
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.6      jsonlite_2.0.0    compiler_4.4.3    tidyselect_1.2.1 
- [5] xml2_1.3.8        jquerylib_0.1.4   systemfonts_1.2.1 scales_1.3.0     
- [9] yaml_2.3.10       fastmap_1.2.0     R6_2.6.1          generics_0.1.3   
-[13] munsell_0.5.1     svglite_2.1.3     bslib_0.9.0       pillar_1.10.1    
-[17] tzdb_0.5.0        rlang_1.1.5       cachem_1.1.0      stringi_1.8.7    
-[21] xfun_0.51         sass_0.4.9        viridisLite_0.4.2 timechange_0.3.0 
-[25] cli_3.6.4         withr_3.0.2       magrittr_2.0.3    digest_0.6.37    
-[29] grid_4.4.3        rstudioapi_0.17.1 hms_1.1.3         lifecycle_1.0.4  
-[33] vctrs_0.6.5       evaluate_1.0.3    glue_1.8.0        colorspace_2.1-1 
-[37] rmarkdown_2.29    tools_4.4.3       pkgconfig_2.0.3   htmltools_0.5.8.1</code></pre>
+ [1] gtable_0.3.6       jsonlite_2.0.0     compiler_4.5.0     tidyselect_1.2.1  
+ [5] xml2_1.3.8         jquerylib_0.1.4    systemfonts_1.2.2  scales_1.4.0      
+ [9] yaml_2.3.10        fastmap_1.2.0      R6_2.6.1           generics_0.1.3    
+[13] svglite_2.1.3      bslib_0.9.0        pillar_1.10.2      RColorBrewer_1.1-3
+[17] tzdb_0.5.0         rlang_1.1.6        cachem_1.1.0       stringi_1.8.7     
+[21] xfun_0.52          sass_0.4.10        viridisLite_0.4.2  timechange_0.3.0  
+[25] cli_3.6.5          withr_3.0.2        magrittr_2.0.3     digest_0.6.37     
+[29] grid_4.5.0         rstudioapi_0.17.1  hms_1.1.3          lifecycle_1.0.4   
+[33] vctrs_0.6.5        evaluate_1.0.3     glue_1.8.0         farver_2.1.2      
+[37] rmarkdown_2.29     tools_4.5.0        pkgconfig_2.0.3    htmltools_0.5.8.1 </code></pre>
 </div>
 <div id="load-data" class="section level1">
 <h1>Load data</h1>
@@ -811,10 +813,10 @@ Cluster: 142
 third_plus_ceph_1d
 </td>
 <td style="text-align:left;">
-0.4 (0.22-0.71)
+0.40 (0.22-0.72)
 </td>
 <td style="text-align:left;">
-0.0021
+0.0022
 </td>
 <td style="text-align:left;">
 bactrim_1d
@@ -829,21 +831,21 @@ bactrim_1d
 AKI
 </td>
 <td style="text-align:left;">
-0.41 (0.24-0.72)
+0.41 (0.23-0.70)
 </td>
 <td style="text-align:left;">
-0.0019
+0.0014
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-AKI
+bactrim_1d
 </td>
 <td style="text-align:left;">
-0.46 (0.27-0.76)
+24.97 (4.02-504.50)
 </td>
 <td style="text-align:left;">
-0.0032
+0.0044
 </td>
 <td style="text-align:left;">
 sex.female
@@ -858,27 +860,27 @@ sex.female
 third_plus_ceph_1d
 </td>
 <td style="text-align:left;">
-0.39 (0.21-0.72)
+0.40 (0.22-0.73)
 </td>
 <td style="text-align:left;">
-0.0028
+0.0031
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-bactrim_1d
+AKI
 </td>
 <td style="text-align:left;">
-23.56 (3.83-470.95)
+0.49 (0.29-0.81)
 </td>
 <td style="text-align:left;">
-0.0049
+0.0060
 </td>
 <td style="text-align:left;">
 tigecycline_1d
 </td>
 <td style="text-align:left;">
-3.66 (1.1-11.75)
+3.66 (1.10-11.75)
 </td>
 <td style="text-align:left;">
 0.0292
@@ -887,27 +889,27 @@ tigecycline_1d
 bactrim_1d
 </td>
 <td style="text-align:left;">
-21.5 (3.47-423.67)
+18.93 (3.13-368.12)
 </td>
 <td style="text-align:left;">
-0.006
+0.0077
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-decub
+gastro
 </td>
 <td style="text-align:left;">
-2.04 (1.09-3.91)
+1.86 (1.11-3.18)
 </td>
 <td style="text-align:left;">
-0.0273
+0.0203
 </td>
 <td style="text-align:left;">
 zosyn_1d
 </td>
 <td style="text-align:left;">
-0.09 (0-0.67)
+0.09 (0.00-0.67)
 </td>
 <td style="text-align:left;">
 0.0709
@@ -916,7 +918,7 @@ zosyn_1d
 FQ_1d
 </td>
 <td style="text-align:left;">
-0.41 (0.2-0.82)
+0.42 (0.20-0.82)
 </td>
 <td style="text-align:left;">
 0.0132
@@ -924,19 +926,19 @@ FQ_1d
 </tr>
 <tr>
 <td style="text-align:left;">
-tigecycline_1d
+decub
 </td>
 <td style="text-align:left;">
-2.33 (1.1-5.16)
+2.08 (1.12-3.96)
 </td>
 <td style="text-align:left;">
-0.0311
+0.0227
 </td>
 <td style="text-align:left;">
 poly_colistin_1d
 </td>
 <td style="text-align:left;">
-0.1 (0-0.8)
+0.10 (0.00-0.80)
 </td>
 <td style="text-align:left;">
 0.0892
@@ -945,21 +947,21 @@ poly_colistin_1d
 decub
 </td>
 <td style="text-align:left;">
-2.09 (1.09-4.08)
+2.10 (1.11-4.06)
 </td>
 <td style="text-align:left;">
-0.0281
+0.0247
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-FQ_1d
+tigecycline_1d
 </td>
 <td style="text-align:left;">
-0.5 (0.26-0.94)
+2.34 (1.12-5.11)
 </td>
 <td style="text-align:left;">
-0.0335
+0.0278
 </td>
 <td style="text-align:left;">
 NA
@@ -974,21 +976,21 @@ NA
 gastro
 </td>
 <td style="text-align:left;">
-1.88 (1.07-3.33)
+1.89 (1.09-3.33)
 </td>
 <td style="text-align:left;">
-0.0283
+0.0256
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-gastro
+gent_1d
 </td>
 <td style="text-align:left;">
-1.77 (1.04-3.04)
+0.17 (0.02-0.76)
 </td>
 <td style="text-align:left;">
-0.0366
+0.0346
 </td>
 <td style="text-align:left;">
 NA
@@ -1003,39 +1005,10 @@ NA
 gent_1d
 </td>
 <td style="text-align:left;">
-0.1 (0-0.58)
+0.09 (0.00-0.54)
 </td>
 <td style="text-align:left;">
-0.0335
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-gent_1d
-</td>
-<td style="text-align:left;">
-0.18 (0.03-0.78)
-</td>
-<td style="text-align:left;">
-0.0382
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-trach
-</td>
-<td style="text-align:left;">
-1.59 (0.88-2.87)
-</td>
-<td style="text-align:left;">
-0.1249
+0.0286
 </td>
 </tr>
 <tr>
@@ -1043,39 +1016,10 @@ trach
 amikacin_1d
 </td>
 <td style="text-align:left;">
-0.47 (0.21-1)
+0.46 (0.21-0.98)
 </td>
 <td style="text-align:left;">
-0.0542
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-malignancy
-</td>
-<td style="text-align:left;">
-0.56 (0.25-1.22)
-</td>
-<td style="text-align:left;">
-0.1503
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-malignancy
-</td>
-<td style="text-align:left;">
-0.53 (0.25-1.1)
-</td>
-<td style="text-align:left;">
-0.0897
+0.0465
 </td>
 <td style="text-align:left;">
 NA
@@ -1086,54 +1030,54 @@ NA
 <td style="text-align:left;">
 NA
 </td>
-<td style="text-align:left;">
-LOSbeforeCx
-</td>
-<td style="text-align:left;">
-1 (0.99-1)
-</td>
-<td style="text-align:left;">
-0.1853
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-LOSbeforeCx
-</td>
-<td style="text-align:left;">
-1 (0.99-1)
-</td>
-<td style="text-align:left;">
-0.1745
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
 <td style="text-align:left;">
 trach
 </td>
 <td style="text-align:left;">
-1.41 (0.81-2.48)
+1.67 (0.94-3.01)
 </td>
 <td style="text-align:left;">
-0.2248
+0.0831
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FQ_1d
+</td>
+<td style="text-align:left;">
+0.53 (0.28-1.01)
+</td>
+<td style="text-align:left;">
+0.0541
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+malignancy
+</td>
+<td style="text-align:left;">
+0.52 (0.24-1.08)
+</td>
+<td style="text-align:left;">
+0.0803
 </td>
 <td style="text-align:left;">
 NA
@@ -1183,7 +1127,7 @@ Cluster: 152
 decub
 </td>
 <td style="text-align:left;">
-2.23 (1.22-4.2)
+2.23 (1.22-4.20)
 </td>
 <td style="text-align:left;">
 0.0105
@@ -1192,10 +1136,10 @@ decub
 CHF
 </td>
 <td style="text-align:left;">
-3.45 (1.14-10.35)
+3.61 (1.21-10.75)
 </td>
 <td style="text-align:left;">
-0.0257
+0.0199
 </td>
 <td style="text-align:left;">
 decub
@@ -1221,10 +1165,10 @@ third_plus_ceph_1d
 third_plus_ceph_1d
 </td>
 <td style="text-align:left;">
-0.14 (0.01-0.72)
+0.13 (0.01-0.67)
 </td>
 <td style="text-align:left;">
-0.0586
+0.0513
 </td>
 <td style="text-align:left;">
 CKD
@@ -1250,10 +1194,10 @@ CKD
 carbapenem_1d
 </td>
 <td style="text-align:left;">
-0.28 (0.06-0.98)
+0.27 (0.06-0.95)
 </td>
 <td style="text-align:left;">
-0.0701
+0.0626
 </td>
 <td style="text-align:left;">
 bactrim_1d
@@ -1276,13 +1220,13 @@ bactrim_1d
 0.0193
 </td>
 <td style="text-align:left;">
-foley
+NA
 </td>
 <td style="text-align:left;">
-1.81 (0.62-6.07)
+NA
 </td>
 <td style="text-align:left;">
-0.2994
+NA
 </td>
 <td style="text-align:left;">
 third_plus_ceph_1d
@@ -1299,7 +1243,7 @@ third_plus_ceph_1d
 malignancy
 </td>
 <td style="text-align:left;">
-0.48 (0.22-1)
+0.48 (0.22-1.00)
 </td>
 <td style="text-align:left;">
 0.0525
@@ -1317,7 +1261,7 @@ NA
 AKI
 </td>
 <td style="text-align:left;">
-0.6 (0.36-1)
+0.60 (0.36-1.00)
 </td>
 <td style="text-align:left;">
 0.0501
@@ -1381,7 +1325,7 @@ Cluster: 86
 tobra_1d
 </td>
 <td style="text-align:left;">
-2.82 (1.14-7.4)
+2.82 (1.14-7.40)
 </td>
 <td style="text-align:left;">
 0.0279
@@ -1410,7 +1354,7 @@ third_plus_ceph_1d
 gent_1d
 </td>
 <td style="text-align:left;">
-4.44 (1.24-20.8)
+4.44 (1.24-20.80)
 </td>
 <td style="text-align:left;">
 0.0318
@@ -1428,7 +1372,7 @@ gent_1d
 gent_1d
 </td>
 <td style="text-align:left;">
-4.61 (1.08-23.3)
+4.61 (1.08-23.30)
 </td>
 <td style="text-align:left;">
 0.0424
@@ -1457,7 +1401,7 @@ malignancy
 lung_dz
 </td>
 <td style="text-align:left;">
-1.8 (0.96-3.35)
+1.80 (0.96-3.35)
 </td>
 <td style="text-align:left;">
 0.0618
@@ -1502,14 +1446,14 @@ Present: 111
 <td style="text-align:left;">
 </td>
 <td style="text-align:left;">
-Singleton: 21
+Singleton: 20
 </td>
 <td style="text-align:left;">
 </td>
 <td style="text-align:left;">
 </td>
 <td style="text-align:left;">
-Cluster: 90
+Cluster: 91
 </td>
 <td style="text-align:left;">
 </td>
@@ -1521,45 +1465,45 @@ Cluster: 90
 poly_colistin_1d
 </td>
 <td style="text-align:left;">
-4.09 (1.95-8.87)
+3.85 (1.85-8.28)
 </td>
 <td style="text-align:left;">
-2e-04
+0.0004
 </td>
 <td style="text-align:left;">
 foley
 </td>
 <td style="text-align:left;">
-0.14 (0.03-0.46)
+0.15 (0.04-0.49)
 </td>
 <td style="text-align:left;">
-0.0026
+0.0039
 </td>
 <td style="text-align:left;">
 poly_colistin_1d
 </td>
 <td style="text-align:left;">
-3.39 (1.48-7.97)
+3.19 (1.45-7.11)
 </td>
 <td style="text-align:left;">
-0.0043
+0.0039
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-underweight
+VDRF
 </td>
 <td style="text-align:left;">
-0.55 (0.3-0.99)
+0.54 (0.30-0.95)
 </td>
 <td style="text-align:left;">
-0.051
+0.0353
 </td>
 <td style="text-align:left;">
 poly_colistin_1d
 </td>
 <td style="text-align:left;">
-7.72 (1.91-33.71)
+7.87 (1.92-34.78)
 </td>
 <td style="text-align:left;">
 0.0042
@@ -1568,155 +1512,39 @@ poly_colistin_1d
 underweight
 </td>
 <td style="text-align:left;">
-0.46 (0.23-0.88)
+0.47 (0.24-0.87)
 </td>
 <td style="text-align:left;">
-0.0218
+0.0208
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-age
+underweight
 </td>
 <td style="text-align:left;">
-1.01 (0.99-1.03)
+0.53 (0.29-0.95)
 </td>
 <td style="text-align:left;">
-0.2036
+0.0361
 </td>
 <td style="text-align:left;">
 lung_dz
 </td>
 <td style="text-align:left;">
-4.11 (1.4-12.24)
+4.60 (1.54-14.26)
 </td>
 <td style="text-align:left;">
-0.0096
-</td>
-<td style="text-align:left;">
-VDRF
-</td>
-<td style="text-align:left;">
-0.51 (0.27-0.96)
-</td>
-<td style="text-align:left;">
-0.0411
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-VDRF
-</td>
-<td style="text-align:left;">
-0.66 (0.33-1.3)
-</td>
-<td style="text-align:left;">
-0.229
-</td>
-<td style="text-align:left;">
-tigecycline_1d
-</td>
-<td style="text-align:left;">
-3.55 (1.02-11.65)
-</td>
-<td style="text-align:left;">
-0.0387
-</td>
-<td style="text-align:left;">
-third_plus_ceph_1d
-</td>
-<td style="text-align:left;">
-0.54 (0.27-1.03)
-</td>
-<td style="text-align:left;">
-0.0691
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-foley
-</td>
-<td style="text-align:left;">
-0.73 (0.39-1.33)
-</td>
-<td style="text-align:left;">
-0.3053
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-brain_injury
-</td>
-<td style="text-align:left;">
-1.87 (0.93-3.77)
-</td>
-<td style="text-align:left;">
-0.0787
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
+0.0064
 </td>
 <td style="text-align:left;">
 LOSbeforeCx
 </td>
 <td style="text-align:left;">
-0.99 (0.98-1)
+0.99 (0.98-1.00)
 </td>
 <td style="text-align:left;">
-0.0795
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-age
-</td>
-<td style="text-align:left;">
-1.02 (1-1.03)
-</td>
-<td style="text-align:left;">
-0.0988
+0.0667
 </td>
 </tr>
 <tr>
@@ -1730,7 +1558,13 @@ NA
 NA
 </td>
 <td style="text-align:left;">
-NA
+tigecycline_1d
+</td>
+<td style="text-align:left;">
+3.95 (1.11-13.41)
+</td>
+<td style="text-align:left;">
+0.0277
 </td>
 <td style="text-align:left;">
 NA
@@ -1739,13 +1573,7 @@ NA
 NA
 </td>
 <td style="text-align:left;">
-bactrim_1d
-</td>
-<td style="text-align:left;">
-2.88 (0.73-11.64)
-</td>
-<td style="text-align:left;">
-0.1257
+NA
 </td>
 </tr>
 <tr>
@@ -1789,16 +1617,16 @@ age
 1.03 (1.01-1.06)
 </td>
 <td style="text-align:left;">
-0.025
+0.0250
 </td>
 <td style="text-align:left;">
 third_plus_ceph_1d
 </td>
 <td style="text-align:left;">
-5.58 (1.97-16.73)
+5.74 (2.03-17.14)
 </td>
 <td style="text-align:left;">
-0.0014
+0.0011
 </td>
 </tr>
 <tr>
@@ -1824,10 +1652,10 @@ carbapenem_1d
 lung_dz
 </td>
 <td style="text-align:left;">
-4.37 (1.44-13.36)
+4.16 (1.38-12.54)
 </td>
 <td style="text-align:left;">
-0.0085
+0.0102
 </td>
 </tr>
 <tr>
@@ -1844,7 +1672,7 @@ carbapenem_1d
 tigecycline_1d
 </td>
 <td style="text-align:left;">
-2.32 (0.9-5.6)
+2.32 (0.90-5.60)
 </td>
 <td style="text-align:left;">
 0.0683
@@ -1853,10 +1681,10 @@ tigecycline_1d
 age
 </td>
 <td style="text-align:left;">
-1.05 (1.01-1.09)
+1.04 (1.00-1.09)
 </td>
 <td style="text-align:left;">
-0.0294
+0.0383
 </td>
 </tr>
 <tr>
@@ -1879,13 +1707,13 @@ linezolid_1d
 0.0894
 </td>
 <td style="text-align:left;">
-underweight
+foley
 </td>
 <td style="text-align:left;">
-0.3 (0.06-1.03)
+3.10 (1.07-10.49)
 </td>
 <td style="text-align:left;">
-0.0827
+0.0478
 </td>
 </tr>
 <tr>
@@ -1905,45 +1733,16 @@ underweight
 0.39 (0.11-1.06)
 </td>
 <td style="text-align:left;">
-0.093
+0.0930
 </td>
 <td style="text-align:left;">
-foley
+underweight
 </td>
 <td style="text-align:left;">
-2.45 (0.72-9.09)
+0.29 (0.06-1.00)
 </td>
 <td style="text-align:left;">
-0.1583
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-<td style="text-align:left;">
-brain_injury
-</td>
-<td style="text-align:left;">
-1.82 (0.51-6.39)
-</td>
-<td style="text-align:left;">
-0.3478
+0.0744
 </td>
 </tr>
 </tbody>
