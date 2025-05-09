@@ -1,5 +1,5 @@
 ---
-title: "stable 7: corHMM hidden rate modeling"
+title: "Supplemental table 7: Modeling of single- and multi-rate categories using corHMM"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
@@ -15,7 +15,7 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=T, message=T, include=T, results=F}
 #Packages
-packages <- c("tidyverse",'kableExtra','gridExtra','readr')   
+packages <- c("tidyverse",'kableExtra','gridExtra')   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) 
 # Load function
@@ -29,7 +29,9 @@ sessionInfo()
 ```{r}
 rate_differences_table <- readRDS('./data/corHMM_rate_differences/corHMM_model_stats.RDS')
 
-rate_differences_table_formatted <- rate_differences_table %>% select(phenotype,model) %>% cbind(.,rate_differences_table %>% select(-phenotype,-model,-np,-multi_np,-nRateCat,-multi_nRateCat,-best_model) %>% mutate_all(as.numeric) %>% round(.,2) %>% cbind(.,rate_differences_table %>% select(best_model))) 
+rate_differences_table_formatted <- rate_differences_table %>% select(phenotype,model) %>% cbind(.,rate_differences_table %>% select(-phenotype,-model,-np,-multi_np,-nRateCat,-multi_nRateCat,-best_model) %>% mutate_all(as.numeric) %>% apply(.,2,FUN=function(x){ ifelse(abs(x)>1e5 | abs(x)<1e-5,
+  formatC(x, format = "e", digits = 2),round(x,2) %>% formatC(.,format='f',digits=2))
+}) %>% gsub(" NA","",.)) %>% cbind(.,rate_differences_table %>% select(best_model))
 
 rate_differences_table_formatted$phenotype <- recode(rate_differences_table_formatted$phenotype,'AMK_dich_num' = 'Amikacin','blbli_dich_num'='BL/BLI','CST_dich_num'='Colistin','TMP_SMX_dich_num'='TMP-SMX','gentamicin_dich_num'='Gentamicin')    
 
