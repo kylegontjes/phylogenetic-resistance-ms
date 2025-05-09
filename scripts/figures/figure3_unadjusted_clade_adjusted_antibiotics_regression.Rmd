@@ -1,5 +1,5 @@
 ---
-title: "figure3 but unadjusted"
+title: "Figure 3. Influence of genetic background and antibiotic exposures on the emergence and spread of resistant lineages"
 output: html_document
 date: "`r Sys.Date()`"
 ---
@@ -25,8 +25,8 @@ sessionInfo()
 # Load figures
 ```{r load data,include=F,echo=F,results=F,message=F, include=F}
 clade_forest <- readRDS("./data/regression/unadjusted_regression_clade_figure.RDS")
-cognate_forest <- readRDS("./data/regression/unadjusted_regression_cognate_figure.RDS") 
-dysbiosis_forest <- readRDS("./data/regression/unadjusted_regression_dysbiotic_figure.RDS") 
+cognate_forest <- readRDS("./data/regression/adjusted_regression_cognate_figure.RDS") 
+dysbiosis_forest <- readRDS("./data/regression/adjusted_regression_dysbiotic_figure.RDS") 
 ```
 
 # Create cowplot
@@ -37,4 +37,9 @@ fig3C <- ggplotify::grid2grob(plot(dysbiosis_forest))
 
 figure3 <- plot_grid(fig3A,fig3B,fig3C,labels = "AUTO",nrow=3,label_size = 18,rel_heights = c(1,1,1),label_x = 0,align = "hv",axis='l') 
 figure3
+```
+
+# Save figure
+```{r}
+ggsave("./figures/figure3.png",figure3,dpi=600,width=11.25,height=15,bg='white')
 ```

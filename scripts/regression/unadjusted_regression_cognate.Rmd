@@ -109,11 +109,11 @@ combined_dataset <- rbind(TMP_SMX_results,gentamicin_results,AMK_results,CST_res
 
 # Forest plot
 ```{r,fig.height=8.4,fig.width=14}
-agent_string <- c("TMP-SMX","","","","Gentamicin","","","","Amikacin","","","","Colistin","","","","BL/BLI Agents","","","")
+agent_string <- c("TMP-SMX","","","","Gentamicin","","","","Amikacin","","","","Colistin","","","","BL/BLI","","","")
 susceptible_string <- c("",subset(TMP_SMX_results,outcome=="present") %>% .$susceptible,"","","",subset(gentamicin_results,outcome=="present") %>% .$susceptible,"","","",subset(AMK_results,outcome=="present") %>% .$susceptible,"","","",subset(CST_results,outcome=="present") %>% .$susceptible,"","","",subset(blbli_results,outcome=="present") %>% .$susceptible,"","")
-feature_string <- c("","Resistant","Emergence","Spread","","Resistant","Emergence","Spread","","Resistant","Emergence","Spread","","NResistant","Emergence","Spread","","Resistant","Emergence","Spread")
+feature_string <- c("","Presence","Emergence","Spread","","Presence","Emergence","Spread","","Presence","Emergence","Spread","","Presence","Emergence","Spread","","Presence","Emergence","Spread")
 resistance_string <- c("",TMP_SMX_results$non_susceptible,"",gentamicin_results$non_susceptible,"",AMK_results$non_susceptible,"",CST_results$non_susceptible,"",blbli_results$non_susceptible)
-OR_string <- c("",TMP_SMX_results$`OR (95% CI)`,"",gentamicin_results$`OR (95% CI)`,"",AMK_results$`OR (95% CI)`,"",CST_results$`OR (95% CI)`,"",blbli_results$`OR (95% CI)`)
+OR_string <- c("",TMP_SMX_results$`OR (95% CI)`,"",gentamicin_results$`OR (95% CI)`,"",AMK_results$`OR (95% CI)`,"",CST_results$`OR (95% CI)`,"",blbli_results$`OR (95% CI)`)%>% str_pad(.,width=19,side='right', pad = "\u00A0")
  
 tabletext <- cbind.data.frame(agent_string,susceptible_string,feature_string,resistance_string,OR_string) %>% `colnames<-`(c("agent","susceptible","feature","resistance","OR"))
 
@@ -135,10 +135,10 @@ upper <- sapply(OR_stat,FUN=function(x){
         initial_split[,2] %>% str_split(.,"\\-",simplify=T) %>% .[,2] %>% gsub("\\)","",.) %>% as.numeric
 }})    
     
- 
 fp_rmetadata <- cbind.data.frame(OR,lower,upper)  %>% mutate_all(as.numeric)
   
-forest_plot <- res_forest_plot(tabletext = tabletext,fp_rmetadata = fp_rmetadata,outcome_name="Cognate Antibiotic") 
+forest_plot <- res_forest_plot(tabletext = tabletext,fp_rmetadata = fp_rmetadata,outcome_name="Cognate antibiotic",type_of_regression="Unadjusted") 
+
 forest_plot
 ```
 

@@ -24,7 +24,7 @@ create_mv_table <- function(datasets,lr_results){
   return(final_list)
 }
 
-res_forest_plot <- function(tabletext,fp_rmetadata,outcome_name){
+res_forest_plot <- function(tabletext,fp_rmetadata,outcome_name,type_of_regression){
   forestplot( tabletext,
               mean = fp_rmetadata$OR,
               lower = fp_rmetadata$lower,
@@ -39,16 +39,16 @@ res_forest_plot <- function(tabletext,fp_rmetadata,outcome_name){
               lwd.zero = (2),
               align = c("l", "l", "l","l","l"),
               colgap = unit(2.75,"mm"),
-              xlab = "Adjusted Odds Ratio (aOR)",
+              xlab = ifelse(type_of_regression =="Adjusted","Adjusted Odds Ratio (aOR)","Unadjusted Odds Ratio (OR)"),
               lwd.xaxis =2,
               vertices= TRUE,
               mar = unit(rep(0.5, times = 4), "mm"),
               txt_gp = fpTxtGp(ticks=gpar(cex=1),
                                xlab=gpar(cex=1))) %>% fp_add_header(agent = c("","Phenotype"),
                                                                     susceptible = c("","Susceptible"),
-                                                                    feature = c("","Resistance category"),
+                                                                    feature = c("","Resistance Category"),
                                                                     resistance = c("","Outcome"),
-                                                                    OR = c("","aOR (95% CI)") %>% str_pad(.,width=19,side='right', pad = "\u00A0"))%>% fp_add_lines(h_3 = gpar(lwd=2),
+                                                                    OR = c("",ifelse(type_of_regression =="Adjusted","aOR (95% CI)","OR (95% CI)")) %>% str_pad(.,width=19,side='right', pad = "\u00A0"))%>% fp_add_lines(h_3 = gpar(lwd=2),
                                                                                                               h_4 = gpar(columns = 1:5),
                                                                                                               h_8 = gpar(columns = 1:5),
                                                                                                               h_12 = gpar(columns = 1:5),

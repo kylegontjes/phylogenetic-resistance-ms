@@ -148,7 +148,7 @@ upper <- sapply(OR_stat,FUN=function(x){
     
 fp_rmetadata <- cbind.data.frame(OR,lower,upper)  %>% mutate_all(as.numeric)
   
-forest_plot <- res_forest_plot(tabletext = tabletext,fp_rmetadata = fp_rmetadata,outcome_name="ST258 Clade I") 
+forest_plot <- res_forest_plot(tabletext = tabletext,fp_rmetadata = fp_rmetadata,outcome_name="ST258 Clade I",type_of_regression="Adjusted") 
 
 forest_plot
 ```
