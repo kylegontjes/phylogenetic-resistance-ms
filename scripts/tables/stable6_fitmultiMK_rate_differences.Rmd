@@ -16,11 +16,14 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=T, message=T, include=T, results=F}
 #Packages
-packages <- c("tidyverse",'kableExtra','gridExtra','readr')   
+packages <- c("tidyverse",'kableExtra','gridExtra')   
+
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) 
+
 # Load function
 source('./lib/consistent_themes.R')
+
 # Print
 Sys.info()
 sessionInfo() 
@@ -39,7 +42,7 @@ colnames(rate_differences_table_formatted) <- c("Phenotype",
 "Model",
 "Rate 1",
 "Rate 2",
-"Single-regimeLog Likelihood",
+"Single-regime Log Likelihood",
 "Single-regime AIC",
 "Clade I Rate 1",
 "Clade I Rate 2",
@@ -48,9 +51,8 @@ colnames(rate_differences_table_formatted) <- c("Phenotype",
 "Multi-regime Log Likelihood",
 "Multi-regime AIC",
 "X2 value",
-"p-value"
+"p-value")
 
-)
 favorite_kable(rate_differences_table_formatted)
 ```
 

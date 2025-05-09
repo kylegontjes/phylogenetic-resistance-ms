@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-07" />
+<meta name="date" content="2025-04-28" />
 
 <title>Supplemental Table 6: Evaluation of single-regime and clade-specific evolutionary rate model using fitmultiMK</title>
 
@@ -578,7 +578,7 @@ display: none;
 single-regime and clade-specific evolutionary rate model using
 fitmultiMK</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-04-07</h4>
+<h4 class="date">2025-04-28</h4>
 
 </div>
 
@@ -586,13 +586,14 @@ fitmultiMK</h1>
 <div id="environment" class="section level1">
 <h1>Environment</h1>
 <pre class="r"><code>#Packages
-packages &lt;- c(&quot;tidyverse&quot;,&#39;kableExtra&#39;,&#39;gridExtra&#39;,&#39;readr&#39;)   
+packages &lt;- c(&quot;tidyverse&quot;,&#39;kableExtra&#39;,&#39;gridExtra&#39;)   
+
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) </code></pre>
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ ggplot2   3.5.2     ✔ tibble    3.2.1
 ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
 ✔ purrr     1.0.4     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
@@ -617,6 +618,7 @@ The following object is masked from &#39;package:dplyr&#39;:
     combine</code></pre>
 <pre class="r"><code># Load function
 source(&#39;./lib/consistent_themes.R&#39;)
+
 # Print
 Sys.info()
 sessionInfo() </code></pre>
@@ -634,7 +636,7 @@ colnames(rate_differences_table_formatted) &lt;- c(&quot;Phenotype&quot;,
 &quot;Model&quot;,
 &quot;Rate 1&quot;,
 &quot;Rate 2&quot;,
-&quot;Single-regimeLog Likelihood&quot;,
+&quot;Single-regime Log Likelihood&quot;,
 &quot;Single-regime AIC&quot;,
 &quot;Clade I Rate 1&quot;,
 &quot;Clade I Rate 2&quot;,
@@ -643,9 +645,8 @@ colnames(rate_differences_table_formatted) &lt;- c(&quot;Phenotype&quot;,
 &quot;Multi-regime Log Likelihood&quot;,
 &quot;Multi-regime AIC&quot;,
 &quot;X2 value&quot;,
-&quot;p-value&quot;
+&quot;p-value&quot;)
 
-)
 favorite_kable(rate_differences_table_formatted)</code></pre>
 <table style="width:100%; color: black; margin-left: auto; margin-right: auto;" class="table table-striped table-hover table-condensed table-responsive">
 <thead>
@@ -663,7 +664,7 @@ Rate 1
 Rate 2
 </th>
 <th style="text-align:right;">
-Single-regimeLog Likelihood
+Single-regime Log Likelihood
 </th>
 <th style="text-align:right;">
 Single-regime AIC
@@ -850,7 +851,7 @@ ARD
 18208.26
 </td>
 <td style="text-align:right;">
-41250.17
+41250.16
 </td>
 <td style="text-align:right;">
 9512.24
@@ -891,7 +892,7 @@ NA
 455.95
 </td>
 <td style="text-align:right;">
-398076.01
+398075.94
 </td>
 <td style="text-align:right;">
 NA
@@ -935,25 +936,25 @@ ARD
 448.94
 </td>
 <td style="text-align:right;">
-175891.50
+202426.53
 </td>
 <td style="text-align:right;">
-123423.15
+140691.98
 </td>
 <td style="text-align:right;">
-16284.14
+16090.46
 </td>
 <td style="text-align:right;">
-55470.30
+55069.54
 </td>
 <td style="text-align:right;">
--202.94
+-202.83
 </td>
 <td style="text-align:right;">
-413.88
+413.67
 </td>
 <td style="text-align:right;">
-39.07
+39.27
 </td>
 <td style="text-align:right;">
 0.000
@@ -979,7 +980,7 @@ NA
 320.52
 </td>
 <td style="text-align:right;">
-9924.86
+9924.87
 </td>
 <td style="text-align:right;">
 NA
@@ -1023,10 +1024,10 @@ ARD
 321.04
 </td>
 <td style="text-align:right;">
-184613.99
+184614.13
 </td>
 <td style="text-align:right;">
-1097808.16
+1097808.65
 </td>
 <td style="text-align:right;">
 8487.38
@@ -1102,7 +1103,7 @@ ARD
 12926.43
 </td>
 <td style="text-align:right;">
-77010.13
+77010.14
 </td>
 <td style="text-align:right;">
 -145.38
@@ -1111,28 +1112,28 @@ ARD
 294.75
 </td>
 <td style="text-align:right;">
-44859.27
+45899.85
 </td>
 <td style="text-align:right;">
-135890.93
+139580.52
 </td>
 <td style="text-align:right;">
-8670.99
+8497.99
 </td>
 <td style="text-align:right;">
-84734.03
+82031.48
 </td>
 <td style="text-align:right;">
--142.10
+-142.39
 </td>
 <td style="text-align:right;">
-292.19
+292.77
 </td>
 <td style="text-align:right;">
-6.56
+5.98
 </td>
 <td style="text-align:right;">
-0.038
+0.050
 </td>
 </tr>
 </tbody>
