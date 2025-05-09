@@ -113,10 +113,10 @@ category_matrices <- lapply(model_lists,create_matrix_of_comb_components,permuta
 ```{r,fig.height=8.5,fig.width=7.5}
 distinct_colors = hues::iwanthue(5,hmin = 40,plot=T)
 
-lgd = Legend(labels = c("Demographics","Length of stay","Devices","Comorbidities","Antibiotic exposures"), legend_gp = gpar(fill = distinct_colors), title = "Variable type", 
-    ncol = 1, title_position = "topcenter",labels_gp = gpar(fontsize = 10),title_gp = gpar(fontsize=12,fontface="bold"))
+lgd = Legend(labels = c("Demographics","Length of stay","Devices","Comorbidities","Antibiotic exposures"), legend_gp = gpar(fill = distinct_colors), title = "Variable category", 
+    ncol = 1, title_position = "topleft",labels_gp = gpar(fontsize = 10),title_gp = gpar(fontsize=12,fontface="bold"))
 
-top_a_diverse = HeatmapAnnotation(
+top_ann_category = HeatmapAnnotation(
     "TMP-SMX" = anno_barplot(category_matrices[[1]], 
         gp = gpar(fill = distinct_colors), height = unit(3, "cm"),ylim = c(0,6),add_numbers = T,comb_order = c(1:7),numbers_rot=0), 
     "Gentamicin" = anno_barplot(category_matrices[[2]], 
@@ -133,7 +133,7 @@ fake <- list(Presence = c("shared",'pres+emerge','pres+spread','present'),
              Emergence = c("shared",'pres+emerge','emerge+spread','emergence'),
             Spread = c("shared",'pres+spread','emerge+spread','spread'))
  
-F4 <- UpSet(make_comb_mat(fake),right_annotation = NULL,top_annotation = top_a_diverse,comb_order = c(1:7), height = unit(4.5, "cm"))  
+F4 <- UpSet(make_comb_mat(fake),right_annotation = NULL,top_annotation = top_ann_category,comb_order = c(1:7), height = unit(4.5, "cm"))  
 
 ComplexHeatmap::draw(F4,annotation_legend_list = list(lgd),
      annotation_legend_side = "right") 
