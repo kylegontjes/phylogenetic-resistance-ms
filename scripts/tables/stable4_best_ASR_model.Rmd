@@ -33,20 +33,27 @@ asr_model_choices <- readRDS("./data/asr_clustering/asr_model_choices.RDS")
 ```
 
 # Create table
+## Best model
+```{r}
+lapply(asr_model_choices,FUN=function(x){
+  x[["best_model"]]
+}) 
+```
+
+## Format
 ```{r}
 model_table <- lapply(asr_model_choices,FUN=function(x){
   x[["model_options"]]
 }) %>% do.call(rbind,.) 
 
-stable4 <- model_table %>%  select(pheno,model,np,rate1,rate2,loglik,AIC,AICc) %>% `colnames<-`(c("Phenotype","Model","No. Parameters","Rate 1","Rate 2","Log Likelihood","AIC","Corrected AIC")) %>% `rownames<-`(NULL) 
+stable4 <- model_table %>%  select(pheno,model,np,rate1,rate2,loglik,AICc) %>% `colnames<-`(c("Phenotype","Model","No. Parameters","Rate 1","Rate 2","Log Likelihood","Corrected AIC")) %>% `rownames<-`(NULL) 
 
 stable4$Phenotype <- recode(stable4$Phenotype,'TMP_SMX_dich_num'='TMP-SMX',
                              "gentamicin_dich_num"="Gentamicin",
                              'AMK_dich_num'='Amikacin',
                              'CST_dich_num'='Colistin',
                              'blbli_dich_num'="BL/BLI")  
-stable4$`Log Likelihood` <- round(stable4$`Log Likelihood`, 2)
-stable4$`AIC` <- round(stable4$`AIC`, 2)
+stable4$`Log Likelihood` <- round(stable4$`Log Likelihood`, 2) 
 stable4$`Corrected AIC` <- round(stable4$`Corrected AIC`, 2)
 
 stable4 %>% favorite_kable 

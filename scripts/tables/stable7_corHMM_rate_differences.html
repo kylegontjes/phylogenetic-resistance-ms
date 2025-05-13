@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-28" />
+<meta name="date" content="2025-05-12" />
 
 <title>Supplemental table 7: Modeling of single- and multi-rate categories using corHMM</title>
 
@@ -577,7 +577,7 @@ display: none;
 <h1 class="title toc-ignore">Supplemental table 7: Modeling of single-
 and multi-rate categories using corHMM</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-04-28</h4>
+<h4 class="date">2025-05-12</h4>
 
 </div>
 
@@ -624,7 +624,7 @@ sessionInfo() </code></pre>
 <h1>Create table</h1>
 <pre class="r"><code>rate_differences_table &lt;- readRDS(&#39;./data/corHMM_rate_differences/corHMM_model_stats.RDS&#39;)
 
-rate_differences_table_formatted &lt;- rate_differences_table %&gt;% select(phenotype,model) %&gt;% cbind(.,rate_differences_table %&gt;% select(-phenotype,-model,-np,-multi_np,-nRateCat,-multi_nRateCat,-best_model) %&gt;% mutate_all(as.numeric) %&gt;% apply(.,2,FUN=function(x){ ifelse(abs(x)&gt;1e5 | abs(x)&lt;1e-5,
+rate_differences_table_formatted &lt;- rate_differences_table %&gt;% select(phenotype,model) %&gt;% cbind(.,rate_differences_table %&gt;% select(-phenotype,-model,-np,-multi_np,-nRateCat,-multi_nRateCat,-best_model,-AIC,-multi_AIC,-AIC) %&gt;% mutate_all(as.numeric) %&gt;% apply(.,2,FUN=function(x){ ifelse(abs(x)&gt;1e5 | abs(x)&lt;1e-5,
   formatC(x, format = &quot;e&quot;, digits = 2),round(x,2) %&gt;% formatC(.,format=&#39;f&#39;,digits=2))
 }) %&gt;% gsub(&quot; NA&quot;,&quot;&quot;,.)) %&gt;% cbind(.,rate_differences_table %&gt;% select(best_model))
 
@@ -638,15 +638,13 @@ colnames(rate_differences_table_formatted) &lt;- c(&quot;Phenotype&quot;,
 &quot;Model&quot;, 
 &quot;Rate 1&quot;,
 &quot;Rate 2&quot;,
-&quot;Single-rate Log Likelihood&quot;,
-&quot;Single-rate AIC&quot;,
+&quot;Single-rate Log Likelihood&quot;, 
 &quot;Single-rate AICc&quot;,
 &quot;Category I Rate 1&quot;,
 &quot;Category I Rate 2&quot;,
 &quot;Category II Rate 1&quot;,
 &quot;Category II Rate 2&quot;,
-&quot;Multi-rate Log Likelihood&quot;,
-&quot;Multi-rate AIC&quot;,
+&quot;Multi-rate Log Likelihood&quot;, 
 &quot;Multi-rate AICc&quot;,
 &#39;Best model&#39;)
 
@@ -670,9 +668,6 @@ Rate 2
 Single-rate Log Likelihood
 </th>
 <th style="text-align:left;">
-Single-rate AIC
-</th>
-<th style="text-align:left;">
 Single-rate AICc
 </th>
 <th style="text-align:left;">
@@ -689,9 +684,6 @@ Category II Rate 2
 </th>
 <th style="text-align:left;">
 Multi-rate Log Likelihood
-</th>
-<th style="text-align:left;">
-Multi-rate AIC
 </th>
 <th style="text-align:left;">
 Multi-rate AICc
@@ -719,9 +711,6 @@ NA
 -186.86
 </td>
 <td style="text-align:left;">
-375.71
-</td>
-<td style="text-align:left;">
 375.72
 </td>
 <td style="text-align:left;">
@@ -738,9 +727,6 @@ NA
 </td>
 <td style="text-align:left;">
 -162.37
-</td>
-<td style="text-align:left;">
-332.74
 </td>
 <td style="text-align:left;">
 332.84
@@ -766,9 +752,6 @@ ARD
 -185.73
 </td>
 <td style="text-align:left;">
-375.46
-</td>
-<td style="text-align:left;">
 375.49
 </td>
 <td style="text-align:left;">
@@ -785,9 +768,6 @@ ARD
 </td>
 <td style="text-align:left;">
 -160.25
-</td>
-<td style="text-align:left;">
-332.50
 </td>
 <td style="text-align:left;">
 332.73
@@ -813,9 +793,6 @@ NA
 -162.08
 </td>
 <td style="text-align:left;">
-326.16
-</td>
-<td style="text-align:left;">
 326.17
 </td>
 <td style="text-align:left;">
@@ -832,9 +809,6 @@ NA
 </td>
 <td style="text-align:left;">
 -157.21
-</td>
-<td style="text-align:left;">
-322.41
 </td>
 <td style="text-align:left;">
 322.52
@@ -860,9 +834,6 @@ ARD
 -162.01
 </td>
 <td style="text-align:left;">
-328.02
-</td>
-<td style="text-align:left;">
 328.05
 </td>
 <td style="text-align:left;">
@@ -879,9 +850,6 @@ ARD
 </td>
 <td style="text-align:left;">
 -156.68
-</td>
-<td style="text-align:left;">
-325.37
 </td>
 <td style="text-align:left;">
 325.59
@@ -907,9 +875,6 @@ NA
 -226.98
 </td>
 <td style="text-align:left;">
-455.95
-</td>
-<td style="text-align:left;">
 455.96
 </td>
 <td style="text-align:left;">
@@ -926,9 +891,6 @@ NA
 </td>
 <td style="text-align:left;">
 -202.38
-</td>
-<td style="text-align:left;">
-412.75
 </td>
 <td style="text-align:left;">
 412.86
@@ -954,9 +916,6 @@ ARD
 -222.47
 </td>
 <td style="text-align:left;">
-448.94
-</td>
-<td style="text-align:left;">
 448.97
 </td>
 <td style="text-align:left;">
@@ -973,9 +932,6 @@ ARD
 </td>
 <td style="text-align:left;">
 -197.35
-</td>
-<td style="text-align:left;">
-406.70
 </td>
 <td style="text-align:left;">
 406.92
@@ -1001,9 +957,6 @@ NA
 -159.26
 </td>
 <td style="text-align:left;">
-320.52
-</td>
-<td style="text-align:left;">
 320.53
 </td>
 <td style="text-align:left;">
@@ -1020,9 +973,6 @@ NA
 </td>
 <td style="text-align:left;">
 -152.18
-</td>
-<td style="text-align:left;">
-312.36
 </td>
 <td style="text-align:left;">
 312.47
@@ -1048,9 +998,6 @@ ARD
 -158.50
 </td>
 <td style="text-align:left;">
-320.99
-</td>
-<td style="text-align:left;">
 321.02
 </td>
 <td style="text-align:left;">
@@ -1067,9 +1014,6 @@ ARD
 </td>
 <td style="text-align:left;">
 -147.27
-</td>
-<td style="text-align:left;">
-306.54
 </td>
 <td style="text-align:left;">
 306.76
@@ -1095,9 +1039,6 @@ NA
 -166.53
 </td>
 <td style="text-align:left;">
-335.05
-</td>
-<td style="text-align:left;">
 335.06
 </td>
 <td style="text-align:left;">
@@ -1114,9 +1055,6 @@ NA
 </td>
 <td style="text-align:left;">
 -110.28
-</td>
-<td style="text-align:left;">
-228.57
 </td>
 <td style="text-align:left;">
 228.67
@@ -1142,9 +1080,6 @@ ARD
 -145.38
 </td>
 <td style="text-align:left;">
-294.75
-</td>
-<td style="text-align:left;">
 294.79
 </td>
 <td style="text-align:left;">
@@ -1161,9 +1096,6 @@ ARD
 </td>
 <td style="text-align:left;">
 -129.65
-</td>
-<td style="text-align:left;">
-271.30
 </td>
 <td style="text-align:left;">
 271.53

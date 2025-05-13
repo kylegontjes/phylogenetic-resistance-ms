@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-25" />
+<meta name="date" content="2025-05-09" />
 
 <title>Results Section 3: Whole-genome sequencing revealed variable phylogenetic clustering of resistance</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Results Section 3: Whole-genome sequencing
 revealed variable phylogenetic clustering of resistance</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-04-25</h4>
+<h4 class="date">2025-05-09</h4>
 
 </div>
 
@@ -407,131 +407,71 @@ for(i in pheno){
 <h1>LR analyses</h1>
 <div id="modeling-clade-i" class="section level2">
 <h2>Modeling Clade I</h2>
-<pre class="r"><code>variables_of_interest &lt;- c(&quot;age&quot;,&quot;sex&quot;,&quot;clade_I&quot;)
-TMP_SMX_lr_CI &lt;- phyloaware_regression(&quot;TMP_SMX_dich_num&quot;,df = TMP_SMX_regression_df,variables = variables_of_interest,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = &#39;multivariable&#39;)
-gentamicin_lr_CI &lt;- phyloaware_regression(&quot;gentamicin_dich_num&quot;,gentamicin_regression_df,variables = variables_of_interest,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = &#39;multivariable&#39;)   
-AMK_lr_CI &lt;- phyloaware_regression(&quot;AMK_dich_num&quot;,AMK_regression_df,variables = variables_of_interest,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = &#39;multivariable&#39;)
-CST_lr_CI &lt;- phyloaware_regression(&quot;CST_dich_num&quot;,CST_regression_df,variables = variables_of_interest,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = &#39;multivariable&#39;)
-blbli_lr_CI &lt;- phyloaware_regression(&quot;blbli_dich_num&quot;,blbli_regression_df,variables =variables_of_interest,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = &#39;multivariable&#39;)  </code></pre>
-<pre class="r"><code>TMP_SMX_lr_CI$multivariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;TMP-SMX&quot;)</code></pre>
-<pre><code>                       OR (95% CI) p_value   pheno
-present.age          1 (0.99-1.02)  0.5895 TMP-SMX
-present.sexmale    1.59 (0.98-2.6)  0.0617 TMP-SMX
-present.clade_I   0.19 (0.11-0.33)  0.0000 TMP-SMX
-singleton.age     0.98 (0.95-1.01)  0.2410 TMP-SMX
-singleton.sexmale 2.08 (0.88-5.17)  0.1014 TMP-SMX
-singleton.clade_I   0.9 (0.37-2.2)  0.8134 TMP-SMX
-cluster.age       1.01 (0.99-1.03)  0.3668 TMP-SMX
-cluster.sexmale   1.45 (0.87-2.45)  0.1606 TMP-SMX
-cluster.clade_I   0.12 (0.06-0.22)  0.0000 TMP-SMX</code></pre>
-<pre class="r"><code>gentamicin_lr_CI$multivariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;Gentamicin&quot;)</code></pre>
-<pre><code>                       OR (95% CI) p_value      pheno
-present.age          1.02 (1-1.04)  0.0151 Gentamicin
-present.sexmale   0.93 (0.57-1.53)  0.7832 Gentamicin
-present.clade_I   0.14 (0.08-0.24)  0.0000 Gentamicin
-singleton.age     1.01 (0.97-1.05)  0.6844 Gentamicin
-singleton.sexmale 1.28 (0.48-3.67)  0.6282 Gentamicin
-singleton.clade_I 1.62 (0.57-5.11)  0.3856 Gentamicin
-cluster.age       1.02 (1.01-1.04)  0.0101 Gentamicin
-cluster.sexmale   0.78 (0.46-1.33)  0.3608 Gentamicin
-cluster.clade_I   0.07 (0.04-0.14)  0.0000 Gentamicin</code></pre>
-<pre class="r"><code>AMK_lr_CI$multivariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;Amikacin&quot;)</code></pre>
-<pre><code>                        OR (95% CI) p_value    pheno
-present.age        0.99 (0.97-1.01)  0.2157 Amikacin
-present.sexmale    0.78 (0.46-1.29)  0.3335 Amikacin
-present.clade_I   7.27 (4.26-12.72)  0.0000 Amikacin
-singleton.age         1 (0.97-1.03)  0.8601 Amikacin
-singleton.sexmale  0.87 (0.41-1.87)  0.7228 Amikacin
-singleton.clade_I  2.57 (1.11-5.81)  0.0239 Amikacin
-cluster.age           0.98 (0.96-1)  0.1266 Amikacin
-cluster.sexmale    0.69 (0.38-1.25)  0.2246 Amikacin
-cluster.clade_I   11.63 (6.26-22.5)  0.0000 Amikacin</code></pre>
-<pre class="r"><code>CST_lr_CI$multivariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;Colistin&quot;)</code></pre>
-<pre><code>                       OR (95% CI) p_value    pheno
-present.age       1.02 (1.01-1.04)  0.0127 Colistin
-present.sexmale   1.07 (0.65-1.74)  0.7962 Colistin
-present.clade_I   0.21 (0.11-0.37)  0.0000 Colistin
-singleton.age     0.99 (0.96-1.03)  0.7717 Colistin
-singleton.sexmale 1.58 (0.61-4.38)  0.3577 Colistin
-singleton.clade_I 2.43 (0.91-7.08)  0.0858 Colistin
-cluster.age       1.03 (1.01-1.05)  0.0025 Colistin
-cluster.sexmale   0.97 (0.56-1.68)  0.9174 Colistin
-cluster.clade_I   0.06 (0.02-0.14)  0.0000 Colistin</code></pre>
-<pre class="r"><code>blbli_lr_CI$multivariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;BL/BLI&quot;)</code></pre>
-<pre><code>                        OR (95% CI) p_value  pheno
-present.age           1.03 (1-1.06)  0.0482 BL/BLI
-present.sexmale    0.64 (0.33-1.21)  0.1678 BL/BLI
-present.clade_I    4.05 (2.12-7.97)  0.0000 BL/BLI
-singleton.age         1.03 (1-1.06)  0.0553 BL/BLI
-singleton.sexmale  0.75 (0.35-1.61)  0.4600 BL/BLI
-singleton.clade_I  2.04 (0.93-4.46)  0.0726 BL/BLI
-cluster.age        1.02 (0.98-1.07)  0.3770 BL/BLI
-cluster.sexmale    0.45 (0.16-1.23)  0.1234 BL/BLI
-cluster.clade_I   21.2 (5.71-138.2)  0.0001 BL/BLI</code></pre>
+<pre class="r"><code>variables_of_interest &lt;- c(&quot;clade_I&quot;)
+TMP_SMX_lr_CI &lt;- phyloaware_regression(&quot;TMP_SMX_dich_num&quot;,df = TMP_SMX_regression_df,variables = variables_of_interest,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = F)
+gentamicin_lr_CI &lt;- phyloaware_regression(&quot;gentamicin_dich_num&quot;,gentamicin_regression_df,variables = variables_of_interest,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = F)   
+AMK_lr_CI &lt;- phyloaware_regression(&quot;AMK_dich_num&quot;,AMK_regression_df,variables = variables_of_interest,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = F)
+CST_lr_CI &lt;- phyloaware_regression(&quot;CST_dich_num&quot;,CST_regression_df,variables = variables_of_interest,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = F)
+blbli_lr_CI &lt;- phyloaware_regression(&quot;blbli_dich_num&quot;,blbli_regression_df,variables =variables_of_interest,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = F)  </code></pre>
+<pre class="r"><code>TMP_SMX_lr_CI$univariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;TMP-SMX&quot;)</code></pre>
+<pre><code>               OR (95% CI) p_value   pheno
+present   0.21 (0.13-0.35)  0.0000 TMP-SMX
+singleton 0.92 (0.41-2.08)  0.8380 TMP-SMX
+cluster   0.13 (0.07-0.24)  0.0000 TMP-SMX</code></pre>
+<pre class="r"><code>gentamicin_lr_CI$univariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;Gentamicin&quot;)</code></pre>
+<pre><code>               OR (95% CI) p_value      pheno
+present   0.16 (0.10-0.27)  0.0000 Gentamicin
+singleton 1.80 (0.67-5.37)  0.2595 Gentamicin
+cluster   0.09 (0.05-0.17)  0.0000 Gentamicin</code></pre>
+<pre class="r"><code>AMK_lr_CI$univariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;Amikacin&quot;)</code></pre>
+<pre><code>                OR (95% CI) p_value    pheno
+present   6.45 (3.89-10.90)  0.0000 Amikacin
+singleton  2.49 (1.10-5.47)  0.0246 Amikacin
+cluster   9.53 (5.39-17.30)  0.0000 Amikacin</code></pre>
+<pre class="r"><code>CST_lr_CI$univariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;Colistin&quot;)</code></pre>
+<pre><code>               OR (95% CI) p_value    pheno
+present   0.25 (0.14-0.43)  0.0000 Colistin
+singleton 2.38 (0.94-6.58)  0.0761 Colistin
+cluster   0.07 (0.03-0.17)  0.0000 Colistin</code></pre>
+<pre class="r"><code>blbli_lr_CI$univariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;BL/BLI&quot;)</code></pre>
+<pre><code>                  OR (95% CI) p_value  pheno
+present      4.43 (2.37-8.52)  0.0000 BL/BLI
+singleton    2.34 (1.09-4.99)  0.0272 BL/BLI
+cluster   21.19 (5.89-135.76)  0.0001 BL/BLI</code></pre>
 </div>
 <div id="modeling-clade-ii" class="section level2">
 <h2>Modeling Clade II</h2>
-<pre class="r"><code>variables_of_interest_II &lt;- c(&quot;age&quot;,&quot;sex&quot;,&quot;clade_II&quot;)
-TMP_SMX_lr_CII &lt;- phyloaware_regression(&quot;TMP_SMX_dich_num&quot;,df = TMP_SMX_regression_df,variables = variables_of_interest_II,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = &#39;multivariable&#39;)
-gentamicin_lr_CII &lt;- phyloaware_regression(&quot;gentamicin_dich_num&quot;,gentamicin_regression_df,variables = variables_of_interest_II,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = &#39;multivariable&#39;)   
-AMK_lr_CII &lt;- phyloaware_regression(&quot;AMK_dich_num&quot;,AMK_regression_df,variables = variables_of_interest_II,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = &#39;multivariable&#39;)
-CST_lr_CII &lt;- phyloaware_regression(&quot;CST_dich_num&quot;,CST_regression_df,variables = variables_of_interest_II,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = &#39;multivariable&#39;)
-blbli_lr_CII &lt;- phyloaware_regression(&quot;blbli_dich_num&quot;,blbli_regression_df,variables =variables_of_interest_II,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = &#39;multivariable&#39;)  </code></pre>
-<pre class="r"><code>TMP_SMX_lr_CII$multivariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;TMP-SMX&quot;)</code></pre>
-<pre><code>                         OR (95% CI) p_value   pheno
-present.age            1 (0.99-1.02)  0.5895 TMP-SMX
-present.sexmale      1.59 (0.98-2.6)  0.0617 TMP-SMX
-present.clade_II     5.17 (3.07-8.9)  0.0000 TMP-SMX
-singleton.age       0.98 (0.95-1.01)  0.2410 TMP-SMX
-singleton.sexmale   2.08 (0.88-5.17)  0.1014 TMP-SMX
-singleton.clade_II   1.11 (0.45-2.7)  0.8134 TMP-SMX
-cluster.age         1.01 (0.99-1.03)  0.3668 TMP-SMX
-cluster.sexmale     1.45 (0.87-2.45)  0.1606 TMP-SMX
-cluster.clade_II   8.26 (4.55-15.68)  0.0000 TMP-SMX</code></pre>
-<pre class="r"><code>gentamicin_lr_CII$multivariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;Gentamicin&quot;)</code></pre>
-<pre><code>                          OR (95% CI) p_value      pheno
-present.age             1.02 (1-1.04)  0.0151 Gentamicin
-present.sexmale      0.93 (0.57-1.53)  0.7832 Gentamicin
-present.clade_II    7.31 (4.25-12.94)  0.0000 Gentamicin
-singleton.age        1.01 (0.97-1.05)  0.6844 Gentamicin
-singleton.sexmale    1.28 (0.48-3.67)  0.6282 Gentamicin
-singleton.clade_II    0.62 (0.2-1.77)  0.3856 Gentamicin
-cluster.age          1.02 (1.01-1.04)  0.0101 Gentamicin
-cluster.sexmale      0.78 (0.46-1.33)  0.3608 Gentamicin
-cluster.clade_II   13.52 (7.16-27.07)  0.0000 Gentamicin</code></pre>
-<pre class="r"><code>AMK_lr_CII$multivariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;Amikacin&quot;)</code></pre>
-<pre><code>                        OR (95% CI) p_value    pheno
-present.age        0.99 (0.97-1.01)  0.2157 Amikacin
-present.sexmale    0.78 (0.46-1.29)  0.3335 Amikacin
-present.clade_II   0.14 (0.08-0.23)  0.0000 Amikacin
-singleton.age         1 (0.97-1.03)  0.8601 Amikacin
-singleton.sexmale  0.87 (0.41-1.87)  0.7228 Amikacin
-singleton.clade_II  0.39 (0.17-0.9)  0.0239 Amikacin
-cluster.age           0.98 (0.96-1)  0.1266 Amikacin
-cluster.sexmale    0.69 (0.38-1.25)  0.2246 Amikacin
-cluster.clade_II   0.09 (0.04-0.16)  0.0000 Amikacin</code></pre>
-<pre class="r"><code>CST_lr_CII$multivariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;Colistin&quot;)</code></pre>
-<pre><code>                          OR (95% CI) p_value    pheno
-present.age          1.02 (1.01-1.04)  0.0127 Colistin
-present.sexmale      1.07 (0.65-1.74)  0.7962 Colistin
-present.clade_II     4.78 (2.68-8.92)  0.0000 Colistin
-singleton.age        0.99 (0.96-1.03)  0.7717 Colistin
-singleton.sexmale    1.58 (0.61-4.38)  0.3577 Colistin
-singleton.clade_II    0.41 (0.14-1.1)  0.0858 Colistin
-cluster.age          1.03 (1.01-1.05)  0.0025 Colistin
-cluster.sexmale      0.97 (0.56-1.68)  0.9174 Colistin
-cluster.clade_II   17.38 (7.23-51.93)  0.0000 Colistin</code></pre>
-<pre class="r"><code>blbli_lr_CII$multivariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;BL/BLI&quot;)</code></pre>
-<pre><code>                        OR (95% CI) p_value  pheno
-present.age           1.03 (1-1.06)  0.0482 BL/BLI
-present.sexmale    0.64 (0.33-1.21)  0.1678 BL/BLI
-present.clade_II   0.25 (0.13-0.47)  0.0000 BL/BLI
-singleton.age         1.03 (1-1.06)  0.0553 BL/BLI
-singleton.sexmale  0.75 (0.35-1.61)  0.4600 BL/BLI
-singleton.clade_II 0.49 (0.22-1.08)  0.0726 BL/BLI
-cluster.age        1.02 (0.98-1.07)  0.3770 BL/BLI
-cluster.sexmale    0.45 (0.16-1.23)  0.1234 BL/BLI
-cluster.clade_II   0.05 (0.01-0.18)  0.0001 BL/BLI</code></pre>
+<pre class="r"><code>variables_of_interest_II &lt;- c(&quot;clade_II&quot;)
+TMP_SMX_lr_CII &lt;- phyloaware_regression(&quot;TMP_SMX_dich_num&quot;,df = TMP_SMX_regression_df,variables = variables_of_interest_II,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = F)
+gentamicin_lr_CII &lt;- phyloaware_regression(&quot;gentamicin_dich_num&quot;,gentamicin_regression_df,variables = variables_of_interest_II,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = F)   
+AMK_lr_CII &lt;- phyloaware_regression(&quot;AMK_dich_num&quot;,AMK_regression_df,variables = variables_of_interest_II,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = F)
+CST_lr_CII &lt;- phyloaware_regression(&quot;CST_dich_num&quot;,CST_regression_df,variables = variables_of_interest_II,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = F)
+blbli_lr_CII &lt;- phyloaware_regression(&quot;blbli_dich_num&quot;,blbli_regression_df,variables =variables_of_interest_II,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = F)  </code></pre>
+<pre class="r"><code>TMP_SMX_lr_CII$univariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;TMP-SMX&quot;)</code></pre>
+<pre><code>                OR (95% CI) p_value   pheno
+present    4.69 (2.85-7.87)  0.0000 TMP-SMX
+singleton  1.09 (0.48-2.46)  0.8380 TMP-SMX
+cluster   7.50 (4.22-13.91)  0.0000 TMP-SMX</code></pre>
+<pre class="r"><code>gentamicin_lr_CII$univariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;Gentamicin&quot;)</code></pre>
+<pre><code>                 OR (95% CI) p_value      pheno
+present    6.14 (3.68-10.51)  0.0000 Gentamicin
+singleton   0.56 (0.19-1.49)  0.2595 Gentamicin
+cluster   10.99 (6.01-21.24)  0.0000 Gentamicin</code></pre>
+<pre class="r"><code>AMK_lr_CII$univariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;Amikacin&quot;)</code></pre>
+<pre><code>               OR (95% CI) p_value    pheno
+present   0.16 (0.09-0.26)  0.0000 Amikacin
+singleton 0.40 (0.18-0.91)  0.0246 Amikacin
+cluster   0.10 (0.06-0.19)  0.0000 Amikacin</code></pre>
+<pre class="r"><code>CST_lr_CII$univariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;Colistin&quot;)</code></pre>
+<pre><code>                 OR (95% CI) p_value    pheno
+present     4.02 (2.30-7.34)  0.0000 Colistin
+singleton   0.42 (0.15-1.07)  0.0761 Colistin
+cluster   13.39 (5.72-39.27)  0.0000 Colistin</code></pre>
+<pre class="r"><code>blbli_lr_CII$univariable %&gt;% do.call(rbind.data.frame,.) %&gt;% mutate(pheno=&quot;BL/BLI&quot;)</code></pre>
+<pre><code>               OR (95% CI) p_value  pheno
+present   0.23 (0.12-0.42)  0.0000 BL/BLI
+singleton 0.43 (0.20-0.92)  0.0272 BL/BLI
+cluster   0.05 (0.01-0.17)  0.0001 BL/BLI</code></pre>
 </div>
 </div>
 

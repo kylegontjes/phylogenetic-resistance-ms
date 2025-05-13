@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-25" />
+<meta name="date" content="2025-05-12" />
 
 <title>Identify best model for ancestral state reconstruction</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Identify best model for ancestral state
 reconstruction</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-04-25</h4>
+<h4 class="date">2025-05-12</h4>
 
 </div>
 
@@ -383,26 +383,26 @@ The following object is masked from &#39;package:dplyr&#39;:
     where</code></pre>
 <pre class="r"><code># Print
 Sys.info()</code></pre>
-<pre><code>                                                                                             sysname 
-                                                                                            &quot;Darwin&quot; 
-                                                                                             release 
-                                                                                            &quot;24.4.0&quot; 
-                                                                                             version 
-&quot;Darwin Kernel Version 24.4.0: Wed Mar 19 21:16:31 PDT 2025; root:xnu-11417.101.15~1/RELEASE_X86_64&quot; 
-                                                                                            nodename 
-                                                                                    &quot;msla0572.local&quot; 
-                                                                                             machine 
-                                                                                            &quot;x86_64&quot; 
-                                                                                               login 
-                                                                                              &quot;root&quot; 
-                                                                                                user 
-                                                                                          &quot;kgontjes&quot; 
-                                                                                      effective_user 
-                                                                                          &quot;kgontjes&quot; </code></pre>
+<pre><code>                                                                                               sysname 
+                                                                                              &quot;Darwin&quot; 
+                                                                                               release 
+                                                                                              &quot;24.4.0&quot; 
+                                                                                               version 
+&quot;Darwin Kernel Version 24.4.0: Fri Apr 11 18:28:23 PDT 2025; root:xnu-11417.101.15~117/RELEASE_X86_64&quot; 
+                                                                                              nodename 
+                                                                                      &quot;msla0572.local&quot; 
+                                                                                               machine 
+                                                                                              &quot;x86_64&quot; 
+                                                                                                 login 
+                                                                                                &quot;root&quot; 
+                                                                                                  user 
+                                                                                            &quot;kgontjes&quot; 
+                                                                                        effective_user 
+                                                                                            &quot;kgontjes&quot; </code></pre>
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>R version 4.5.0 (2025-04-11)
 Platform: x86_64-apple-darwin20
-Running under: macOS Sequoia 15.4
+Running under: macOS Sequoia 15.4.1
 
 Matrix products: default
 BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
@@ -517,8 +517,8 @@ asr_model_choices</code></pre>
 <pre><code>$TMP_SMX
 $TMP_SMX$model_options
   model np nRateCat    rate1   rate2    loglik      AIC     AICc
-1    ER  1        1 12296.57      NA -186.8567 375.7134 375.7238
-2   ARD  2        1 14264.51 9771.37 -185.7299 375.4597 375.4911
+1    ER  1        1 12300.45      NA -186.8567 375.7134 375.7238
+2   ARD  2        1 14267.89 9775.21 -185.7299 375.4597 375.4911
              pheno
 1 TMP_SMX_dich_num
 2 TMP_SMX_dich_num
@@ -531,8 +531,8 @@ TMP_SMX_dich_num
 $gentamicin
 $gentamicin$model_options
   model np nRateCat    rate1   rate2    loglik      AIC     AICc
-1    ER  1        1 10272.00      NA -162.0817 326.1635 326.1739
-2   ARD  2        1 10793.17 9821.01 -162.0099 328.0199 328.0512
+1    ER  1        1 10271.51      NA -162.0817 326.1635 326.1739
+2   ARD  2        1 10791.97 9820.55 -162.0099 328.0199 328.0512
                 pheno
 1 gentamicin_dich_num
 2 gentamicin_dich_num
@@ -545,8 +545,8 @@ gentamicin_dich_num
 $AMK
 $AMK$model_options
   model np nRateCat    rate1    rate2    loglik      AIC     AICc        pheno
-1    ER  1        1 23430.11       NA -226.9771 455.9543 455.9647 AMK_dich_num
-2   ARD  2        1 24666.18 42371.32 -222.4716 448.9432 448.9745 AMK_dich_num
+1    ER  1        1 23431.15       NA -226.9771 455.9543 455.9647 AMK_dich_num
+2   ARD  2        1 24660.02 42363.19 -222.4716 448.9432 448.9745 AMK_dich_num
 
 $AMK$best_model
 AMK_dich_num 
@@ -555,9 +555,9 @@ AMK_dich_num
 
 $CST
 $CST$model_options
-  model np nRateCat   rate1   rate2    loglik      AIC     AICc        pheno
-1    ER  1        1 8707.31      NA -159.2620 320.5239 320.5343 CST_dich_num
-2   ARD  2        1 7875.87 11610.5 -158.4957 320.9914 321.0227 CST_dich_num
+  model np nRateCat   rate1    rate2    loglik      AIC     AICc        pheno
+1    ER  1        1 8706.47       NA -159.2620 320.5239 320.5343 CST_dich_num
+2   ARD  2        1 7876.47 11609.77 -158.4957 320.9914 321.0227 CST_dich_num
 
 $CST$best_model
 CST_dich_num 
@@ -567,8 +567,8 @@ CST_dich_num
 $blbli
 $blbli$model_options
   model np nRateCat    rate1    rate2    loglik      AIC     AICc
-1    ER  1        1  7845.37       NA -166.5255 335.0509 335.0613
-2   ARD  2        1 12923.25 76991.77 -145.3771 294.7542 294.7856
+1    ER  1        1  7844.39       NA -166.5255 335.0509 335.0613
+2   ARD  2        1 12923.92 76988.89 -145.3771 294.7542 294.7856
            pheno
 1 blbli_dich_num
 2 blbli_dich_num

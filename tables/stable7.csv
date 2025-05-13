@@ -1,11 +1,11 @@
-Phenotype,Model,Rate 1,Rate 2,Single-rate Log Likelihood,Single-rate AIC,Single-rate AICc,Category I Rate 1,Category I Rate 2,Category II Rate 1,Category II Rate 2,Multi-rate Log Likelihood,Multi-rate AIC,Multi-rate AICc,Best model
-TMP-SMX,ER,12301.22,NA,-186.86,375.71,375.72,1.80e+14,NA,0.02,NA,-162.37,332.74,332.84,Two rate categories
-TMP-SMX,ARD,14265.83,9776.72,-185.73,375.46,375.49,1.61e+12,1.99e+12,3278.11,2.24e-08,-160.25,332.50,332.73,Two rate categories
-Gentamicin,ER,10270.87,NA,-162.08,326.16,326.17,6.56e+14,NA,0.28,NA,-157.21,322.41,322.52,Two rate categories
-Gentamicin,ARD,10791.87,9820.39,-162.01,328.02,328.05,1.72e+12,2.33e+13,7467.86,18147.69,-156.68,325.37,325.59,Two rate categories
-Amikacin,ER,23422.45,NA,-226.98,455.95,455.96,1.95e+14,NA,3082.43,NA,-202.38,412.75,412.86,Two rate categories
-Amikacin,ARD,24657.66,42350.99,-222.47,448.94,448.97,4.85e+05,7.48e+05,4945.51,50807.93,-197.35,406.70,406.92,Two rate categories
-Colistin,ER,8708.53,NA,-159.26,320.52,320.53,2.97e+14,NA,0.10,NA,-152.18,312.36,312.47,Two rate categories
-Colistin,ARD,7876.02,11611.03,-158.50,320.99,321.02,1.72e+06,1.31e+05,43819.28,278.79,-147.27,306.54,306.76,Two rate categories
-BL/BLI,ER,7843.07,NA,-166.53,335.05,335.06,1.82e+19,NA,8.62,NA,-110.28,228.57,228.67,Two rate categories
-BL/BLI,ARD,12922.02,76983.84,-145.38,294.75,294.79,1.33e+06,4.60e+05,1.01e-09,1886.08,-129.65,271.30,271.53,Two rate categories
+Phenotype,Model,Rate 1,Rate 2,Single-rate Log Likelihood,Single-rate AICc,Category I Rate 1,Category I Rate 2,Category II Rate 1,Category II Rate 2,Multi-rate Log Likelihood,Multi-rate AICc,Best model
+TMP-SMX,ER,12301.22,NA,-186.86,375.72,1.80e+14,NA,0.02,NA,-162.37,332.84,Two rate categories
+TMP-SMX,ARD,14265.83,9776.72,-185.73,375.49,1.61e+12,1.99e+12,3278.11,2.24e-08,-160.25,332.73,Two rate categories
+Gentamicin,ER,10270.87,NA,-162.08,326.17,6.56e+14,NA,0.28,NA,-157.21,322.52,Two rate categories
+Gentamicin,ARD,10791.87,9820.39,-162.01,328.05,1.72e+12,2.33e+13,7467.86,18147.69,-156.68,325.59,Two rate categories
+Amikacin,ER,23422.45,NA,-226.98,455.96,1.95e+14,NA,3082.43,NA,-202.38,412.86,Two rate categories
+Amikacin,ARD,24657.66,42350.99,-222.47,448.97,4.85e+05,7.48e+05,4945.51,50807.93,-197.35,406.92,Two rate categories
+Colistin,ER,8708.53,NA,-159.26,320.53,2.97e+14,NA,0.10,NA,-152.18,312.47,Two rate categories
+Colistin,ARD,7876.02,11611.03,-158.50,321.02,1.72e+06,1.31e+05,43819.28,278.79,-147.27,306.76,Two rate categories
+BL/BLI,ER,7843.07,NA,-166.53,335.06,1.82e+19,NA,8.62,NA,-110.28,228.67,Two rate categories
+BL/BLI,ARD,12922.02,76983.84,-145.38,294.79,1.33e+06,4.60e+05,1.01e-09,1886.08,-129.65,271.53,Two rate categories

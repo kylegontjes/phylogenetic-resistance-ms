@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-28" />
+<meta name="date" content="2025-05-12" />
 
 <title>Supplemental Table 4: Comparison of ancestral state reconstruction models using Akaike information criteria</title>
 
@@ -578,7 +578,7 @@ display: none;
 ancestral state reconstruction models using Akaike information
 criteria</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-04-28</h4>
+<h4 class="date">2025-05-12</h4>
 
 </div>
 
@@ -616,26 +616,26 @@ The following object is masked from &#39;package:dplyr&#39;:
     group_rows</code></pre>
 <pre class="r"><code># Print
 Sys.info()</code></pre>
-<pre><code>                                                                                             sysname 
-                                                                                            &quot;Darwin&quot; 
-                                                                                             release 
-                                                                                            &quot;24.4.0&quot; 
-                                                                                             version 
-&quot;Darwin Kernel Version 24.4.0: Wed Mar 19 21:16:31 PDT 2025; root:xnu-11417.101.15~1/RELEASE_X86_64&quot; 
-                                                                                            nodename 
-                                                                                    &quot;msla0572.local&quot; 
-                                                                                             machine 
-                                                                                            &quot;x86_64&quot; 
-                                                                                               login 
-                                                                                              &quot;root&quot; 
-                                                                                                user 
-                                                                                          &quot;kgontjes&quot; 
-                                                                                      effective_user 
-                                                                                          &quot;kgontjes&quot; </code></pre>
+<pre><code>                                                                                               sysname 
+                                                                                              &quot;Darwin&quot; 
+                                                                                               release 
+                                                                                              &quot;24.4.0&quot; 
+                                                                                               version 
+&quot;Darwin Kernel Version 24.4.0: Fri Apr 11 18:28:23 PDT 2025; root:xnu-11417.101.15~117/RELEASE_X86_64&quot; 
+                                                                                              nodename 
+                                                                                      &quot;msla0572.local&quot; 
+                                                                                               machine 
+                                                                                              &quot;x86_64&quot; 
+                                                                                                 login 
+                                                                                                &quot;root&quot; 
+                                                                                                  user 
+                                                                                            &quot;kgontjes&quot; 
+                                                                                        effective_user 
+                                                                                            &quot;kgontjes&quot; </code></pre>
 <pre class="r"><code>sessionInfo() </code></pre>
 <pre><code>R version 4.5.0 (2025-04-11)
 Platform: x86_64-apple-darwin20
-Running under: macOS Sequoia 15.4
+Running under: macOS Sequoia 15.4.1
 
 Matrix products: default
 BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
@@ -674,19 +674,45 @@ loaded via a namespace (and not attached):
 </div>
 <div id="create-table" class="section level1">
 <h1>Create table</h1>
+<div id="best-model" class="section level2">
+<h2>Best model</h2>
+<pre class="r"><code>lapply(asr_model_choices,FUN=function(x){
+  x[[&quot;best_model&quot;]]
+}) </code></pre>
+<pre><code>$TMP_SMX
+TMP_SMX_dich_num 
+           &quot;ARD&quot; 
+
+$gentamicin
+gentamicin_dich_num 
+               &quot;ER&quot; 
+
+$AMK
+AMK_dich_num 
+       &quot;ARD&quot; 
+
+$CST
+CST_dich_num 
+        &quot;ER&quot; 
+
+$blbli
+blbli_dich_num 
+         &quot;ARD&quot; </code></pre>
+</div>
+<div id="format" class="section level2">
+<h2>Format</h2>
 <pre class="r"><code>model_table &lt;- lapply(asr_model_choices,FUN=function(x){
   x[[&quot;model_options&quot;]]
 }) %&gt;% do.call(rbind,.) 
 
-stable4 &lt;- model_table %&gt;%  select(pheno,model,np,rate1,rate2,loglik,AIC,AICc) %&gt;% `colnames&lt;-`(c(&quot;Phenotype&quot;,&quot;Model&quot;,&quot;No. Parameters&quot;,&quot;Rate 1&quot;,&quot;Rate 2&quot;,&quot;Log Likelihood&quot;,&quot;AIC&quot;,&quot;Corrected AIC&quot;)) %&gt;% `rownames&lt;-`(NULL) 
+stable4 &lt;- model_table %&gt;%  select(pheno,model,np,rate1,rate2,loglik,AICc) %&gt;% `colnames&lt;-`(c(&quot;Phenotype&quot;,&quot;Model&quot;,&quot;No. Parameters&quot;,&quot;Rate 1&quot;,&quot;Rate 2&quot;,&quot;Log Likelihood&quot;,&quot;Corrected AIC&quot;)) %&gt;% `rownames&lt;-`(NULL) 
 
 stable4$Phenotype &lt;- recode(stable4$Phenotype,&#39;TMP_SMX_dich_num&#39;=&#39;TMP-SMX&#39;,
                              &quot;gentamicin_dich_num&quot;=&quot;Gentamicin&quot;,
                              &#39;AMK_dich_num&#39;=&#39;Amikacin&#39;,
                              &#39;CST_dich_num&#39;=&#39;Colistin&#39;,
                              &#39;blbli_dich_num&#39;=&quot;BL/BLI&quot;)  
-stable4$`Log Likelihood` &lt;- round(stable4$`Log Likelihood`, 2)
-stable4$`AIC` &lt;- round(stable4$`AIC`, 2)
+stable4$`Log Likelihood` &lt;- round(stable4$`Log Likelihood`, 2) 
 stable4$`Corrected AIC` &lt;- round(stable4$`Corrected AIC`, 2)
 
 stable4 %&gt;% favorite_kable </code></pre>
@@ -712,9 +738,6 @@ Rate 2
 Log Likelihood
 </th>
 <th style="text-align:right;">
-AIC
-</th>
-<th style="text-align:right;">
 Corrected AIC
 </th>
 </tr>
@@ -731,16 +754,13 @@ ER
 1
 </td>
 <td style="text-align:right;">
-12296.57
+12300.45
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
 -186.86
-</td>
-<td style="text-align:right;">
-375.71
 </td>
 <td style="text-align:right;">
 375.72
@@ -757,16 +777,13 @@ ARD
 2
 </td>
 <td style="text-align:right;">
-14264.51
+14267.89
 </td>
 <td style="text-align:right;">
-9771.37
+9775.21
 </td>
 <td style="text-align:right;">
 -185.73
-</td>
-<td style="text-align:right;">
-375.46
 </td>
 <td style="text-align:right;">
 375.49
@@ -783,16 +800,13 @@ ER
 1
 </td>
 <td style="text-align:right;">
-10272.00
+10271.51
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
 -162.08
-</td>
-<td style="text-align:right;">
-326.16
 </td>
 <td style="text-align:right;">
 326.17
@@ -809,16 +823,13 @@ ARD
 2
 </td>
 <td style="text-align:right;">
-10793.17
+10791.97
 </td>
 <td style="text-align:right;">
-9821.01
+9820.55
 </td>
 <td style="text-align:right;">
 -162.01
-</td>
-<td style="text-align:right;">
-328.02
 </td>
 <td style="text-align:right;">
 328.05
@@ -835,16 +846,13 @@ ER
 1
 </td>
 <td style="text-align:right;">
-23430.11
+23431.15
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
 -226.98
-</td>
-<td style="text-align:right;">
-455.95
 </td>
 <td style="text-align:right;">
 455.96
@@ -861,16 +869,13 @@ ARD
 2
 </td>
 <td style="text-align:right;">
-24666.18
+24660.02
 </td>
 <td style="text-align:right;">
-42371.32
+42363.19
 </td>
 <td style="text-align:right;">
 -222.47
-</td>
-<td style="text-align:right;">
-448.94
 </td>
 <td style="text-align:right;">
 448.97
@@ -887,16 +892,13 @@ ER
 1
 </td>
 <td style="text-align:right;">
-8707.31
+8706.47
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
 -159.26
-</td>
-<td style="text-align:right;">
-320.52
 </td>
 <td style="text-align:right;">
 320.53
@@ -913,16 +915,13 @@ ARD
 2
 </td>
 <td style="text-align:right;">
-7875.87
+7876.47
 </td>
 <td style="text-align:right;">
-11610.50
+11609.77
 </td>
 <td style="text-align:right;">
 -158.50
-</td>
-<td style="text-align:right;">
-320.99
 </td>
 <td style="text-align:right;">
 321.02
@@ -939,16 +938,13 @@ ER
 1
 </td>
 <td style="text-align:right;">
-7845.37
+7844.39
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
 -166.53
-</td>
-<td style="text-align:right;">
-335.05
 </td>
 <td style="text-align:right;">
 335.06
@@ -965,16 +961,13 @@ ARD
 2
 </td>
 <td style="text-align:right;">
-12923.25
+12923.92
 </td>
 <td style="text-align:right;">
-76991.77
+76988.89
 </td>
 <td style="text-align:right;">
 -145.38
-</td>
-<td style="text-align:right;">
-294.75
 </td>
 <td style="text-align:right;">
 294.79
@@ -982,6 +975,7 @@ ARD
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 <div id="save-table" class="section level1">
 <h1>Save table</h1>
