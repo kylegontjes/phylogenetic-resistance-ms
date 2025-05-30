@@ -19,8 +19,10 @@ resistance_cat_scale <- scale_fill_manual(values=resistance_cat_colors, name="Re
 feature_colors <- c(`1` = "black",`0`="white")
 feature_scale <- scale_fill_manual(values=feature_colors,labels=c("Present","Absent"),name="Tip state", guide = guide_legend(nrow=1, title.position = "top", label.position = "right"))
 
+# Figure 1 theme
+figure_1_theme <- theme(axis.ticks = element_line(color = "black"), axis.text = element_text(color = "black", size = 14), axis.title = element_text(size = 16))
 
-# Sfigure1 format
+# Supplemental Figure 1 format
 format <- theme(legend.position = "bottom",
                   axis.text =   element_text(size=18, color="black"),
                   axis.title = element_text(size = 22, color="black"),
@@ -29,13 +31,12 @@ format <- theme(legend.position = "bottom",
                   plot.title = element_text(size = 24, color="black")
 )
 
-# Figure 1 tree theme
-consistent_theme <- theme(legend.position = 'bottom',legend.direction="horizontal", legend.justification = "center", legend.key = element_rect(colour = c('black')),legend.box.spacing = unit(.0001, "cm"),legend.key.size = unit(.75, "cm"),legend.key.width = unit(.75, "cm"),legend.spacing.x=unit(.75, "cm"), legend.title = element_text(size=18,hjust=0.5),legend.text = element_text(size=16,hjust=0))
+# Figure 2 tree theme
+consistent_theme <- theme(legend.position = 'bottom',legend.direction="horizontal", legend.justification = "center", legend.key = element_rect(colour = c('black')),legend.box.spacing = unit(.0001, "cm"),legend.key.size = unit(.75, "cm"),legend.key.width = unit(.75, "cm"),legend.spacing.x=unit(.75, "cm"), legend.title = element_text(size=22,hjust=0.5),legend.text = element_text(size=20,hjust=0))
 
-# Figure 1 table
-mytheme <- ttheme_minimal(core = list(fg_params = list(hjust=0, x=0.01, fontsize=18),
-                                      padding=unit(c(5,2.5), "mm")),
-                          colhead = list(fg_params = list(hjust=0, x=0.01, fontsize=18, fontface="bold")),
+# Figure 2 table
+mytheme <- ttheme_minimal(core = list(fg_params = list(hjust=0, vjust = 0.5 ,x=0.1, fontsize=16),padding = unit(c(4, 2), "mm")),
+                          colhead = list(fg_params = list(hjust=0, vjust = 0.5, x=0.1, fontsize=16, fontface="bold"),padding = unit(c(4, 4), "mm")),
                           rowhead=list(fg_params=list(hjust=0, x=0)))
 
 # Favorite kable

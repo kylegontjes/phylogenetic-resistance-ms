@@ -36,3 +36,7 @@ convert_tableone_into_df <- function (dataset, vars, strata = NULL, argsNormal =
     return(table)
   }
 }
+
+get_legend <- function(plot){
+  cowplot::get_plot_component(plot,"guide-box",return_all=T) %>% .[[3]]
+}
