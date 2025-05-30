@@ -34,6 +34,7 @@ rownames(df) <- df$isolate_no
 # Variable curation 
 ```{r}
 rownames(df) <- df$isolate_no 
+
 # Demographics 
 dem_vars <- c("age","sex","LOSbeforeCx")
 df$sex.female <- ifelse(df$sex=="male",0,1)  
@@ -119,7 +120,7 @@ paste0("Eligible variables: ")
 other_vars <-  c("age","LOSbeforeCx","sex.female",device_vars,comorb_vars)
 variables <- c(other_vars,abx_vars_of_interest) 
 
-df_final <- df_fin %>% select(variables,isolate_no,source,clade_I,Patient_ID,Cx_date,pheno,'multimorbid','any_antibiotic_1d','any_device','device_ct','comorb_ct','AG_1d')
+df_final <- df_fin %>% select(variables, isolate_no, source, clade_I, Patient_ID, Cx_date ,pheno ,'multimorbid', 'any_antibiotic_1d', 'any_device', 'device_ct', 'comorb_ct', 'AG_1d')
 
 # Save
 saveRDS(df_final,"~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/data/regression/regression_df.RDS")

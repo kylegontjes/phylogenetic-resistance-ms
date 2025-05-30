@@ -16,7 +16,7 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=T, message=T, include=T, results=T}
 #Packages
-packages <- c("tidyverse","phyloAMR")   
+packages <- c("tidyverse","phyloAMR",'pbmcapply')   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) 
 # Functions
@@ -32,7 +32,7 @@ sessionInfo()
 df <- readRDS("./data/regression/regression_df.RDS")
 eligible_variables <- readLines("./data/regression/eligible_variables.txt")
 
-# Load asr
+# Load asr clustering
 pheno <- c("TMP_SMX","gentamicin","AMK","CST","blbli")
 for(i in pheno){
   assign(paste0(i,"_asr_clustering"),readRDS(paste0("./data/asr_clustering/",i,"_asr_clustering.RDS")))
@@ -49,11 +49,11 @@ for(i in pheno){
 # Purposeful selection algorithm
 ## Without confounding (i.e., set confounding_criteria to a very high number)  
 ```{r} 
-purposeful_output <- lapply(pheno,FUN=function(x){
+purposeful_output <- pbmcapply::pbmclapply(pheno,FUN=function(x){
   phenotype = paste0(x,"_dich_num")
   phenotype_df = get(paste0(x,"_regression_df"))
-  phyloaware_regression(phenotype,variables =eligible_variables,df=phenotype_df,first_present=T,patient_id="Patient_ID",culture_date="Cx_date",multivariable='purposeful',stepwise_direction = NULL,entry_criteria = 0.20,retention_criteria = 0.1,confounding_criteria = 1000e100)
-}) %>% `names<-`(pheno)
+  phyloaware_regression(trait = phenotype, variables = eligible_variables, df = phenotype_df, first_present = TRUE, patient_id = "Patient_ID", culture_date = "Cx_date", multivariable = 'purposeful', stepwise_direction = NULL, entry_criteria = 0.20, retention_criteria = 0.1, confounding_criteria = 1000e100)
+},mc.cores = 5) %>% `names<-`(pheno)
 
 saveRDS(purposeful_output,"./data/regression/purposeful_regression_results.RDS")
 ```

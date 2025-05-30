@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-25" />
+<meta name="date" content="2025-05-30" />
 
 <title>Curate dataset for phylogenetically-aware regression</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Curate dataset for phylogenetically-aware
 regression</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-04-25</h4>
+<h4 class="date">2025-05-30</h4>
 
 </div>
 
@@ -376,26 +376,26 @@ invisible(lapply(packages,library,character.only=T,quietly=T)) </code></pre>
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 <pre class="r"><code># Print
 Sys.info()</code></pre>
-<pre><code>                                                                                             sysname 
-                                                                                            &quot;Darwin&quot; 
-                                                                                             release 
-                                                                                            &quot;24.4.0&quot; 
-                                                                                             version 
-&quot;Darwin Kernel Version 24.4.0: Wed Mar 19 21:16:31 PDT 2025; root:xnu-11417.101.15~1/RELEASE_X86_64&quot; 
-                                                                                            nodename 
-                                                                                    &quot;msla0572.local&quot; 
-                                                                                             machine 
-                                                                                            &quot;x86_64&quot; 
-                                                                                               login 
-                                                                                              &quot;root&quot; 
-                                                                                                user 
-                                                                                          &quot;kgontjes&quot; 
-                                                                                      effective_user 
-                                                                                          &quot;kgontjes&quot; </code></pre>
+<pre><code>                                                                                            sysname 
+                                                                                           &quot;Darwin&quot; 
+                                                                                            release 
+                                                                                           &quot;24.5.0&quot; 
+                                                                                            version 
+&quot;Darwin Kernel Version 24.5.0: Tue Apr 22 19:53:26 PDT 2025; root:xnu-11417.121.6~2/RELEASE_X86_64&quot; 
+                                                                                           nodename 
+                                                                                   &quot;msla0572.local&quot; 
+                                                                                            machine 
+                                                                                           &quot;x86_64&quot; 
+                                                                                              login 
+                                                                                             &quot;root&quot; 
+                                                                                               user 
+                                                                                         &quot;kgontjes&quot; 
+                                                                                     effective_user 
+                                                                                         &quot;kgontjes&quot; </code></pre>
 <pre class="r"><code>sessionInfo() </code></pre>
 <pre><code>R version 4.5.0 (2025-04-11)
 Platform: x86_64-apple-darwin20
-Running under: macOS Sequoia 15.4
+Running under: macOS Sequoia 15.5
 
 Matrix products: default
 BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
@@ -418,7 +418,7 @@ other attached packages:
 loaded via a namespace (and not attached):
  [1] gtable_0.3.6       jsonlite_2.0.0     compiler_4.5.0     tidyselect_1.2.1  
  [5] jquerylib_0.1.4    scales_1.4.0       yaml_2.3.10        fastmap_1.2.0     
- [9] R6_2.6.1           generics_0.1.3     bslib_0.9.0        pillar_1.10.2     
+ [9] R6_2.6.1           generics_0.1.4     bslib_0.9.0        pillar_1.10.2     
 [13] RColorBrewer_1.1-3 tzdb_0.5.0         rlang_1.1.6        cachem_1.1.0      
 [17] stringi_1.8.7      xfun_0.52          sass_0.4.10        timechange_0.3.0  
 [21] cli_3.6.5          withr_3.0.2        magrittr_2.0.3     digest_0.6.37     
@@ -436,6 +436,7 @@ rownames(df) &lt;- df$isolate_no </code></pre>
 <div id="variable-curation" class="section level1">
 <h1>Variable curation</h1>
 <pre class="r"><code>rownames(df) &lt;- df$isolate_no 
+
 # Demographics 
 dem_vars &lt;- c(&quot;age&quot;,&quot;sex&quot;,&quot;LOSbeforeCx&quot;)
 df$sex.female &lt;- ifelse(df$sex==&quot;male&quot;,0,1)  
@@ -521,7 +522,7 @@ dataset saved, too</h1>
 <pre class="r"><code>other_vars &lt;-  c(&quot;age&quot;,&quot;LOSbeforeCx&quot;,&quot;sex.female&quot;,device_vars,comorb_vars)
 variables &lt;- c(other_vars,abx_vars_of_interest) 
 
-df_final &lt;- df_fin %&gt;% select(variables,isolate_no,source,clade_I,Patient_ID,Cx_date,pheno,&#39;multimorbid&#39;,&#39;any_antibiotic_1d&#39;,&#39;any_device&#39;,&#39;device_ct&#39;,&#39;comorb_ct&#39;,&#39;AG_1d&#39;)
+df_final &lt;- df_fin %&gt;% select(variables, isolate_no, source, clade_I, Patient_ID, Cx_date ,pheno ,&#39;multimorbid&#39;, &#39;any_antibiotic_1d&#39;, &#39;any_device&#39;, &#39;device_ct&#39;, &#39;comorb_ct&#39;, &#39;AG_1d&#39;)
 
 # Save
 saveRDS(df_final,&quot;~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/data/regression/regression_df.RDS&quot;)

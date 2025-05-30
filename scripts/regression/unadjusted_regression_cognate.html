@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-05-09" />
+<meta name="date" content="2025-05-30" />
 
 <title>Unadjusted regression for resistance outcomes and cognate antibiotic exposure</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Unadjusted regression for resistance
 outcomes and cognate antibiotic exposure</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-05-09</h4>
+<h4 class="date">2025-05-30</h4>
 
 </div>
 
@@ -414,51 +414,25 @@ blbli_lr &lt;- phyloaware_regression(&quot;blbli_dich_num&quot;,blbli_regression
 <div id="genreate-descriptive-stats" class="section level1">
 <h1>Genreate descriptive stats</h1>
 <pre class="r"><code>TMP_SMX_descriptive &lt;- generate_descriptive_stats(&quot;TMP_SMX&quot;,TMP_SMX_lr$datasets,variables = &quot;bactrim_1d&quot;,factorVars = &quot;bactrim_1d&quot;)
-TMP_SMX_results &lt;- create_mv_table(datasets = TMP_SMX_descriptive,lr_results=TMP_SMX_lr$univariable)   
+TMP_SMX_results &lt;- create_mv_table(descriptives = TMP_SMX_descriptive,lr_results=TMP_SMX_lr$univariable)   
 
 gentamicin_descriptive &lt;- generate_descriptive_stats(&quot;gentamicin&quot;,gentamicin_lr$datasets,&quot;AG_1d&quot;,factorVars = &quot;AG_1d&quot;)
-gentamicin_results &lt;- create_mv_table(datasets = gentamicin_descriptive,lr_results=gentamicin_lr$univariable)
+gentamicin_results &lt;- create_mv_table(descriptives = gentamicin_descriptive,lr_results=gentamicin_lr$univariable)
 
 AMK_descriptive &lt;- generate_descriptive_stats(&quot;AMK&quot;,AMK_lr$datasets,&quot;AG_1d&quot;,factorVars = &quot;AG_1d&quot;)
-AMK_results &lt;- create_mv_table(datasets = AMK_descriptive,lr_results=AMK_lr$univariable)
+AMK_results &lt;- create_mv_table(descriptives = AMK_descriptive,lr_results=AMK_lr$univariable)
 
 CST_descriptive &lt;- generate_descriptive_stats(&quot;CST&quot;,CST_lr$datasets,&quot;poly_colistin_1d&quot;,factorVars = &quot;poly_colistin_1d&quot;)
-CST_results &lt;- create_mv_table(datasets = CST_descriptive,lr_results=CST_lr$univariable)
+CST_results &lt;- create_mv_table(descriptives = CST_descriptive,lr_results=CST_lr$univariable)
 
 blbli_descriptive &lt;- generate_descriptive_stats(&quot;blbli&quot;,blbli_lr$datasets,&quot;carbapenem_1d&quot;,factorVars = &quot;carbapenem_1d&quot;)
-blbli_results &lt;- create_mv_table(datasets = blbli_descriptive,lr_results=blbli_lr$univariable)</code></pre>
-<pre class="r"><code>combined_dataset &lt;- rbind(TMP_SMX_results,gentamicin_results,AMK_results,CST_results,blbli_results)</code></pre>
+blbli_results &lt;- create_mv_table(descriptives = blbli_descriptive,lr_results=blbli_lr$univariable)</code></pre>
 </div>
 <div id="forest-plot" class="section level1">
 <h1>Forest plot</h1>
-<pre class="r"><code>agent_string &lt;- c(&quot;TMP-SMX&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;Gentamicin&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;Amikacin&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;Colistin&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;BL/BLI&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;)
-susceptible_string &lt;- c(&quot;&quot;,subset(TMP_SMX_results,outcome==&quot;present&quot;) %&gt;% .$susceptible,&quot;&quot;,&quot;&quot;,&quot;&quot;,subset(gentamicin_results,outcome==&quot;present&quot;) %&gt;% .$susceptible,&quot;&quot;,&quot;&quot;,&quot;&quot;,subset(AMK_results,outcome==&quot;present&quot;) %&gt;% .$susceptible,&quot;&quot;,&quot;&quot;,&quot;&quot;,subset(CST_results,outcome==&quot;present&quot;) %&gt;% .$susceptible,&quot;&quot;,&quot;&quot;,&quot;&quot;,subset(blbli_results,outcome==&quot;present&quot;) %&gt;% .$susceptible,&quot;&quot;,&quot;&quot;)
-feature_string &lt;- c(&quot;&quot;,&quot;Presence&quot;,&quot;Emergence&quot;,&quot;Spread&quot;,&quot;&quot;,&quot;Presence&quot;,&quot;Emergence&quot;,&quot;Spread&quot;,&quot;&quot;,&quot;Presence&quot;,&quot;Emergence&quot;,&quot;Spread&quot;,&quot;&quot;,&quot;Presence&quot;,&quot;Emergence&quot;,&quot;Spread&quot;,&quot;&quot;,&quot;Presence&quot;,&quot;Emergence&quot;,&quot;Spread&quot;)
-resistance_string &lt;- c(&quot;&quot;,TMP_SMX_results$non_susceptible,&quot;&quot;,gentamicin_results$non_susceptible,&quot;&quot;,AMK_results$non_susceptible,&quot;&quot;,CST_results$non_susceptible,&quot;&quot;,blbli_results$non_susceptible)
-OR_string &lt;- c(&quot;&quot;,TMP_SMX_results$`OR (95% CI)`,&quot;&quot;,gentamicin_results$`OR (95% CI)`,&quot;&quot;,AMK_results$`OR (95% CI)`,&quot;&quot;,CST_results$`OR (95% CI)`,&quot;&quot;,blbli_results$`OR (95% CI)`)%&gt;% str_pad(.,width=19,side=&#39;right&#39;, pad = &quot;\u00A0&quot;)
- 
-tabletext &lt;- cbind.data.frame(agent_string,susceptible_string,feature_string,resistance_string,OR_string) %&gt;% `colnames&lt;-`(c(&quot;agent&quot;,&quot;susceptible&quot;,&quot;feature&quot;,&quot;resistance&quot;,&quot;OR&quot;))
+<pre class="r"><code>tabletext &lt;- get_table_text(TMP_SMX_results,gentamicin_results,AMK_results,CST_results,blbli_results)
+fp_rmetadata &lt;- get_fp_rmetadata(TMP_SMX_results,gentamicin_results,AMK_results,CST_results,blbli_results)
 
-# Metadata
-OR_stat &lt;- c(&quot;&quot;,TMP_SMX_results$`OR (95% CI)`,&quot;&quot;,gentamicin_results$`OR (95% CI)`,&quot;&quot;,AMK_results$`OR (95% CI)`,&quot;&quot;,CST_results$`OR (95% CI)`,&quot;&quot;,blbli_results$`OR (95% CI)`)
-OR &lt;- sapply(OR_stat,FUN=function(x){str_split(x,&quot; &quot;,simplify=T) %&gt;% .[,1] %&gt;% as.numeric})
-lower &lt;- sapply(OR_stat,FUN=function(x){
-    initial_split &lt;- str_split(x,&quot; &quot;,simplify=T)
-    if(ncol(initial_split)==1){
-        &quot;&quot;
-    } else {
-        initial_split[,2] %&gt;% str_split(.,&quot;\\-&quot;,simplify=T) %&gt;% .[,1] %&gt;% gsub(&quot;\\(&quot;,&quot;&quot;,.) %&gt;% as.numeric
-    }})
-upper &lt;- sapply(OR_stat,FUN=function(x){
-    initial_split &lt;- str_split(x,&quot; &quot;,simplify=T)
-    if(ncol(initial_split)==1){
-        &quot;&quot;
-    } else {
-        initial_split[,2] %&gt;% str_split(.,&quot;\\-&quot;,simplify=T) %&gt;% .[,2] %&gt;% gsub(&quot;\\)&quot;,&quot;&quot;,.) %&gt;% as.numeric
-}})    
-    
-fp_rmetadata &lt;- cbind.data.frame(OR,lower,upper)  %&gt;% mutate_all(as.numeric)
-  
 forest_plot &lt;- res_forest_plot(tabletext = tabletext,fp_rmetadata = fp_rmetadata,outcome_name=&quot;Cognate antibiotic&quot;,type_of_regression=&quot;Unadjusted&quot;) 
 
 forest_plot</code></pre>

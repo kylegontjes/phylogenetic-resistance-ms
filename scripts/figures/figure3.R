@@ -13,16 +13,70 @@ generate_descriptive_stats <- function(drug,datasets,variables,factorVars){
   return(descriptives_list)
 }
 
-create_mv_table <- function(datasets,lr_results){
+get_mv_table_adjusted <- function(descriptives,lr_results){
   # Nons
-  nons_modeling <- cbind.data.frame(datasets[[1]] ,lr_results[[1]]) %>%  as.data.frame %>% mutate(outcome = "present") %>% `rownames<-`(NULL)
+  nons_modeling <- left_join(descriptives[[1]] ,lr_results[[1]]) %>%  as.data.frame %>% mutate(outcome = "present") %>% subset(!rownames(.) %in% c("age","sex")) %>% `rownames<-`(NULL)
   # Emergence
-  emergence_modeling <- cbind.data.frame(datasets[[2]] ,lr_results[[2]])%>%  as.data.frame %>% mutate(outcome = "singleton")   %>% `rownames<-`(NULL)
+  emergence_modeling <- left_join(descriptives[[2]] ,lr_results[[2]])%>%  as.data.frame %>% mutate(outcome = "singleton")  %>% subset(!rownames(.) %in% c("age","sex"))   %>% `rownames<-`(NULL)
   # Spread
-  spread_modeling <- cbind.data.frame(datasets[[3]] ,lr_results[[3]]) %>%  as.data.frame %>% mutate(outcome = "cluster") %>% `rownames<-`(NULL)
-  final_list <- rbind(nons_modeling,emergence_modeling,spread_modeling)
+  spread_modeling <- left_join(descriptives[[3]] ,lr_results[[3]]) %>%  as.data.frame %>% mutate(outcome = "cluster") %>% subset(!rownames(.) %in% c("age","sex"))  %>% `rownames<-`(NULL)
+
+  # Get final multivariable table
+  final_list <- rbind.data.frame(nons_modeling,emergence_modeling,spread_modeling)
+
+  # Format the tables
+  final_list$OR <- formatC(final_list$OR, format = "f", digits = 2)
+  final_list$`2.5%` <- formatC(final_list$`2.5%`, format = "f", digits = 2)
+  final_list$`97.5%` <-   formatC(final_list$`97.5%`, format = "f", digits = 2)
+
+  # Create OR (95% CI) variable
+  final_list$`OR (95% CI)` <- paste0(final_list$OR," (",final_list$`2.5%`,"-",final_list$`97.5%`,")")
   return(final_list)
 }
+
+create_mv_table <- function(descriptives,lr_results){
+  # Nons
+  nons_modeling <- suppressMessages(left_join(descriptives[[1]] ,lr_results[[1]]) %>%  as.data.frame %>% mutate(outcome = "present") %>% `rownames<-`(NULL))
+  # Emergence
+  emergence_modeling <- suppressMessages(left_join(descriptives[[2]] ,lr_results[[2]])%>%  as.data.frame %>% mutate(outcome = "singleton")   %>% `rownames<-`(NULL))
+  # Spread
+  spread_modeling <- suppressMessages(left_join(descriptives[[3]] ,lr_results[[3]]) %>%  as.data.frame %>% mutate(outcome = "cluster") %>% `rownames<-`(NULL))
+  # Create final multivariable table
+  final_list <- rbind.data.frame(nons_modeling,emergence_modeling,spread_modeling)
+
+  # Format the tables
+  final_list$OR <- formatC(final_list$OR, format = "f", digits = 2)
+  final_list$`2.5%` <- formatC(final_list$`2.5%`, format = "f", digits = 2)
+  final_list$`97.5%` <-   formatC(final_list$`97.5%`, format = "f", digits = 2)
+
+  # Create OR (95% CI) variable
+  final_list$`OR (95% CI)` <- paste0(final_list$OR," (",final_list$`2.5%`,"-",final_list$`97.5%`,")")
+
+  return(final_list)
+}
+
+get_table_text <- function(TMP_SMX_results,gentamicin_results,AMK_results,CST_results,blbli_results){
+  agent_string <- c("TMP-SMX","","","","Gentamicin","","","","Amikacin","","","","Colistin","","","","BL/BLI","","","")
+  susceptible_string <- c("",subset(TMP_SMX_results,outcome=="present") %>% .$susceptible,"","","",subset(gentamicin_results,outcome=="present") %>% .$susceptible,"","","",subset(AMK_results,outcome=="present") %>% .$susceptible,"","","",subset(CST_results,outcome=="present") %>% .$susceptible,"","","",subset(blbli_results,outcome=="present") %>% .$susceptible,"","")
+  feature_string <- c("","Presence","Emergence","Spread","","Presence","Emergence","Spread","","Presence","Emergence","Spread","","Presence","Emergence","Spread","","Presence","Emergence","Spread")
+  resistance_string <- c("",TMP_SMX_results$non_susceptible,"",gentamicin_results$non_susceptible,"",AMK_results$non_susceptible,"",CST_results$non_susceptible,"",blbli_results$non_susceptible)
+  OR_string <- c('',TMP_SMX_results$`OR (95% CI)`,"",gentamicin_results$`OR (95% CI)`,"",AMK_results$`OR (95% CI)`,"",CST_results$`OR (95% CI)`,"",blbli_results$`OR (95% CI)`) %>% str_pad(.,width=19,side='right', pad = "\u00A0")
+
+  tabletext <- cbind.data.frame(agent_string,susceptible_string,feature_string,resistance_string,OR_string) %>% `colnames<-`(c("agent","susceptible","feature","resistance","OR"))
+  return(tabletext)
+
+}
+
+get_fp_rmetadata <- function(TMP_SMX_results,gentamicin_results,AMK_results,CST_results,blbli_results){
+  OR_stat <- c("",TMP_SMX_results$`OR (95% CI)`,"",gentamicin_results$`OR (95% CI)`,"",AMK_results$`OR (95% CI)`,"",CST_results$`OR (95% CI)`,"",blbli_results$`OR (95% CI)`)
+  OR <- c("",TMP_SMX_results$OR,"",gentamicin_results$OR,"",AMK_results$OR,"",CST_results$OR,"",blbli_results$OR)
+  lower <- c("",TMP_SMX_results$`2.5%`,"",gentamicin_results$`2.5%`,"",AMK_results$`2.5%`,"",CST_results$`2.5%`,"",blbli_results$`2.5%`)
+  upper <- c("",TMP_SMX_results$`97.5%`,"",gentamicin_results$`97.5%`,"",AMK_results$`97.5%`,"",CST_results$`97.5%`,"",blbli_results$`97.5%`)
+
+  fp_rmetadata <- cbind.data.frame(OR,lower,upper)  %>% mutate_all(as.numeric)
+  return(fp_rmetadata)
+}
+
 
 res_forest_plot <- function(tabletext,fp_rmetadata,outcome_name,type_of_regression){
   forestplot( tabletext,

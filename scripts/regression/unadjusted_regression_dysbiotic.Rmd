@@ -90,55 +90,26 @@ blbli_lr <- phyloaware_regression("blbli_dich_num",blbli_regression_df,variables
 # Genreate descriptive stats
 ```{r} 
 TMP_SMX_descriptive <- generate_descriptive_stats("TMP_SMX",TMP_SMX_lr$datasets,variables = "dysbiosis_abx",factorVars = "dysbiosis_abx")
-TMP_SMX_results <- create_mv_table(datasets = TMP_SMX_descriptive,lr_results=TMP_SMX_lr$univariable)  
+TMP_SMX_results <- create_mv_table(descriptives = TMP_SMX_descriptive,lr_results=TMP_SMX_lr$univariable)  
 
 gentamicin_descriptive <- generate_descriptive_stats("gentamicin",gentamicin_lr$datasets,"dysbiosis_abx",factorVars = "dysbiosis_abx")
-gentamicin_results <- create_mv_table(datasets = gentamicin_descriptive,lr_results=gentamicin_lr$univariable)
+gentamicin_results <- create_mv_table(descriptives = gentamicin_descriptive,lr_results=gentamicin_lr$univariable)
 
 AMK_descriptive <- generate_descriptive_stats("AMK",AMK_lr$datasets,"dysbiosis_abx",factorVars = "dysbiosis_abx")
-AMK_results <- create_mv_table(datasets = AMK_descriptive,lr_results=AMK_lr$univariable)
+AMK_results <- create_mv_table(descriptives = AMK_descriptive,lr_results=AMK_lr$univariable)
 
 CST_descriptive <- generate_descriptive_stats("CST",CST_lr$datasets,"dysbiosis_abx",factorVars = "dysbiosis_abx")
-CST_results <- create_mv_table(datasets = CST_descriptive,lr_results=CST_lr$univariable)
+CST_results <- create_mv_table(descriptives = CST_descriptive,lr_results=CST_lr$univariable)
 
 blbli_descriptive <- generate_descriptive_stats("blbli",blbli_lr$datasets,"dysbiosis_abx",factorVars = "dysbiosis_abx")
-blbli_results <- create_mv_table(datasets = blbli_descriptive,lr_results=blbli_lr$univariable)
-```
-
-```{r}  
-combined_dataset <- rbind(TMP_SMX_results,gentamicin_results,AMK_results,CST_results,blbli_results)
+blbli_results <- create_mv_table(descriptives = blbli_descriptive,lr_results=blbli_lr$univariable)
 ```
 
 # Forest plot
 ```{r,fig.height=8.4,fig.width=14}
-agent_string <- c("TMP-SMX","","","","Gentamicin","","","","Amikacin","","","","Colistin","","","","BL/BLI","","","")
-susceptible_string <- c("",subset(TMP_SMX_results,outcome=="present") %>% .$susceptible,"","","",subset(gentamicin_results,outcome=="present") %>% .$susceptible,"","","",subset(AMK_results,outcome=="present") %>% .$susceptible,"","","",subset(CST_results,outcome=="present") %>% .$susceptible,"","","",subset(blbli_results,outcome=="present") %>% .$susceptible,"","")
-feature_string <- c("","Presence","Emergence","Spread","","Presence","Emergence","Spread","","Presence","Emergence","Spread","","Presence","Emergence","Spread","","Presence","Emergence","Spread")
-resistance_string <- c("",TMP_SMX_results$non_susceptible,"",gentamicin_results$non_susceptible,"",AMK_results$non_susceptible,"",CST_results$non_susceptible,"",blbli_results$non_susceptible)
-OR_string <- c("",TMP_SMX_results$`OR (95% CI)`,"",gentamicin_results$`OR (95% CI)`,"",AMK_results$`OR (95% CI)`,"",CST_results$`OR (95% CI)`,"",blbli_results$`OR (95% CI)`)%>% str_pad(.,width=19,side='right', pad = "\u00A0")
- 
-tabletext <- cbind.data.frame(agent_string,susceptible_string,feature_string,resistance_string,OR_string) %>% `colnames<-`(c("agent","susceptible","feature","resistance","OR"))
+tabletext <- get_table_text(TMP_SMX_results,gentamicin_results,AMK_results,CST_results,blbli_results)
+fp_rmetadata <- get_fp_rmetadata(TMP_SMX_results,gentamicin_results,AMK_results,CST_results,blbli_results)
 
-# Metadata
-OR_stat <- c("",TMP_SMX_results$`OR (95% CI)`,"",gentamicin_results$`OR (95% CI)`,"",AMK_results$`OR (95% CI)`,"",CST_results$`OR (95% CI)`,"",blbli_results$`OR (95% CI)`)
-OR <- sapply(OR_stat,FUN=function(x){str_split(x," ",simplify=T) %>% .[,1] %>% as.numeric})
-lower <- sapply(OR_stat,FUN=function(x){
-    initial_split <- str_split(x," ",simplify=T)
-    if(ncol(initial_split)==1){
-        ""
-    } else {
-        initial_split[,2] %>% str_split(.,"\\-",simplify=T) %>% .[,1] %>% gsub("\\(","",.) %>% as.numeric
-    }})
-upper <- sapply(OR_stat,FUN=function(x){
-    initial_split <- str_split(x," ",simplify=T)
-    if(ncol(initial_split)==1){
-        ""
-    } else {
-        initial_split[,2] %>% str_split(.,"\\-",simplify=T) %>% .[,2] %>% gsub("\\)","",.) %>% as.numeric
-}})    
-    
-fp_rmetadata <- cbind.data.frame(OR,lower,upper)  %>% mutate_all(as.numeric)
-  
 forest_plot <- res_forest_plot(tabletext = tabletext,fp_rmetadata = fp_rmetadata,outcome_name="Dybsiotic antibiotic",type_of_regression="Unadjusted") 
 
 forest_plot

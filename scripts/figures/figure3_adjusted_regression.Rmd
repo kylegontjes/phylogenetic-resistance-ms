@@ -1,5 +1,5 @@
 ---
-title: "Figure 3. Influence of genetic background and antibiotic exposures on the emergence and spread of resistant lineages"
+title: "Figure 3. Alternate, all adjusted"
 output: html_document
 date: "`r Sys.Date()`"
 ---
