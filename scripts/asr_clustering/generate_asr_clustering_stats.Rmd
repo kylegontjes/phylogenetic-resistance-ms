@@ -1,5 +1,5 @@
 ---
-title: "Generate phylogenetic clustering statistics using phyloAMR"
+title: "Generate phylogenetic clustering statistics using phyloAMR's asr_cluster_analysis() function"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
@@ -38,7 +38,7 @@ for(i in pheno){
 
 # Clustering Analysis  
 ```{r}
-cluster_stats <- lapply(paste0(pheno,"_asr_clustering"),get) %>% lapply(.,asr_cluster_analysis,remove_faux=TRUE) %>% do.call(rbind,.) %>% mutate(pheno = pheno)  %>% `rownames<-`(NULL)
+cluster_stats <- lapply(paste0(pheno,"_asr_clustering"),get) %>% lapply(.,asr_cluster_analysis) %>% do.call(rbind,.) %>% mutate(pheno = pheno) %>% `rownames<-`(NULL)
 
 # Print
 favorite_kable(cluster_stats)
@@ -46,4 +46,3 @@ favorite_kable(cluster_stats)
 # Save
 saveRDS(cluster_stats,"./data/asr_clustering/clustering_stats.RDS")
 ```
- 

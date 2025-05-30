@@ -11,9 +11,9 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-25" />
+<meta name="date" content="2025-05-30" />
 
-<title>Generate ancestral state reconstructions using phyloAMR</title>
+<title>Generate ancestral state reconstructions using phyloAMR’s asr() function</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -351,9 +351,9 @@ display: none;
 
 
 <h1 class="title toc-ignore">Generate ancestral state reconstructions
-using phyloAMR</h1>
+using phyloAMR’s asr() function</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-04-25</h4>
+<h4 class="date">2025-05-30</h4>
 
 </div>
 
@@ -361,7 +361,7 @@ using phyloAMR</h1>
 <div id="environment" class="section level1">
 <h1>Environment</h1>
 <pre class="r"><code>#Packages
-packages &lt;- c(&quot;tidyverse&quot;,&#39;phyloAMR&#39;,&#39;phytools&#39;,&#39;ggtree&#39;)   
+packages &lt;- c(&quot;tidyverse&quot;,&#39;phyloAMR&#39;,&#39;ape&#39;)   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T))  </code></pre>
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
@@ -380,61 +380,29 @@ Attaching package: &#39;ape&#39;
 
 The following object is masked from &#39;package:dplyr&#39;:
 
-    where
-
-
-
-Attaching package: &#39;maps&#39;
-
-
-The following object is masked from &#39;package:purrr&#39;:
-
-    map
-
-
-ggtree v3.16.0 Learn more at https://yulab-smu.top/contribution-tree-data/
-
-Please cite:
-
-Guangchuang Yu, Tommy Tsan-Yuk Lam, Huachen Zhu, Yi Guan. Two methods
-for mapping and visualizing associated data on phylogeny using ggtree.
-Molecular Biology and Evolution. 2018, 35(12):3041-3043.
-doi:10.1093/molbev/msy194
-
-
-Attaching package: &#39;ggtree&#39;
-
-
-The following object is masked from &#39;package:ape&#39;:
-
-    rotate
-
-
-The following object is masked from &#39;package:tidyr&#39;:
-
-    expand</code></pre>
+    where</code></pre>
 <pre class="r"><code># Print
 Sys.info()</code></pre>
-<pre><code>                                                                                             sysname 
-                                                                                            &quot;Darwin&quot; 
-                                                                                             release 
-                                                                                            &quot;24.4.0&quot; 
-                                                                                             version 
-&quot;Darwin Kernel Version 24.4.0: Wed Mar 19 21:16:31 PDT 2025; root:xnu-11417.101.15~1/RELEASE_X86_64&quot; 
-                                                                                            nodename 
-                                                                                    &quot;msla0572.local&quot; 
-                                                                                             machine 
-                                                                                            &quot;x86_64&quot; 
-                                                                                               login 
-                                                                                              &quot;root&quot; 
-                                                                                                user 
-                                                                                          &quot;kgontjes&quot; 
-                                                                                      effective_user 
-                                                                                          &quot;kgontjes&quot; </code></pre>
+<pre><code>                                                                                            sysname 
+                                                                                           &quot;Darwin&quot; 
+                                                                                            release 
+                                                                                           &quot;24.5.0&quot; 
+                                                                                            version 
+&quot;Darwin Kernel Version 24.5.0: Tue Apr 22 19:53:26 PDT 2025; root:xnu-11417.121.6~2/RELEASE_X86_64&quot; 
+                                                                                           nodename 
+                                                                                   &quot;msla0572.local&quot; 
+                                                                                            machine 
+                                                                                           &quot;x86_64&quot; 
+                                                                                              login 
+                                                                                             &quot;root&quot; 
+                                                                                               user 
+                                                                                         &quot;kgontjes&quot; 
+                                                                                     effective_user 
+                                                                                         &quot;kgontjes&quot; </code></pre>
 <pre class="r"><code>sessionInfo() </code></pre>
 <pre><code>R version 4.5.0 (2025-04-11)
 Platform: x86_64-apple-darwin20
-Running under: macOS Sequoia 15.4
+Running under: macOS Sequoia 15.5
 
 Matrix products: default
 BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
@@ -450,82 +418,132 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] ggtree_3.16.0   phytools_2.4-4  maps_3.4.2.1    ape_5.8-1      
- [5] phyloAMR_0.1.0  lubridate_1.9.4 forcats_1.0.0   stringr_1.5.1  
- [9] dplyr_1.1.4     purrr_1.0.4     readr_2.1.5     tidyr_1.3.1    
-[13] tibble_3.2.1    ggplot2_3.5.2   tidyverse_2.0.0 knitr_1.50     
+ [1] ape_5.8-1       phyloAMR_0.1.0  lubridate_1.9.4 forcats_1.0.0  
+ [5] stringr_1.5.1   dplyr_1.1.4     purrr_1.0.4     readr_2.1.5    
+ [9] tidyr_1.3.1     tibble_3.2.1    ggplot2_3.5.2   tidyverse_2.0.0
+[13] knitr_1.50     
 
 loaded via a namespace (and not attached):
- [1] fastmatch_1.1-6         gtable_0.3.6            xfun_0.52              
- [4] bslib_0.9.0             lattice_0.22-7          tzdb_0.5.0             
- [7] numDeriv_2016.8-1.1     yulab.utils_0.2.0       quadprog_1.5-8         
-[10] vctrs_0.6.5             tools_4.5.0             generics_0.1.3         
-[13] parallel_4.5.0          pkgconfig_2.0.3         Matrix_1.7-3           
-[16] ggplotify_0.1.2         RColorBrewer_1.1-3      scatterplot3d_0.3-44   
-[19] lifecycle_1.0.4         compiler_4.5.0          farver_2.1.2           
-[22] treeio_1.32.0           mnormt_2.1.1            combinat_0.0-8         
-[25] codetools_0.2-20        ggfun_0.1.8             htmltools_0.5.8.1      
-[28] sass_0.4.10             lazyeval_0.2.2          yaml_2.3.10            
-[31] pillar_1.10.2           jquerylib_0.1.4         MASS_7.3-65            
-[34] cachem_1.1.0            clusterGeneration_1.3.8 iterators_1.0.14       
-[37] foreach_1.5.2           nlme_3.1-168            phangorn_2.12.1        
-[40] aplot_0.2.5             tidyselect_1.2.1        digest_0.6.37          
-[43] stringi_1.8.7           fastmap_1.2.0           grid_4.5.0             
-[46] expm_1.0-0              cli_3.6.5               magrittr_2.0.3         
-[49] patchwork_1.3.0         optimParallel_1.0-2     withr_3.0.2            
-[52] scales_1.4.0            DEoptim_2.2-8           timechange_0.3.0       
-[55] rmarkdown_2.29          igraph_2.1.4            hms_1.1.3              
-[58] coda_0.19-4.1           evaluate_1.0.3          doParallel_1.0.17      
-[61] gridGraphics_0.5-1      rlang_1.1.6             Rcpp_1.0.14            
-[64] tidytree_0.4.6          glue_1.8.0              rstudioapi_0.17.1      
-[67] jsonlite_2.0.0          R6_2.6.1                fs_1.6.6               </code></pre>
+ [1] yulab.utils_0.2.0  sass_0.4.10        generics_0.1.4     ggtree_3.16.0     
+ [5] ggplotify_0.1.2    stringi_1.8.7      lattice_0.22-7     hms_1.1.3         
+ [9] digest_0.6.37      magrittr_2.0.3     evaluate_1.0.3     grid_4.5.0        
+[13] timechange_0.3.0   RColorBrewer_1.1-3 fastmap_1.2.0      jsonlite_2.0.0    
+[17] aplot_0.2.5        scales_1.4.0       lazyeval_0.2.2     jquerylib_0.1.4   
+[21] cli_3.6.5          rlang_1.1.6        tidytree_0.4.6     withr_3.0.2       
+[25] cachem_1.1.0       yaml_2.3.10        tools_4.5.0        parallel_4.5.0    
+[29] tzdb_0.5.0         gridGraphics_0.5-1 vctrs_0.6.5        R6_2.6.1          
+[33] lifecycle_1.0.4    ggfun_0.1.8        fs_1.6.6           treeio_1.32.0     
+[37] pkgconfig_2.0.3    pillar_1.10.2      bslib_0.9.0        gtable_0.3.6      
+[41] glue_1.8.0         Rcpp_1.0.14        xfun_0.52          tidyselect_1.2.1  
+[45] rstudioapi_0.17.1  farver_2.1.2       patchwork_1.3.0    htmltools_0.5.8.1 
+[49] nlme_3.1-168       rmarkdown_2.29     compiler_4.5.0    </code></pre>
 <pre class="r"><code># Patient Metadata &amp; Phylogeny
 df &lt;- readRDS(&quot;./data/dataset/df.RDS&quot;)
 tr &lt;- read.tree(&quot;./data/tree/tree.treefile&quot;)   
-df&lt;- df %&gt;% .[match(tr$tip.label,.$isolate_no),] 
-# Best model call
-asr_model_choices &lt;- readRDS(&quot;./data/asr_clustering/asr_model_choices.RDS&quot;) 
-asr_best_models &lt;- lapply(asr_model_choices,FUN=function(x){x[[&quot;best_model&quot;]]})  %&gt;% `names&lt;-`(NULL) %&gt;%unlist(use.names = T)  </code></pre>
+df&lt;- df %&gt;% .[match(tr$tip.label,.$isolate_no),]  </code></pre>
 </div>
 <div id="run-asr-algorithm" class="section level1">
 <h1>Run ASR algorithm</h1>
-<pre class="r"><code>pheno &lt;- c(&quot;TMP_SMX&quot;,&quot;gentamicin&quot;,&quot;AMK&quot;,&quot;CST&quot;,&quot;blbli&quot;)
+<pre class="r"><code># Tested across the following phenotypes
+pheno &lt;- c(&quot;TMP_SMX&quot;,&quot;gentamicin&quot;,&quot;AMK&quot;,&quot;CST&quot;,&quot;blbli&quot;)
+
 for(i in pheno){
-  pheno_dich = paste0(i,&quot;_dich_num&quot;)
-  best_model &lt;- subset(asr_best_models,names(asr_best_models)==pheno_dich)
-  asr_model &lt;- asr(df = df,tr = tr,tip_name_var = &quot;isolate_no&quot;,pheno=pheno_dich,model = best_model,node_states = &quot;joint&quot;, upper_bound=1e50, lower_bound=1e-9) 
+  pheno_dich = paste0(i,&quot;_dich_num&quot;) 
+  # Used model finding option to identify best model
+  asr_model &lt;- asr(df = df, tr = tr, tip_name_variable = &quot;isolate_no&quot;, trait =pheno_dich, model = &#39;MF&#39;, node_states = &quot;joint&quot;, upper_bound = 1e50, lower_bound = 1e-9) 
+  # Saving
   saveRDS(asr_model,paste0(&quot;./data/asr_clustering/&quot;,i,&quot;_asr.RDS&quot;))
 }</code></pre>
-<pre><code>You specified &#39;fixed.nodes=FALSE&#39; but included a phy object with node labels. These node labels have been removed.
+<pre><code>Performing model finding to use best fitting model 
+Testing equal rates (ER) model 
+You specified &#39;fixed.nodes=FALSE&#39; but included a phy object with node labels. These node labels have been removed.
 State distribution in data:
 States: 0   1   
 Counts: 179 207 
 Beginning thorough optimization search -- performing 0 random restarts 
 Finished. Inferring ancestral states using joint reconstruction. 
+AICc of ER model is: 375.72384118483 
+Testing all rates differ (ARD) model 
+You specified &#39;fixed.nodes=FALSE&#39; but included a phy object with node labels. These node labels have been removed.
+State distribution in data:
+States: 0   1   
+Counts: 179 207 
+Beginning thorough optimization search -- performing 0 random restarts 
+Finished. Inferring ancestral states using joint reconstruction. 
+AICc of ARD model is: 375.491069111713 
+Best model: ARD 
+Performing model finding to use best fitting model 
+Testing equal rates (ER) model 
 You specified &#39;fixed.nodes=FALSE&#39; but included a phy object with node labels. These node labels have been removed.
 State distribution in data:
 States: 0   1   
 Counts: 187 199 
 Beginning thorough optimization search -- performing 0 random restarts 
 Finished. Inferring ancestral states using joint reconstruction. 
+AICc of ER model is: 326.173904018866 
+Testing all rates differ (ARD) model 
+You specified &#39;fixed.nodes=FALSE&#39; but included a phy object with node labels. These node labels have been removed.
+State distribution in data:
+States: 0   1   
+Counts: 187 199 
+Beginning thorough optimization search -- performing 0 random restarts 
+Finished. Inferring ancestral states using joint reconstruction. 
+AICc of ARD model is: 328.051194997898 
+Best model: ER 
+Performing model finding to use best fitting model 
+Testing equal rates (ER) model 
 You specified &#39;fixed.nodes=FALSE&#39; but included a phy object with node labels. These node labels have been removed.
 State distribution in data:
 States: 0   1   
 Counts: 254 132 
 Beginning thorough optimization search -- performing 0 random restarts 
 Finished. Inferring ancestral states using joint reconstruction. 
+AICc of ER model is: 455.964688289278 
+Testing all rates differ (ARD) model 
+You specified &#39;fixed.nodes=FALSE&#39; but included a phy object with node labels. These node labels have been removed.
+State distribution in data:
+States: 0   1   
+Counts: 254 132 
+Beginning thorough optimization search -- performing 0 random restarts 
+Finished. Inferring ancestral states using joint reconstruction. 
+AICc of ARD model is: 448.974496909926 
+Best model: ARD 
+Performing model finding to use best fitting model 
+Testing equal rates (ER) model 
 You specified &#39;fixed.nodes=FALSE&#39; but included a phy object with node labels. These node labels have been removed.
 State distribution in data:
 States: 0   1   
 Counts: 257 129 
 Beginning thorough optimization search -- performing 0 random restarts 
 Finished. Inferring ancestral states using joint reconstruction. 
+AICc of ER model is: 320.53433405418 
+Testing all rates differ (ARD) model 
+You specified &#39;fixed.nodes=FALSE&#39; but included a phy object with node labels. These node labels have been removed.
+State distribution in data:
+States: 0   1   
+Counts: 257 129 
+Beginning thorough optimization search -- performing 0 random restarts 
+Finished. Inferring ancestral states using joint reconstruction. 
+AICc of ARD model is: 321.022726725721 
+Best model: ER 
+Performing model finding to use best fitting model 
+Testing equal rates (ER) model 
 You specified &#39;fixed.nodes=FALSE&#39; but included a phy object with node labels. These node labels have been removed.
 State distribution in data:
 States: 0   1   
 Counts: 330 56  
 Beginning thorough optimization search -- performing 0 random restarts 
-Finished. Inferring ancestral states using joint reconstruction. </code></pre>
+Finished. Inferring ancestral states using joint reconstruction. 
+AICc of ER model is: 335.061321768028 
+Testing all rates differ (ARD) model 
+You specified &#39;fixed.nodes=FALSE&#39; but included a phy object with node labels. These node labels have been removed.
+State distribution in data:
+States: 0   1   
+Counts: 330 56  
+Beginning thorough optimization search -- performing 0 random restarts 
+Finished. Inferring ancestral states using joint reconstruction. 
+AICc of ARD model is: 294.785562030851 
+Best model: ARD </code></pre>
 </div>
 
 

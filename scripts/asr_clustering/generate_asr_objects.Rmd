@@ -1,5 +1,5 @@
 ---
-title: "Generate ancestral state reconstructions using phyloAMR"
+title: "Generate ancestral state reconstructions using phyloAMR's asr() function"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
@@ -15,7 +15,7 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=T, message=T, include=T, results=T}
 #Packages
-packages <- c("tidyverse",'phyloAMR','phytools','ggtree')   
+packages <- c("tidyverse",'phyloAMR','ape')   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T))  
 # Print
@@ -27,20 +27,19 @@ sessionInfo()
 # Patient Metadata & Phylogeny
 df <- readRDS("./data/dataset/df.RDS")
 tr <- read.tree("./data/tree/tree.treefile")   
-df<- df %>% .[match(tr$tip.label,.$isolate_no),] 
-# Best model call
-asr_model_choices <- readRDS("./data/asr_clustering/asr_model_choices.RDS") 
-asr_best_models <- lapply(asr_model_choices,FUN=function(x){x[["best_model"]]})  %>% `names<-`(NULL) %>%unlist(use.names = T)  
+df<- df %>% .[match(tr$tip.label,.$isolate_no),]  
 ```
-
 
 # Run ASR algorithm
 ```{r}
+# Tested across the following phenotypes
 pheno <- c("TMP_SMX","gentamicin","AMK","CST","blbli")
+
 for(i in pheno){
-  pheno_dich = paste0(i,"_dich_num")
-  best_model <- subset(asr_best_models,names(asr_best_models)==pheno_dich)
-  asr_model <- asr(df = df,tr = tr,tip_name_var = "isolate_no",pheno=pheno_dich,model = best_model,node_states = "joint", upper_bound=1e50, lower_bound=1e-9) 
+  pheno_dich = paste0(i,"_dich_num") 
+  # Used model finding option to identify best model
+  asr_model <- asr(df = df, tr = tr, tip_name_variable = "isolate_no", trait =pheno_dich, model = 'MF', node_states = "joint", upper_bound = 1e50, lower_bound = 1e-9) 
+  # Saving
   saveRDS(asr_model,paste0("./data/asr_clustering/",i,"_asr.RDS"))
 }
 ```

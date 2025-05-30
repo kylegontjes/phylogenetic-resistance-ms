@@ -16,7 +16,7 @@ opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resi
 # Environment
 ```{r environment, echo=F, message=FALSE, include=F, results=F}
 #Packages
-packages <- c("tidyverse","devtools","kableExtra","cowplot","gridExtra",'hues','magick','ggtree','phytools','ape','ggnewscale')   
+packages <- c("tidyverse","devtools","kableExtra","cowplot","gridExtra",'hues','magick','ggtree','ape','ggnewscale','grid')   
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T))
 
@@ -44,15 +44,15 @@ df <- left_join(df,pclustering_df)
 
 # Conceptual diagram
 ```{r}
-F2A <- magick::image_read("./figures/clustering_algorithm_conceptual_figure.png") %>% image_ggplot
+F2A <- magick::image_read(path = "./figures/clustering_algorithm_conceptual_figure.png") %>% image_ggplot()
 ```
 
 # Create phylogenies
 ```{r}
-phenotypes <- c("TMP_SMX","gentamicin","AMK","CST","blbli") %>% paste0(.,"_asr_cluster")
+phenotypes <- c("TMP_SMX","gentamicin","AMK","CST","blbli") %>% paste0(.,"_asr_cluster_renamed_resistant")
 sizes <- c()
 for(i in phenotypes){
-  sizes[i] <- table(df[,i])  %>% subset(names(.) != "singleton" & grepl("cluster",names(.))) %>% as.numeric %>%length
+  sizes[i] <- table(df[,i])  %>% subset(names(.) != "Resistant Singleton" & grepl("Cluster",names(.))) %>% as.numeric %>% length
 }
 
 ncluster <- max(sizes)
@@ -75,59 +75,132 @@ cluster_scale <- scale_fill_manual(breaks =c("Susceptible","Resistant Singleton"
 ```{r} 
 rownames(df) <- df$isolate_no
 # Clade
-F2B.0 <- gheatmap(ggtree(tr),df %>% select(clade_I) %>% `colnames<-`("Clade") %>% mutate_all(as.factor) , colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .15) + ylim(NA,565)  + clade_scale + consistent_theme
+F2B.0 <- gheatmap(ggtree(tr),df %>% select(clade_I) %>% `colnames<-`("Clade") %>% mutate_all(as.factor) , colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .15) + ylim(NA,575)  + clade_scale + consistent_theme
 F2B.1 <- F2B.0 + ggnewscale::new_scale_fill()
 # Non-susceptibility
-F2B <- gheatmap(F2B.1,df %>% select(TMP_SMX_dich,gentamicin_dich,AMK_dich,CST_dich,blbli_dich) %>% `colnames<-`(c("TMP-SMX resistance","Gentamicin resistance","Amikacin resistance","Colistin resistance","BL/BLI resistance")) %>% mutate_all(as.factor) , colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .75,offset =0.00004) + NS_scale  + ylim(NA,560)  + consistent_theme
+F2B <- gheatmap(F2B.1,df %>% select(TMP_SMX_dich,gentamicin_dich,AMK_dich,CST_dich,blbli_dich) %>% `colnames<-`(c("TMP-SMX resistance","Gentamicin resistance","Amikacin resistance","Colistin resistance","BL/BLI resistance")) %>% mutate_all(as.factor) , colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .75,offset =0.00004) + NS_scale  + ylim(NA,575)  + consistent_theme
 
 # Clustering
-F2C <- gheatmap(ggtree(tr),df %>%  select(TMP_SMX_asr_cluster_renamed_resistant,gentamicin_asr_cluster_renamed_resistant,AMK_asr_cluster_renamed_resistant,CST_asr_cluster_renamed_resistant,blbli_asr_cluster_renamed_resistant) %>% `colnames<-`(c("TMP-SMX clustering","Gentamicin clustering","Amikacin clustering","Colistin clustering","BL/BLI clustering")) %>% mutate_all(as.factor), colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .75) + ylim(NA,560) + cluster_scale + consistent_theme 
+F2C <- gheatmap(ggtree(tr),df %>%  select(TMP_SMX_asr_cluster_renamed_resistant,gentamicin_asr_cluster_renamed_resistant,AMK_asr_cluster_renamed_resistant,CST_asr_cluster_renamed_resistant,blbli_asr_cluster_renamed_resistant) %>% `colnames<-`(c("TMP-SMX clustering","Gentamicin clustering","Amikacin clustering","Colistin clustering","BL/BLI clustering")) %>% mutate_all(as.factor), colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .75) + ylim(NA,575) + cluster_scale + consistent_theme 
  
 # Figure 
-F2BC <- plot_grid(F2B,F2C,labels=c("B","C"),label_size=24,align = "hv", ncol=2) + theme(plot.margin = unit(c(0,0,-.5,0), "cm")) 
+F2BC <- plot_grid(F2B,F2C,labels=c("B","C"),label_size=24,align = "hv", ncol=2) + theme(plot.margin = unit(c(0,0,-0.1,0), "cm")) 
 ```
 
 ```{r,fig.width=15,fig.height=10.5}
 F2BC
 ```
 
-# Clustering data table
+# Transition data table
 ```{r}
 # Transition data
 transition_data <- readRDS("./data/asr_clustering/transition_stats.RDS") 
-transition_data <- transition_data %>% select(pheno,transitions,gains,gains_tip,losses,losses_tip,continuations,continuations_present) %>% `colnames<-`(c("Phenotype",'Transitions','Gains','Gains (tip)','Losses','Losses (tip)','Continuations','Continuations (resistance)'))
+transition_data <- transition_data %>% select(pheno,transitions,gains,gains_tip,losses,losses_tip,continuations,continuations_present,continuations_absent) %>% `colnames<-`(c("Phenotype",'Transitions','Gains','Gains (tip)','Losses','Losses (tip)','Continuations','Continuations (resistance)','Continuations (susceptible)'))
 
+# Formatting table
+D_table <- transition_data
+D_table$Phenotype <- recode(D_table$Phenotype,'AMK' = 'Amikacin','blbli'='BL/BLI','CST'='Colistin','TMP_SMX'='TMP-SMX','gentamicin'='Gentamicin')
+```
+
+```{r}
+F2D_tbl <- D_table %>% tableGrob(rows = NULL,theme=mytheme) 
+```
+
+# Clustering data table
+```{r}
 # Clustering data
 clustering_stats <- readRDS("./data/asr_clustering/clustering_stats.RDS")
-phylosuite_analysis_tbl <- clustering_stats %>% select(pheno,present,phylogenetic_events,singletons,clusters,cluster_isolates,cluster_size_median,cluster_size_range,feature_frequency,phylogenetic_frequency,clustering_frequency)
+phylosuite_analysis_tbl <- clustering_stats %>% select(pheno,present,phylogenetic_events,singletons,singleton_isolates,clusters,cluster_isolates,cluster_size_median,cluster_size_range,feature_frequency,phylogenetic_frequency,clustering_frequency)
  
 phylosuite_analysis_tbl$cluster_median_range <- paste0(phylosuite_analysis_tbl$cluster_size_median," (",phylosuite_analysis_tbl$cluster_size_range,")")
-phylosuite_analysis_tbl <- phylosuite_analysis_tbl%>% select(-cluster_size_median,-cluster_size_range)  %>% select(pheno,present,feature_frequency,phylogenetic_events,singletons,clusters,cluster_isolates,cluster_median_range,phylogenetic_frequency,clustering_frequency)
+phylosuite_analysis_tbl <- phylosuite_analysis_tbl%>% select(-cluster_size_median,-cluster_size_range)  %>% select(pheno,present,feature_frequency,phylogenetic_events,singletons,singleton_isolates,clusters,cluster_isolates,cluster_median_range,phylogenetic_frequency,clustering_frequency)
 
-phylosuite_analysis_tbl <- phylosuite_analysis_tbl %>% `colnames<-`(c("Phenotype","Resistant isolates","Resistance frequency","Phylogenetic events","Singletons","Clusters","Cluster isolates","Cluster size, median (range)","Phylogenetic frequency","Clustering frequency"))
+phylosuite_analysis_tbl <- phylosuite_analysis_tbl %>% `colnames<-`(c("Phenotype","Resistant isolates","Resistance frequency","Phylogenetic events","Singletons","Singleton isolates","Clusters","Cluster isolates","Cluster size, median (range)","Phylogenetic frequency","Clustering frequency"))
 
 phylosuite_analysis_tbl$`Resistance frequency` <- paste0(sprintf("%.2f", phylosuite_analysis_tbl$`Resistance frequency`),"%")
 phylosuite_analysis_tbl$`Phylogenetic frequency` <- paste0(sprintf("%.2f", phylosuite_analysis_tbl$`Phylogenetic frequency`),"%")
 phylosuite_analysis_tbl$`Clustering frequency` <- paste0(sprintf("%.2f", phylosuite_analysis_tbl$`Clustering frequency`),"%")
 
 # Formatting table
-table <- transition_data %>% left_join(.,phylosuite_analysis_tbl)
-colnames(table) <- sapply(colnames(table),strwrap,width=15) %>% sapply(.,paste0,collapse="\n")
-table$Phenotype <- recode(table$Phenotype,'AMK' = 'Amikacin','blbli'='BL/BLI','CST'='Colistin','TMP_SMX'='TMP-SMX','gentamicin'='Gentamicin')                          
+E_table <- phylosuite_analysis_tbl
+E_table$Phenotype <- recode(E_table$Phenotype,'AMK' = 'Amikacin','blbli'='BL/BLI','CST'='Colistin','TMP_SMX'='TMP-SMX','gentamicin'='Gentamicin')       
 ```
 
-```{r ,fig.height=20,fig.width=25}
-F2D_tbl <- table %>% tableGrob(rows = NULL,theme=mytheme) 
+```{r} 
+ncol_D <- ncol(D_table)
+ncol_E <- ncol(E_table)
+max_ncol <- max(ncol_D, ncol_E)
+difference <- max_ncol - ncol_D 
+fake <- data.frame(matrix(ncol=difference,nrow=nrow(D_table),data = "") )
+D_table_manipulated <- cbind(D_table,fake)
+colnames(D_table_manipulated) <- c(colnames(D_table),rep(" ", difference))
+
+manually_pad_column_names <- function(colnames_D,colnames_E,col_val){
+  colnames_D_new <- c()
+  colnames_E_new <- c()
+  for(i in seq_along(colnames_D)){
+    D_i <- colnames_D[[i]]
+    E_i <- colnames_E[[i]]
+    D_length <- nchar(D_i)
+    E_length <- nchar(E_i) 
+    max_length <- max(D_length,E_length)
+    if(D_length == E_length && D_length < col_val){
+      colnames_D_new <- c(colnames_D_new,D_i)
+      colnames_E_new <- c(colnames_E_new,E_i)
+    } 
+    if(D_length != E_length && max_length < col_val){
+        colnames_D_new <- c( colnames_D_new, str_pad(D_i,max_length,side = 'right'))
+        colnames_E_new <- c(colnames_E_new , str_pad(E_i,max_length,side = 'right'))
+    } 
+    if(max_length > col_val){
+      split_D <- strwrap(D_i,width=col_val)
+      split_E <-  strwrap(E_i,width=col_val)
+      max_length_word <- max(nchar(split_D),nchar(split_E))
+      colnames_D_new <- c(colnames_D_new , str_pad(split_D,max_length_word,side = 'right') %>% paste0(collapse="\n"))
+      colnames_E_new <- c(colnames_E_new , str_pad(split_E,max_length_word,side = 'right') %>% paste0(collapse="\n"))
+    } 
+  } 
+ return(list(colnames_D = colnames_D_new, colnames_E = colnames_E_new)) 
+}
+
+new_column_names <- manually_pad_column_names(colnames(D_table_manipulated),colnames(E_table),15)
+
+colnames(D_table_manipulated) <- new_column_names$colnames_D
+colnames(E_table) <- new_column_names$colnames_E
+
+F2D_tbl <- D_table_manipulated %>% tableGrob(rows = NULL,theme=mytheme) 
+
+F2E_tbl <- E_table %>% tableGrob(rows = NULL,theme=mytheme)
+
+common_widths <- unit.pmax(F2D_tbl$widths, F2E_tbl$widths)
+F2D_tbl$widths <- common_widths
+F2E_tbl$widths <- common_widths
+
+g1 <- ggdraw() + draw_grob(F2D_tbl, x = 0, hjust = 0)
+g2 <- ggdraw() + draw_grob(F2E_tbl, x = 0, hjust = 0)
+g2
 ```
+
+```{r ,fig.height=20,fig.width=16}
+blank <- ggdraw() + draw_label("")
+F2D <- plot_grid(
+  plot_grid(g1, g2, ncol = 1, rel_heights = c(1, 1), labels = c("D", "E"), label_size = 24, align = "h"),
+  blank,  # 2nd column is empty
+  ncol = 2,
+  rel_widths = c(1, 0)  # zero width 2nd column forces both grobs into 1 unit-wide space
+) +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
+F2D
+```
+
 
 # Merge figures together
-```{r ,fig.height=20,fig.width=25}
-F2D <- plot_grid(F2D_tbl,label_size=24,align = "hv") + theme(plot.margin = unit(c(-1,0,-1.5,0), "cm")) 
-F2 <- plot_grid(F2A,F2BC,F2D,labels = c("A","","D"),nrow=3,label_size = 24,rel_heights = c(.5,1,.25))
+```{r ,fig.height=20,fig.width=16.25}
+F2 <- plot_grid(F2A,F2BC,F2D,labels = c("A","",""),nrow=3,label_size = 24,rel_heights = c(.5,1,.45))
 F2
 ```
 
 # Save
 ```{r}
-ggsave("./figures/figure2.png",F2,width=25,height=20,dpi=600,bg='white')  
+ggsave("./figures/figure2.png",F2,width=16.5,height=20,dpi=600,bg='white')  
 ```

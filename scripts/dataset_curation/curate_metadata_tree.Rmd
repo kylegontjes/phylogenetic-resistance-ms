@@ -345,6 +345,7 @@ clade_1_descendants = tr_ca_midpoint$tip.label[ phangorn::Descendants(x = tr_ca_
 clade_2_descendants = tr_ca_midpoint$tip.label[ phangorn::Descendants(x = tr_ca_midpoint,node = clade_nodes[[2]],type='tips') %>% unlist]
 
 df$clade_I <- ifelse(df$isolate_no %in% clade_1_descendants,"Clade I","Clade II")
+df$clade_I <- factor(df$clade_I,levels = c("Clade II","Clade I"))
 gheatmap(ggtree(tr_ca_midpoint),df %>% select(clade_I))
 ```
 

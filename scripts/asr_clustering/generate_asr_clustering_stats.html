@@ -11,9 +11,9 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-25" />
+<meta name="date" content="2025-05-30" />
 
-<title>Generate phylogenetic clustering statistics using phyloAMR</title>
+<title>Generate phylogenetic clustering statistics using phyloAMR’s asr_cluster_analysis() function</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -575,9 +575,9 @@ display: none;
 
 
 <h1 class="title toc-ignore">Generate phylogenetic clustering statistics
-using phyloAMR</h1>
+using phyloAMR’s asr_cluster_analysis() function</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-04-25</h4>
+<h4 class="date">2025-05-30</h4>
 
 </div>
 
@@ -622,26 +622,26 @@ The following object is masked from &#39;package:dplyr&#39;:
     group_rows</code></pre>
 <pre class="r"><code># Print
 Sys.info()</code></pre>
-<pre><code>                                                                                             sysname 
-                                                                                            &quot;Darwin&quot; 
-                                                                                             release 
-                                                                                            &quot;24.4.0&quot; 
-                                                                                             version 
-&quot;Darwin Kernel Version 24.4.0: Wed Mar 19 21:16:31 PDT 2025; root:xnu-11417.101.15~1/RELEASE_X86_64&quot; 
-                                                                                            nodename 
-                                                                                    &quot;msla0572.local&quot; 
-                                                                                             machine 
-                                                                                            &quot;x86_64&quot; 
-                                                                                               login 
-                                                                                              &quot;root&quot; 
-                                                                                                user 
-                                                                                          &quot;kgontjes&quot; 
-                                                                                      effective_user 
-                                                                                          &quot;kgontjes&quot; </code></pre>
+<pre><code>                                                                                            sysname 
+                                                                                           &quot;Darwin&quot; 
+                                                                                            release 
+                                                                                           &quot;24.5.0&quot; 
+                                                                                            version 
+&quot;Darwin Kernel Version 24.5.0: Tue Apr 22 19:53:26 PDT 2025; root:xnu-11417.121.6~2/RELEASE_X86_64&quot; 
+                                                                                           nodename 
+                                                                                   &quot;msla0572.local&quot; 
+                                                                                            machine 
+                                                                                           &quot;x86_64&quot; 
+                                                                                              login 
+                                                                                             &quot;root&quot; 
+                                                                                               user 
+                                                                                         &quot;kgontjes&quot; 
+                                                                                     effective_user 
+                                                                                         &quot;kgontjes&quot; </code></pre>
 <pre class="r"><code>sessionInfo() </code></pre>
 <pre><code>R version 4.5.0 (2025-04-11)
 Platform: x86_64-apple-darwin20
-Running under: macOS Sequoia 15.4
+Running under: macOS Sequoia 15.5
 
 Matrix products: default
 BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
@@ -663,17 +663,20 @@ other attached packages:
 [13] ggplot2_3.5.2    tidyverse_2.0.0  knitr_1.50      
 
 loaded via a namespace (and not attached):
- [1] sass_0.4.10        generics_0.1.3     xml2_1.3.8         stringi_1.8.7     
- [5] lattice_0.22-7     hms_1.1.3          digest_0.6.37      magrittr_2.0.3    
- [9] evaluate_1.0.3     grid_4.5.0         timechange_0.3.0   RColorBrewer_1.1-3
-[13] fastmap_1.2.0      jsonlite_2.0.0     viridisLite_0.4.2  scales_1.4.0      
-[17] jquerylib_0.1.4    cli_3.6.5          rlang_1.1.6        withr_3.0.2       
-[21] cachem_1.1.0       yaml_2.3.10        tools_4.5.0        parallel_4.5.0    
-[25] tzdb_0.5.0         vctrs_0.6.5        R6_2.6.1           lifecycle_1.0.4   
-[29] pkgconfig_2.0.3    pillar_1.10.2      bslib_0.9.0        gtable_0.3.6      
-[33] glue_1.8.0         Rcpp_1.0.14        systemfonts_1.2.2  xfun_0.52         
-[37] tidyselect_1.2.1   rstudioapi_0.17.1  farver_2.1.2       htmltools_0.5.8.1 
-[41] nlme_3.1-168       rmarkdown_2.29     svglite_2.1.3      compiler_4.5.0    </code></pre>
+ [1] yulab.utils_0.2.0  sass_0.4.10        generics_0.1.4     ggtree_3.16.0     
+ [5] xml2_1.3.8         ggplotify_0.1.2    stringi_1.8.7      lattice_0.22-7    
+ [9] hms_1.1.3          digest_0.6.37      magrittr_2.0.3     evaluate_1.0.3    
+[13] grid_4.5.0         timechange_0.3.0   RColorBrewer_1.1-3 fastmap_1.2.0     
+[17] jsonlite_2.0.0     aplot_0.2.5        viridisLite_0.4.2  scales_1.4.0      
+[21] lazyeval_0.2.2     jquerylib_0.1.4    cli_3.6.5          rlang_1.1.6       
+[25] tidytree_0.4.6     withr_3.0.2        cachem_1.1.0       yaml_2.3.10       
+[29] tools_4.5.0        parallel_4.5.0     tzdb_0.5.0         gridGraphics_0.5-1
+[33] vctrs_0.6.5        R6_2.6.1           lifecycle_1.0.4    ggfun_0.1.8       
+[37] fs_1.6.6           treeio_1.32.0      pkgconfig_2.0.3    pillar_1.10.2     
+[41] bslib_0.9.0        gtable_0.3.6       glue_1.8.0         Rcpp_1.0.14       
+[45] systemfonts_1.2.2  xfun_0.52          tidyselect_1.2.1   rstudioapi_0.17.1 
+[49] farver_2.1.2       patchwork_1.3.0    htmltools_0.5.8.1  nlme_3.1-168      
+[53] svglite_2.1.3      rmarkdown_2.29     compiler_4.5.0    </code></pre>
 </div>
 <div id="load-data" class="section level1">
 <h1>Load data</h1>
@@ -687,7 +690,7 @@ for(i in pheno){
 </div>
 <div id="clustering-analysis" class="section level1">
 <h1>Clustering Analysis</h1>
-<pre class="r"><code>cluster_stats &lt;- lapply(paste0(pheno,&quot;_asr_clustering&quot;),get) %&gt;% lapply(.,asr_cluster_analysis,remove_faux=TRUE) %&gt;% do.call(rbind,.) %&gt;% mutate(pheno = pheno)  %&gt;% `rownames&lt;-`(NULL)
+<pre class="r"><code>cluster_stats &lt;- lapply(paste0(pheno,&quot;_asr_clustering&quot;),get) %&gt;% lapply(.,asr_cluster_analysis) %&gt;% do.call(rbind,.) %&gt;% mutate(pheno = pheno) %&gt;% `rownames&lt;-`(NULL)
 
 # Print
 favorite_kable(cluster_stats)</code></pre>
@@ -699,6 +702,9 @@ present
 </th>
 <th style="text-align:right;">
 singletons
+</th>
+<th style="text-align:right;">
+singleton_isolates
 </th>
 <th style="text-align:right;">
 clusters
@@ -722,16 +728,16 @@ no_feature
 revertant_isolates
 </th>
 <th style="text-align:right;">
-revertant_lineages
+revertant_clusters
 </th>
 <th style="text-align:right;">
-revertant_lineage_size_median
+revertant_cluster_size_median
 </th>
 <th style="text-align:right;">
-revertant_lineage_size_mean
+revertant_cluster_size_mean
 </th>
 <th style="text-align:left;">
-revertant_lineage_size_range
+revertant_cluster_size_range
 </th>
 <th style="text-align:right;">
 phylogenetic_events
@@ -754,6 +760,9 @@ pheno
 <tr>
 <td style="text-align:right;">
 207
+</td>
+<td style="text-align:right;">
+28
 </td>
 <td style="text-align:right;">
 32
@@ -792,16 +801,16 @@ pheno
 2-94
 </td>
 <td style="text-align:right;">
-40
+36
 </td>
 <td style="text-align:right;">
 53.63
 </td>
 <td style="text-align:right;">
-8.71
+8.35
 </td>
 <td style="text-align:right;">
-20.00
+22.22
 </td>
 <td style="text-align:left;">
 TMP_SMX
@@ -810,6 +819,9 @@ TMP_SMX
 <tr>
 <td style="text-align:right;">
 199
+</td>
+<td style="text-align:right;">
+19
 </td>
 <td style="text-align:right;">
 23
@@ -848,16 +860,16 @@ TMP_SMX
 2-94
 </td>
 <td style="text-align:right;">
-30
+26
 </td>
 <td style="text-align:right;">
 51.55
 </td>
 <td style="text-align:right;">
-7.03
+6.58
 </td>
 <td style="text-align:right;">
-23.33
+26.92
 </td>
 <td style="text-align:left;">
 gentamicin
@@ -866,6 +878,9 @@ gentamicin
 <tr>
 <td style="text-align:right;">
 132
+</td>
+<td style="text-align:right;">
+34
 </td>
 <td style="text-align:right;">
 38
@@ -889,31 +904,31 @@ gentamicin
 254
 </td>
 <td style="text-align:right;">
-86
+84
 </td>
 <td style="text-align:right;">
-13
+11
 </td>
 <td style="text-align:right;">
-2.0
+3.0
 </td>
 <td style="text-align:right;">
-5.54
+6.36
 </td>
 <td style="text-align:left;">
-1-37
+2-37
 </td>
 <td style="text-align:right;">
-51
+47
 </td>
 <td style="text-align:right;">
 34.20
 </td>
 <td style="text-align:right;">
-5.00
+5.43
 </td>
 <td style="text-align:right;">
-25.49
+27.66
 </td>
 <td style="text-align:left;">
 AMK
@@ -922,6 +937,9 @@ AMK
 <tr>
 <td style="text-align:right;">
 129
+</td>
+<td style="text-align:right;">
+20
 </td>
 <td style="text-align:right;">
 20
@@ -980,6 +998,9 @@ CST
 56
 </td>
 <td style="text-align:right;">
+32
+</td>
+<td style="text-align:right;">
 34
 </td>
 <td style="text-align:right;">
@@ -1013,19 +1034,19 @@ CST
 0.00
 </td>
 <td style="text-align:left;">
-NA
+0
 </td>
 <td style="text-align:right;">
-40
+38
 </td>
 <td style="text-align:right;">
 14.51
 </td>
 <td style="text-align:right;">
-9.76
+9.36
 </td>
 <td style="text-align:right;">
-15.00
+15.79
 </td>
 <td style="text-align:left;">
 blbli
