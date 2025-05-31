@@ -686,7 +686,7 @@ asr_model_characteristics &lt;- lapply(pheno,FUN=function(i){
 <pre class="r"><code>stable4 &lt;- asr_model_characteristics %&gt;%  select(pheno,model,number_parameters,rate1,rate2,loglik,AICc,best_model) %&gt;% `colnames&lt;-`(c(&quot;Phenotype&quot;,&quot;Model&quot;,&quot;No. Parameters&quot;,&quot;Rate 1&quot;,&quot;Rate 2&quot;,&quot;Log Likelihood&quot;,&quot;Corrected AIC&quot;,&quot;Best model&quot;)) %&gt;% `rownames&lt;-`(NULL) 
 
 stable4$`Log Likelihood` &lt;- formatC(stable4$`Log Likelihood`,format = &quot;f&quot;,digits =2)
-stable4$`Corrected AIC` &lt;-  formatC(stable4$`Log Likelihood`,format = &quot;f&quot;,digits =2)
+stable4$`Corrected AIC` &lt;-  formatC(stable4$`Corrected AIC`,format = &quot;f&quot;,digits =2)
 
 stable4$Phenotype &lt;- recode(stable4$Phenotype,&#39;TMP_SMX&#39;=&#39;TMP-SMX&#39;,
                              &quot;gentamicin&quot;=&quot;Gentamicin&quot;,
@@ -745,7 +745,7 @@ NA
 -186.86
 </td>
 <td style="text-align:left;">
--186.86
+375.72
 </td>
 <td style="text-align:left;">
 FALSE
@@ -771,7 +771,7 @@ ARD
 -185.73
 </td>
 <td style="text-align:left;">
--185.73
+375.49
 </td>
 <td style="text-align:left;">
 TRUE
@@ -797,7 +797,7 @@ NA
 -162.08
 </td>
 <td style="text-align:left;">
--162.08
+326.17
 </td>
 <td style="text-align:left;">
 TRUE
@@ -823,7 +823,7 @@ ARD
 -162.01
 </td>
 <td style="text-align:left;">
--162.01
+328.05
 </td>
 <td style="text-align:left;">
 FALSE
@@ -849,7 +849,7 @@ NA
 -226.98
 </td>
 <td style="text-align:left;">
--226.98
+455.96
 </td>
 <td style="text-align:left;">
 FALSE
@@ -875,7 +875,7 @@ ARD
 -222.47
 </td>
 <td style="text-align:left;">
--222.47
+448.97
 </td>
 <td style="text-align:left;">
 TRUE
@@ -901,7 +901,7 @@ NA
 -159.26
 </td>
 <td style="text-align:left;">
--159.26
+320.53
 </td>
 <td style="text-align:left;">
 TRUE
@@ -927,7 +927,7 @@ ARD
 -158.50
 </td>
 <td style="text-align:left;">
--158.50
+321.02
 </td>
 <td style="text-align:left;">
 FALSE
@@ -953,7 +953,7 @@ NA
 -166.53
 </td>
 <td style="text-align:left;">
--166.53
+335.06
 </td>
 <td style="text-align:left;">
 FALSE
@@ -979,7 +979,7 @@ ARD
 -145.38
 </td>
 <td style="text-align:left;">
--145.38
+294.79
 </td>
 <td style="text-align:left;">
 TRUE

@@ -46,7 +46,7 @@ asr_model_characteristics <- lapply(pheno,FUN=function(i){
 stable4 <- asr_model_characteristics %>%  select(pheno,model,number_parameters,rate1,rate2,loglik,AICc,best_model) %>% `colnames<-`(c("Phenotype","Model","No. Parameters","Rate 1","Rate 2","Log Likelihood","Corrected AIC","Best model")) %>% `rownames<-`(NULL) 
 
 stable4$`Log Likelihood` <- formatC(stable4$`Log Likelihood`,format = "f",digits =2)
-stable4$`Corrected AIC` <-  formatC(stable4$`Log Likelihood`,format = "f",digits =2)
+stable4$`Corrected AIC` <-  formatC(stable4$`Corrected AIC`,format = "f",digits =2)
 
 stable4$Phenotype <- recode(stable4$Phenotype,'TMP_SMX'='TMP-SMX',
                              "gentamicin"="Gentamicin",
