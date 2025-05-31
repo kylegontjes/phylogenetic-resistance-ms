@@ -99,9 +99,14 @@ fake <- list(Presence = c("shared",'pres+emerge','pres+spread','present'),
             Spread = c("shared",'pres+spread','emerge+spread','spread'))
  
 F4 <- UpSet(make_comb_mat(fake),right_annotation = NULL,top_annotation = top_ann_category,comb_order = c(1:7), height = unit(4.5, "cm"))  
+```
+## Save the figure
+### Requires use of base, not ggsave 
+```{r}
+png(filename = "./figures/figure4.png",width = 7.5, height = 8.5, res = 600, bg = 'white',units = 'in')
 
 ComplexHeatmap::draw(F4,annotation_legend_list = list(lgd),
      annotation_legend_side = "right") 
 
-ggsave("./figures/figure4.png",width=7.5,height=8.5,dpi=600,bg='white')  
+dev.off()
 ```
