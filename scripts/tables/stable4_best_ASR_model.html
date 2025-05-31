@@ -685,8 +685,8 @@ asr_model_characteristics &lt;- lapply(pheno,FUN=function(i){
 <h2>Format</h2>
 <pre class="r"><code>stable4 &lt;- asr_model_characteristics %&gt;%  select(pheno,model,number_parameters,rate1,rate2,loglik,AICc,best_model) %&gt;% `colnames&lt;-`(c(&quot;Phenotype&quot;,&quot;Model&quot;,&quot;No. Parameters&quot;,&quot;Rate 1&quot;,&quot;Rate 2&quot;,&quot;Log Likelihood&quot;,&quot;Corrected AIC&quot;,&quot;Best model&quot;)) %&gt;% `rownames&lt;-`(NULL) 
 
-stable4$`Log Likelihood` &lt;- formatC(stable4$`Log Likelihood`,format = &quot;f&quot;,digits =4)
-stable4$`Corrected AIC` &lt;-  formatC(stable4$`Log Likelihood`,format = &quot;f&quot;,digits =4)
+stable4$`Log Likelihood` &lt;- formatC(stable4$`Log Likelihood`,format = &quot;f&quot;,digits =2)
+stable4$`Corrected AIC` &lt;-  formatC(stable4$`Log Likelihood`,format = &quot;f&quot;,digits =2)
 
 stable4$Phenotype &lt;- recode(stable4$Phenotype,&#39;TMP_SMX&#39;=&#39;TMP-SMX&#39;,
                              &quot;gentamicin&quot;=&quot;Gentamicin&quot;,
@@ -742,10 +742,10 @@ ER
 NA
 </td>
 <td style="text-align:left;">
--186.8567
+-186.86
 </td>
 <td style="text-align:left;">
--186.8567
+-186.86
 </td>
 <td style="text-align:left;">
 FALSE
@@ -768,10 +768,10 @@ ARD
 9772.79
 </td>
 <td style="text-align:left;">
--185.7299
+-185.73
 </td>
 <td style="text-align:left;">
--185.7299
+-185.73
 </td>
 <td style="text-align:left;">
 TRUE
@@ -794,10 +794,10 @@ ER
 NA
 </td>
 <td style="text-align:left;">
--162.0817
+-162.08
 </td>
 <td style="text-align:left;">
--162.0817
+-162.08
 </td>
 <td style="text-align:left;">
 TRUE
@@ -820,10 +820,10 @@ ARD
 9820.55
 </td>
 <td style="text-align:left;">
--162.0099
+-162.01
 </td>
 <td style="text-align:left;">
--162.0099
+-162.01
 </td>
 <td style="text-align:left;">
 FALSE
@@ -846,10 +846,10 @@ ER
 NA
 </td>
 <td style="text-align:left;">
--226.9771
+-226.98
 </td>
 <td style="text-align:left;">
--226.9771
+-226.98
 </td>
 <td style="text-align:left;">
 FALSE
@@ -872,10 +872,10 @@ ARD
 42368.73
 </td>
 <td style="text-align:left;">
--222.4716
+-222.47
 </td>
 <td style="text-align:left;">
--222.4716
+-222.47
 </td>
 <td style="text-align:left;">
 TRUE
@@ -898,10 +898,10 @@ ER
 NA
 </td>
 <td style="text-align:left;">
--159.2620
+-159.26
 </td>
 <td style="text-align:left;">
--159.2620
+-159.26
 </td>
 <td style="text-align:left;">
 TRUE
@@ -924,10 +924,10 @@ ARD
 11609.37
 </td>
 <td style="text-align:left;">
--158.4957
+-158.50
 </td>
 <td style="text-align:left;">
--158.4957
+-158.50
 </td>
 <td style="text-align:left;">
 FALSE
@@ -950,10 +950,10 @@ ER
 NA
 </td>
 <td style="text-align:left;">
--166.5255
+-166.53
 </td>
 <td style="text-align:left;">
--166.5255
+-166.53
 </td>
 <td style="text-align:left;">
 FALSE
@@ -976,10 +976,10 @@ ARD
 76998.04
 </td>
 <td style="text-align:left;">
--145.3771
+-145.38
 </td>
 <td style="text-align:left;">
--145.3771
+-145.38
 </td>
 <td style="text-align:left;">
 TRUE
