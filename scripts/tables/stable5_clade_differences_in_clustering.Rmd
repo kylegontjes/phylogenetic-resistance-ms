@@ -46,8 +46,8 @@ clade1 <- subset(df,clade_I=="Clade I") %>% .$isolate_no
 clade2 <- subset(df,clade_I!="Clade I") %>% .$isolate_no
 
 subset_analysis_to_clade <- function(phenotype,cladeI,clustering){
-  clustering_CI <- asr_cluster_analysis(clustering %>% subset(child_name %in% cladeI),remove_faux = TRUE) %>% mutate(clade = "Clade I")
-  clustering_CII <- asr_cluster_analysis(clustering %>% subset(!child_name %in% cladeI),remove_faux = TRUE) %>% mutate(clade = "Clade II")
+  clustering_CI <- asr_cluster_analysis(clustering %>% subset(child_name %in% cladeI)) %>% mutate(clade = "Clade I")
+  clustering_CII <- asr_cluster_analysis(clustering %>% subset(!child_name %in% cladeI)) %>% mutate(clade = "Clade II")
   rbind.data.frame(clustering_CI,clustering_CII )  %>% mutate(pheno = phenotype)
 }
 
@@ -62,13 +62,13 @@ cluster_stats_clades <- rbind(TMP_SMX,gent,AMK,CST,blbli)
 
 # Make supplemental table 
 ```{r}
-stable5 <- cluster_stats_clades %>% select(pheno,clade,present,feature_frequency,phylogenetic_frequency,clustering_frequency,phylogenetic_events,singletons,clusters,cluster_isolates,cluster_size_median,cluster_size_range)
+stable5 <- cluster_stats_clades %>% select(pheno,clade,present,feature_frequency,phylogenetic_frequency,clustering_frequency,phylogenetic_events,singletons,singleton_isolates,clusters,cluster_isolates,cluster_size_median,cluster_size_range)
  
 stable5$cluster_median_range <- paste0(stable5$cluster_size_median," (",stable5$cluster_size_range,")") 
 
-stable5 <- stable5%>% select(-cluster_size_median,-cluster_size_range)  %>% select(pheno,present,feature_frequency,phylogenetic_events,singletons,clusters,cluster_isolates,cluster_median_range,phylogenetic_frequency,clustering_frequency)
+stable5 <- stable5%>% select(-cluster_size_median,-cluster_size_range)  %>% select(pheno,clade,present,feature_frequency,phylogenetic_events,singletons,singleton_isolates,clusters,cluster_isolates,cluster_median_range,phylogenetic_frequency,clustering_frequency)
 
-stable5 <- stable5 %>% `colnames<-`(c("Phenotype","Resistant isolates","Resistance frequency","Phylogenetic events","Singletons","Clusters","Cluster isolates","Cluster size, median (range)","Phylogenetic frequency","Clustering frequency"))
+stable5 <- stable5 %>% `colnames<-`(c("Phenotype","Clade","Resistant isolates","Resistance frequency","Phylogenetic events","Singletons","Singleton isolates","Clusters","Cluster isolates","Cluster size, median (range)","Phylogenetic frequency","Clustering frequency"))
 
 stable5$`Resistance frequency` <- paste0(sprintf("%.2f", stable5$`Resistance frequency`),"%")
 stable5$`Phylogenetic frequency` <- paste0(sprintf("%.2f", stable5$`Phylogenetic frequency`),"%")

@@ -29,32 +29,27 @@ sessionInfo()
 
 # Load data
 ```{r load data}
-asr_model_choices <- readRDS("./data/asr_clustering/asr_model_choices.RDS") 
+# ASR models
+pheno <- c("TMP_SMX","gentamicin","AMK","CST","blbli")
+
+asr_model_characteristics <- lapply(pheno,FUN=function(i){
+  obj <- readRDS(paste0("./data/asr_clustering/",i,"_asr.RDS"))
+  obj[["corHMM_model_statistics"]][["pheno"]] <-  i
+  obj[["corHMM_model_statistics"]]
+}) %>% do.call(rbind,.)
 ```
 
-# Create table
-## Best model
-```{r}
-lapply(asr_model_choices,FUN=function(x){
-  x[["best_model"]]
-}) 
-```
+# Create table 
 
 ## Format
-```{r}
-model_table <- lapply(asr_model_choices,FUN=function(x){
-  x[["model_options"]]
-}) %>% do.call(rbind,.) 
+```{r} 
+stable4 <- asr_model_characteristics %>%  select(pheno,model,number_parameters,rate1,rate2,loglik,AICc,best_model) %>% `colnames<-`(c("Phenotype","Model","No. Parameters","Rate 1","Rate 2","Log Likelihood","Corrected AIC","Best model")) %>% `rownames<-`(NULL) 
 
-stable4 <- model_table %>%  select(pheno,model,np,rate1,rate2,loglik,AICc) %>% `colnames<-`(c("Phenotype","Model","No. Parameters","Rate 1","Rate 2","Log Likelihood","Corrected AIC")) %>% `rownames<-`(NULL) 
-
-stable4$Phenotype <- recode(stable4$Phenotype,'TMP_SMX_dich_num'='TMP-SMX',
-                             "gentamicin_dich_num"="Gentamicin",
-                             'AMK_dich_num'='Amikacin',
-                             'CST_dich_num'='Colistin',
-                             'blbli_dich_num'="BL/BLI")  
-stable4$`Log Likelihood` <- round(stable4$`Log Likelihood`, 2) 
-stable4$`Corrected AIC` <- round(stable4$`Corrected AIC`, 2)
+stable4$Phenotype <- recode(stable4$Phenotype,'TMP_SMX'='TMP-SMX',
+                             "gentamicin"="Gentamicin",
+                             'AMK_dich'='Amikacin',
+                             'CST'='Colistin',
+                             'blbli'="BL/BLI")    
 
 stable4 %>% favorite_kable 
 ```

@@ -1,5 +1,5 @@
 ---
-title: "stable3: Characteristics of the study population at the time of first isolate collection"
+title: "Supplemental Table 3: Characteristics of the study population at the time of first isolate collection"
 author: "Kyle Gontjes"
 output: html_document
 date: "`r Sys.Date()`"
@@ -72,7 +72,7 @@ data_table$Variable <- gsub(" \\= 1 \\(\\%\\)","",data_table$Variable)
 # Print and save
 ```{r}
 favorite_kable(data_table)
+
 saveRDS(data_table,"./tables/stable3.RDS")
 write_csv(data_table,"./tables/stable3.csv")
 ```
-
