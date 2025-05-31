@@ -24,11 +24,11 @@ figure_1_theme <- theme(axis.ticks = element_line(color = "black"), axis.text = 
 
 # Supplemental Figure 1 format
 format <- theme(legend.position = "bottom",
-                  axis.text =   element_text(size=18, color="black"),
+                  axis.text =   element_text(size=20, color="black"),
                   axis.title = element_text(size = 22, color="black"),
-                  legend.text =   element_text(size=20, color="black"),
-                  legend.title = element_text(size = 22, color="black"),
-                  plot.title = element_text(size = 24, color="black")
+                  legend.text =   element_text(size=22, color="black"),
+                  legend.title = element_text(size = 24, color="black"),
+                  plot.title = element_text(size = 0, color="black")
 )
 
 # Figure 2 tree theme

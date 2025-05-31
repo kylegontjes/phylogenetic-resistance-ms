@@ -67,8 +67,12 @@ clusters_name <- paste0("Resistant Cluster ",1:ncluster)
 names(clusters_col) <- clusters_name
 
 # Clustering scales
-## Non-susceptible 
-Non_sus_scale <- scale_fill_manual(breaks = c(0,1),values=c("white","black"),labels = c("Susceptible","Resistant"),name="Tip state",guide = guide_legend(title.position = "top", label.position = "right",nrow=2,order=2),drop = FALSE )
+## Updated painted tree scale to ensure order
+edge_color_updated <- scale_color_manual(breaks = c(1,0), values = c("red","black"), 
+        labels = c("Present","Absent"), name = 'Trait',guide = guide_legend(ncol=1, order=1,title.position = "top", label.position = "right"))
+ 
+## Resistance
+resistance_scale <- scale_fill_manual(breaks = c(0,1),values=c("white","black"),labels = c("Susceptible","Resistant"),name="Tip state",guide = guide_legend(title.position = "top", label.position = "right",nrow=2,order=2),drop = FALSE )
 
 ## cluster_scale
 cluster_scale <- scale_fill_manual(breaks =c("Susceptible","Resistant Singleton",names(clusters_col)),values=c("Susceptible" = "white","Resistant Singleton" = "red",clusters_col),labels=c("Susceptible","Singleton",gsub("Resistant ","",clusters_name)),name="Phylogenetics of resistance", guide = guide_legend(ncol=3, order=3,title.position = "top", label.position = "right"))
@@ -78,14 +82,19 @@ for(i in pheno){
   state_parent_childs[[i]] <- get(paste0(i,"_asr")) %>% .$parent_child_df 
 }
  
-painted_trees <- lapply(state_parent_childs,paint_tree_with_states,tr)  %>% `names<-`(pheno)
+painted_trees <- lapply(state_parent_childs,FUN=function(x){
+  paint_tree_with_states(parent_child_df = x,tr=tr) + edge_color_updated
+  }) %>% `names<-`(pheno)
+
+simple_consistent_theme <- theme(legend.position = 'right',legend.direction="vertical", legend.justification = "center",legend.box.spacing = unit(.001, "cm"),legend.key.size = unit(.75, "cm"),legend.key.width = unit(.75, "cm"),legend.spacing.x=unit(.75, "cm"))
+
 
 painted_trees_w_cluster_calls <- lapply(pheno,FUN=function(x){
   p_obj <- painted_trees[[x]]
-  asr_clustering_df <- get(paste0(x,"_asr_clustering")) %>% select(child_val,asr_cluster_renamed_resistant) %>% `colnames<-`(c("Feature","Clustering")) %>% mutate_all(as.factor) 
-  p1 <- gheatmap(p_obj,data=asr_clustering_df  %>% select(Feature),width = 0.1,colnames_position = 'top',colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA) + Non_sus_scale
+  asr_clustering_df <- get(paste0(x,"_asr_clustering")) %>% select(child_value,asr_cluster_renamed_resistant) %>% `colnames<-`(c("Feature","Clustering")) %>% mutate_all(as.factor) 
+  p1 <- gheatmap(p_obj,data=asr_clustering_df  %>% select(Feature),width = 0.1,colnames_position = 'top',colnames_angle=90, colnames_offset_y = 0.5, hjust = 0, color = NA) + resistance_scale  + simple_consistent_theme
   p1.1 <- p1 + ggnewscale::new_scale_fill()
-  p2 <- gheatmap(p1.1,data=asr_clustering_df  %>% select(Clustering),width = 0.1,colnames_position = 'top',colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA,offset=0.000025)  + cluster_scale + ylim(NA,450)
+  p2 <- gheatmap(p1.1,data=asr_clustering_df  %>% select(Clustering),width = 0.1,colnames_position = 'top',colnames_angle=90, colnames_offset_y = 0.5, hjust = 0, color = NA,offset=0.000025)  + cluster_scale + ylim(NA,450)  +simple_consistent_theme
   p2
 })
 
@@ -94,7 +103,12 @@ painted_trees_w_cluster_calls_wo_legends <- lapply(painted_trees_w_cluster_calls
  
 legend_fig <- cowplot::get_legend(painted_trees_w_cluster_calls[[3]])
  
-sfigure2 <- cowplot::plot_grid(painted_trees_w_cluster_calls_wo_legends[[1]],painted_trees_w_cluster_calls_wo_legends[[2]],painted_trees_w_cluster_calls_wo_legends[[3]],painted_trees_w_cluster_calls_wo_legends[[4]],painted_trees_w_cluster_calls_wo_legends[[5]],legend_fig,ncol=3,labels =c("TMP-SMX","Gentamicin","Amikacin","Colistin","BL/BLI",""),label_x = 0,label_size = 12)
+names <- c("TMP-SMX","Gentamicin","Amikacin","Colistin","BL/BLI","")
+max_value <- max(sapply(names,nchar))
+consistent_names <- str_pad(string = names,width = max_value,side = 'right')
+
+
+sfigure2 <- cowplot::plot_grid(painted_trees_w_cluster_calls_wo_legends[[1]],painted_trees_w_cluster_calls_wo_legends[[2]],painted_trees_w_cluster_calls_wo_legends[[3]],painted_trees_w_cluster_calls_wo_legends[[4]],painted_trees_w_cluster_calls_wo_legends[[5]],legend_fig,ncol=3,labels= consistent_names,label_x = 0,label_size = 12)
 
 sfigure2
 ```
