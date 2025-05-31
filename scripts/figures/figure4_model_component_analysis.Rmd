@@ -1,5 +1,5 @@
 ---
-title: "figure4_model_component_analysis"
+title: "Figure 4 - Detection of shared and unique risk factors for the emergence and spread of antibiotic resistance"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
@@ -32,33 +32,7 @@ sessionInfo()
 phyloaware_regression_obj <- readRDS("./data/regression/purposeful_regression_results.RDS")
 ```
 
-# Get model components
-```{r}
-print_final_model <- function(x){
-  tables <- lapply(x,FUN=function(list){
-    list[['final_model_table']] %>% arrange(p_value)
-  })  %>% `names<-`(c("present","singleton","spread")) 
-  
-  lapply(tables,function(y){
-   if(y %>% as.data.frame %>% nrow()==0){
-      paste0(names(y))
-      cbind.data.frame(Variable ='No model',`OR (95% CI)` = 'NA',p_value ='NA')
-    } 
-    if(y %>% as.data.frame %>% nrow()>0){
-      paste0(names(y))
-      y %>% arrange(p_value) %>% rownames_to_column(.,'Variable') %>% select("Variable","OR (95% CI)","p_value")
-    } 
-  })
-}
-
-cbind_na <- function(df_list) { 
-  max_rows <- max(lapply(df_list, nrow) %>% unlist) 
-  lapply(df_list,function(x){
-    rbind(x,as.data.frame(matrix(NA,nrow = (max_rows - nrow(x)),ncol=ncol(x))) %>% mutate_all(as.character) %>% `colnames<-`(c("Variable","OR (95% CI)","p_value")))
-  }) %>% do.call(cbind,.)
-}
-```
-
+# Get model components 
 ```{r}
 drugs <- c("TMP_SMX",'gentamicin','AMK','CST','blbli')
 mv_tables <- lapply(drugs,FUN=function(x){
@@ -68,14 +42,6 @@ mv_tables <- lapply(drugs,FUN=function(x){
 
 # List model components
 ```{r}
-get_list_of_components <- function(tbl){
-  Present =  tbl$present.Variable  %>% subset(.!='NA')
-  Emergence = tbl$singleton.Variable   %>% subset(.!='NA')
-  Spread = tbl$spread.Variable  %>% subset(.!='NA')
-  results <- list(A_Present=Present,B_Emergence=Emergence,C_Spread=Spread)
-  return(results)
-}
-
 model_lists <- lapply(mv_tables,get_list_of_components) %>% `names<-`(drugs)
 ```
 
@@ -108,13 +74,12 @@ create_matrix_of_comb_components <- function(x,perumtations,demographics,length_
 category_matrices <- lapply(model_lists,create_matrix_of_comb_components,permutations,demographics,length_of_stay,devices,comorbidities,exposures) 
 ```
 
-
 # Generate upset plots
 ```{r,fig.height=8.5,fig.width=7.5}
 distinct_colors = hues::iwanthue(5,hmin = 40,plot=T)
 
 lgd = Legend(labels = c("Demographics","Length of stay","Devices","Comorbidities","Antibiotic exposures"), legend_gp = gpar(fill = distinct_colors), title = "Variable category", 
-    ncol = 1, title_position = "topleft",labels_gp = gpar(fontsize = 10),title_gp = gpar(fontsize=12,fontface="bold"))
+    ncol = 1, title_position = "topleft",labels_gp = gpar(fontsize = 12),title_gp = gpar(fontsize=14,fontface="bold"))
 
 top_ann_category = HeatmapAnnotation(
     "TMP-SMX" = anno_barplot(category_matrices[[1]], 

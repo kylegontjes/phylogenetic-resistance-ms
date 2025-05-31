@@ -11,9 +11,9 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-28" />
+<meta name="date" content="2025-05-30" />
 
-<title>Supplemental Table 8: Purposeful selection hits</title>
+<title>Table 1: Purposeful selection hits</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -574,10 +574,9 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Supplemental Table 8: Purposeful selection
-hits</h1>
+<h1 class="title toc-ignore">Table 1: Purposeful selection hits</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-04-28</h4>
+<h4 class="date">2025-05-30</h4>
 
 </div>
 
@@ -617,26 +616,26 @@ The following object is masked from &#39;package:dplyr&#39;:
     group_rows</code></pre>
 <pre class="r"><code># Print
 Sys.info()</code></pre>
-<pre><code>                                                                                             sysname 
-                                                                                            &quot;Darwin&quot; 
-                                                                                             release 
-                                                                                            &quot;24.4.0&quot; 
-                                                                                             version 
-&quot;Darwin Kernel Version 24.4.0: Wed Mar 19 21:16:31 PDT 2025; root:xnu-11417.101.15~1/RELEASE_X86_64&quot; 
-                                                                                            nodename 
-                                                                                    &quot;msla0572.local&quot; 
-                                                                                             machine 
-                                                                                            &quot;x86_64&quot; 
-                                                                                               login 
-                                                                                              &quot;root&quot; 
-                                                                                                user 
-                                                                                          &quot;kgontjes&quot; 
-                                                                                      effective_user 
-                                                                                          &quot;kgontjes&quot; </code></pre>
+<pre><code>                                                                                            sysname 
+                                                                                           &quot;Darwin&quot; 
+                                                                                            release 
+                                                                                           &quot;24.5.0&quot; 
+                                                                                            version 
+&quot;Darwin Kernel Version 24.5.0: Tue Apr 22 19:53:26 PDT 2025; root:xnu-11417.121.6~2/RELEASE_X86_64&quot; 
+                                                                                           nodename 
+                                                                                   &quot;msla0572.local&quot; 
+                                                                                            machine 
+                                                                                           &quot;x86_64&quot; 
+                                                                                              login 
+                                                                                             &quot;root&quot; 
+                                                                                               user 
+                                                                                         &quot;kgontjes&quot; 
+                                                                                     effective_user 
+                                                                                         &quot;kgontjes&quot; </code></pre>
 <pre class="r"><code>sessionInfo() </code></pre>
 <pre><code>R version 4.5.0 (2025-04-11)
 Platform: x86_64-apple-darwin20
-Running under: macOS Sequoia 15.4
+Running under: macOS Sequoia 15.5
 
 Matrix products: default
 BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
@@ -660,7 +659,7 @@ other attached packages:
 loaded via a namespace (and not attached):
  [1] gtable_0.3.6       jsonlite_2.0.0     compiler_4.5.0     tidyselect_1.2.1  
  [5] xml2_1.3.8         jquerylib_0.1.4    systemfonts_1.2.2  scales_1.4.0      
- [9] yaml_2.3.10        fastmap_1.2.0      R6_2.6.1           generics_0.1.3    
+ [9] yaml_2.3.10        fastmap_1.2.0      R6_2.6.1           generics_0.1.4    
 [13] svglite_2.1.3      bslib_0.9.0        pillar_1.10.2      RColorBrewer_1.1-3
 [17] tzdb_0.5.0         rlang_1.1.6        cachem_1.1.0       stringi_1.8.7     
 [21] xfun_0.52          sass_0.4.10        viridisLite_0.4.2  timechange_0.3.0  
@@ -672,32 +671,6 @@ loaded via a namespace (and not attached):
 <div id="load-data" class="section level1">
 <h1>Load data</h1>
 <pre class="r"><code>phyloaware_regression_obj &lt;- readRDS(&quot;./data/regression/purposeful_regression_results.RDS&quot;)</code></pre>
-</div>
-<div id="print-model-function" class="section level1">
-<h1>Print model function</h1>
-<pre class="r"><code>print_final_model &lt;- function(x){
-  tables &lt;- lapply(x,FUN=function(list){
-    list[[&#39;final_model_table&#39;]] %&gt;% arrange(p_value)
-  })  %&gt;% `names&lt;-`(c(&quot;present&quot;,&quot;singleton&quot;,&quot;spread&quot;)) 
-  
-  lapply(tables,function(y){
-   if(y %&gt;% as.data.frame %&gt;% nrow()==0){
-      paste0(names(y))
-      cbind.data.frame(Variable =&#39;No model&#39;,`OR (95% CI)` = &#39;NA&#39;,p_value =&#39;NA&#39;)
-    } 
-    if(y %&gt;% as.data.frame %&gt;% nrow()&gt;0){
-      paste0(names(y))
-      y %&gt;% arrange(p_value) %&gt;% rownames_to_column(.,&#39;Variable&#39;) %&gt;% select(&quot;Variable&quot;,&quot;OR (95% CI)&quot;,&quot;p_value&quot;)
-    } 
-  })
-}
-
-cbind_na &lt;- function(df_list) { 
-  max_rows &lt;- max(lapply(df_list, nrow) %&gt;% unlist) 
-  lapply(df_list,function(x){
-    rbind(x,as.data.frame(matrix(NA,nrow = (max_rows - nrow(x)),ncol=ncol(x))) %&gt;% mutate_all(as.character) %&gt;% `colnames&lt;-`(c(&quot;Variable&quot;,&quot;OR (95% CI)&quot;,&quot;p_value&quot;)))
-  }) %&gt;% do.call(cbind,.)
-}</code></pre>
 </div>
 <div id="multivariable-model" class="section level1">
 <h1>Multivariable model</h1>
@@ -744,13 +717,13 @@ blbli_ct &lt;- print_data(&quot;blbli&quot;,phyloaware_regression_obj$blbli$data
 <div id="final-table" class="section level1">
 <h1>Final table</h1>
 <pre class="r"><code>list_df &lt;- list(TMP_SMX_ct,header = TMP_SMX_tbl,gentamicin_ct,gentamicin_tbl,AMK_ct,AMK_tbl,CST_ct,CST_tbl,blbli_ct,blbli_tbl)
-stable8 &lt;- lapply(list_df,FUN=function(x){
+table_1 &lt;- lapply(list_df,FUN=function(x){
   as.matrix(x)
 }) %&gt;% do.call(rbind,.) %&gt;% as.data.frame  </code></pre>
 </div>
 <div id="save-final-table" class="section level1">
 <h1>Save final table</h1>
-<pre class="r"><code>favorite_kable(stable8)</code></pre>
+<pre class="r"><code>favorite_kable(table_1)</code></pre>
 <table style="width:100%; color: black; margin-left: auto; margin-right: auto;" class="table table-striped table-hover table-condensed table-responsive">
 <thead>
 <tr>
@@ -1468,7 +1441,7 @@ poly_colistin_1d
 3.85 (1.85-8.28)
 </td>
 <td style="text-align:left;">
-0.0004
+4e-04
 </td>
 <td style="text-align:left;">
 foley
@@ -1747,8 +1720,8 @@ underweight
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>saveRDS(stable8,&quot;./tables/stable8.RDS&quot;)
-write_csv(stable8,&quot;./tables/stable8.csv&quot;)</code></pre>
+<pre class="r"><code>saveRDS(table_1,&quot;./tables/table1.RDS&quot;)
+write_csv(table_1,&quot;./tables/table1.csv&quot;)</code></pre>
 </div>
 
 

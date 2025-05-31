@@ -40,3 +40,46 @@ convert_tableone_into_df <- function (dataset, vars, strata = NULL, argsNormal =
 get_legend <- function(plot){
   cowplot::get_plot_component(plot,"guide-box",return_all=T) %>% .[[3]]
 }
+
+
+# Create table 1 and figure 4 tables
+print_final_model <- function(x){
+  tables <- lapply(x,FUN=function(list){
+    mv_table <- list[['final_model_table']] %>% arrange(p_value)
+    # Format the tables
+    mv_table$OR <- formatC(mv_table$OR, format = "f", digits = 2)
+    mv_table$`2.5%` <- formatC(mv_table$`2.5%`, format = "f", digits = 2)
+    mv_table$`97.5%` <-   formatC(mv_table$`97.5%`, format = "f", digits = 2)
+
+    # Create OR (95% CI) variable
+    mv_table$`OR (95% CI)` <- paste0(mv_table$OR," (",mv_table$`2.5%`,"-",mv_table$`97.5%`,")")
+    mv_table <- mv_table %>% select(variable, `OR (95% CI)`, p_value)
+    return(mv_table)
+  })  %>% `names<-`(c("present","singleton","spread"))
+
+  lapply(tables,function(y){
+    if(y %>% as.data.frame %>% nrow()==0){
+      paste0(names(y))
+      cbind.data.frame(variable ='No model',`OR (95% CI)` = 'NA',p_value ='NA')
+    }
+    if(y %>% as.data.frame %>% nrow()>0){
+      paste0(names(y))
+      y %>% arrange(p_value)
+    }
+  })
+}
+
+cbind_na <- function(df_list) {
+  max_rows <- max(lapply(df_list, nrow) %>% unlist)
+  lapply(df_list,function(x){
+    rbind(x,as.data.frame(matrix(NA,nrow = (max_rows - nrow(x)),ncol=ncol(x))) %>% mutate_all(as.character) %>% `colnames<-`(c("variable","OR (95% CI)","p_value")))
+  }) %>% do.call(cbind,.)
+}
+
+get_list_of_components <- function(tbl){
+  Present =  tbl$present.variable  %>% subset(.!='NA')
+  Emergence = tbl$singleton.variable   %>% subset(.!='NA')
+  Spread = tbl$spread.variable  %>% subset(.!='NA')
+  results <- list(A_Present=Present,B_Emergence=Emergence,C_Spread=Spread)
+  return(results)
+}
