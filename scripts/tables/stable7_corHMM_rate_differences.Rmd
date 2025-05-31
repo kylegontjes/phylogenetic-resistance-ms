@@ -25,11 +25,11 @@ Sys.info()
 sessionInfo() 
 ``` 
 
-# Create table
+# Create rate differences table
 ```{r}
 rate_differences_table <- readRDS('./data/corHMM_rate_differences/corHMM_model_stats.RDS')
 
-rate_differences_table_formatted <- rate_differences_table %>% select(phenotype,model) %>% cbind(.,rate_differences_table %>% select(-phenotype,-model,-np,-multi_np,-nRateCat,-multi_nRateCat,-best_model,-AIC,-multi_AIC,-AIC) %>% mutate_all(as.numeric) %>% apply(.,2,FUN=function(x){ ifelse(abs(x)>1e5 | abs(x)<1e-5,
+rate_differences_table_formatted <- rate_differences_table %>% select(phenotype,model) %>% cbind(.,rate_differences_table %>% select(-phenotype,-model,-number_parameters,-multi_number_parameters,-number_rate_categories,-multi_number_rate_categories,-best_model,-AIC,-multi_AIC,-AIC) %>% mutate_all(as.numeric) %>% apply(.,2,FUN=function(x){ ifelse(abs(x)>1e5 | abs(x)<1e-5,
   formatC(x, format = "e", digits = 2),round(x,2) %>% formatC(.,format='f',digits=2))
 }) %>% gsub(" NA","",.)) %>% cbind(.,rate_differences_table %>% select(best_model))
 

@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-05-12" />
+<meta name="date" content="2025-05-30" />
 
 <title>Supplemental table 7: Modeling of single- and multi-rate categories using corHMM</title>
 
@@ -577,7 +577,7 @@ display: none;
 <h1 class="title toc-ignore">Supplemental table 7: Modeling of single-
 and multi-rate categories using corHMM</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-05-12</h4>
+<h4 class="date">2025-05-30</h4>
 
 </div>
 
@@ -620,11 +620,11 @@ source(&#39;./lib/consistent_themes.R&#39;)
 Sys.info()
 sessionInfo() </code></pre>
 </div>
-<div id="create-table" class="section level1">
-<h1>Create table</h1>
+<div id="create-rate-differences-table" class="section level1">
+<h1>Create rate differences table</h1>
 <pre class="r"><code>rate_differences_table &lt;- readRDS(&#39;./data/corHMM_rate_differences/corHMM_model_stats.RDS&#39;)
 
-rate_differences_table_formatted &lt;- rate_differences_table %&gt;% select(phenotype,model) %&gt;% cbind(.,rate_differences_table %&gt;% select(-phenotype,-model,-np,-multi_np,-nRateCat,-multi_nRateCat,-best_model,-AIC,-multi_AIC,-AIC) %&gt;% mutate_all(as.numeric) %&gt;% apply(.,2,FUN=function(x){ ifelse(abs(x)&gt;1e5 | abs(x)&lt;1e-5,
+rate_differences_table_formatted &lt;- rate_differences_table %&gt;% select(phenotype,model) %&gt;% cbind(.,rate_differences_table %&gt;% select(-phenotype,-model,-number_parameters,-multi_number_parameters,-number_rate_categories,-multi_number_rate_categories,-best_model,-AIC,-multi_AIC,-AIC) %&gt;% mutate_all(as.numeric) %&gt;% apply(.,2,FUN=function(x){ ifelse(abs(x)&gt;1e5 | abs(x)&lt;1e-5,
   formatC(x, format = &quot;e&quot;, digits = 2),round(x,2) %&gt;% formatC(.,format=&#39;f&#39;,digits=2))
 }) %&gt;% gsub(&quot; NA&quot;,&quot;&quot;,.)) %&gt;% cbind(.,rate_differences_table %&gt;% select(best_model))
 
@@ -702,7 +702,7 @@ TMP-SMX
 ER
 </td>
 <td style="text-align:left;">
-12301.22
+12300.19
 </td>
 <td style="text-align:left;">
 NA
@@ -714,22 +714,22 @@ NA
 375.72
 </td>
 <td style="text-align:left;">
-1.80e+14
+4.18e+16
 </td>
 <td style="text-align:left;">
 NA
 </td>
 <td style="text-align:left;">
-0.02
+0.80
 </td>
 <td style="text-align:left;">
 NA
 </td>
 <td style="text-align:left;">
--162.37
+-162.36
 </td>
 <td style="text-align:left;">
-332.84
+332.82
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -743,10 +743,10 @@ TMP-SMX
 ARD
 </td>
 <td style="text-align:left;">
-14265.83
+14264.50
 </td>
 <td style="text-align:left;">
-9776.72
+9773.12
 </td>
 <td style="text-align:left;">
 -185.73
@@ -755,16 +755,16 @@ ARD
 375.49
 </td>
 <td style="text-align:left;">
-1.61e+12
+1.91e+11
 </td>
 <td style="text-align:left;">
-1.99e+12
+2.36e+11
 </td>
 <td style="text-align:left;">
-3278.11
+3252.91
 </td>
 <td style="text-align:left;">
-2.24e-08
+2.79e-09
 </td>
 <td style="text-align:left;">
 -160.25
@@ -784,7 +784,7 @@ Gentamicin
 ER
 </td>
 <td style="text-align:left;">
-10270.87
+10270.54
 </td>
 <td style="text-align:left;">
 NA
@@ -796,13 +796,13 @@ NA
 326.17
 </td>
 <td style="text-align:left;">
-6.56e+14
+1.84e+14
 </td>
 <td style="text-align:left;">
 NA
 </td>
 <td style="text-align:left;">
-0.28
+0.06
 </td>
 <td style="text-align:left;">
 NA
@@ -825,10 +825,10 @@ Gentamicin
 ARD
 </td>
 <td style="text-align:left;">
-10791.87
+10792.06
 </td>
 <td style="text-align:left;">
-9820.39
+9819.40
 </td>
 <td style="text-align:left;">
 -162.01
@@ -837,22 +837,22 @@ ARD
 328.05
 </td>
 <td style="text-align:left;">
-1.72e+12
+2.06e+06
 </td>
 <td style="text-align:left;">
-2.33e+13
+1.04e+05
 </td>
 <td style="text-align:left;">
-7467.86
+1.94e+05
 </td>
 <td style="text-align:left;">
-18147.69
+12564.28
 </td>
 <td style="text-align:left;">
--156.68
+-156.33
 </td>
 <td style="text-align:left;">
-325.59
+324.88
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -866,7 +866,7 @@ Amikacin
 ER
 </td>
 <td style="text-align:left;">
-23422.45
+23397.39
 </td>
 <td style="text-align:left;">
 NA
@@ -878,22 +878,22 @@ NA
 455.96
 </td>
 <td style="text-align:left;">
-1.95e+14
+3.28e+19
 </td>
 <td style="text-align:left;">
 NA
 </td>
 <td style="text-align:left;">
-3082.43
+20.93
 </td>
 <td style="text-align:left;">
 NA
 </td>
 <td style="text-align:left;">
--202.38
+-164.45
 </td>
 <td style="text-align:left;">
-412.86
+337.00
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -907,10 +907,10 @@ Amikacin
 ARD
 </td>
 <td style="text-align:left;">
-24657.66
+24665.00
 </td>
 <td style="text-align:left;">
-42350.99
+42364.96
 </td>
 <td style="text-align:left;">
 -222.47
@@ -925,10 +925,10 @@ ARD
 7.48e+05
 </td>
 <td style="text-align:left;">
-4945.51
+4934.65
 </td>
 <td style="text-align:left;">
-50807.93
+50839.90
 </td>
 <td style="text-align:left;">
 -197.35
@@ -948,7 +948,7 @@ Colistin
 ER
 </td>
 <td style="text-align:left;">
-8708.53
+8706.93
 </td>
 <td style="text-align:left;">
 NA
@@ -960,13 +960,13 @@ NA
 320.53
 </td>
 <td style="text-align:left;">
-2.97e+14
+1.08e+14
 </td>
 <td style="text-align:left;">
 NA
 </td>
 <td style="text-align:left;">
-0.10
+0.00
 </td>
 <td style="text-align:left;">
 NA
@@ -989,10 +989,10 @@ Colistin
 ARD
 </td>
 <td style="text-align:left;">
-7876.02
+7876.70
 </td>
 <td style="text-align:left;">
-11611.03
+11610.62
 </td>
 <td style="text-align:left;">
 -158.50
@@ -1001,22 +1001,22 @@ ARD
 321.02
 </td>
 <td style="text-align:left;">
-1.72e+06
+1.38e+06
 </td>
 <td style="text-align:left;">
-1.31e+05
+1.40e+05
 </td>
 <td style="text-align:left;">
-43819.28
+13236.94
 </td>
 <td style="text-align:left;">
-278.79
+3472.54
 </td>
 <td style="text-align:left;">
--147.27
+-147.62
 </td>
 <td style="text-align:left;">
-306.76
+307.46
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -1030,7 +1030,7 @@ BL/BLI
 ER
 </td>
 <td style="text-align:left;">
-7843.07
+7845.26
 </td>
 <td style="text-align:left;">
 NA
@@ -1042,22 +1042,22 @@ NA
 335.06
 </td>
 <td style="text-align:left;">
-1.82e+19
+3.79e+21
 </td>
 <td style="text-align:left;">
 NA
 </td>
 <td style="text-align:left;">
-8.62
+17.52
 </td>
 <td style="text-align:left;">
 NA
 </td>
 <td style="text-align:left;">
--110.28
+4857.94
 </td>
 <td style="text-align:left;">
-228.67
+-9707.77
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -1071,10 +1071,10 @@ BL/BLI
 ARD
 </td>
 <td style="text-align:left;">
-12922.02
+12924.85
 </td>
 <td style="text-align:left;">
-76983.84
+76999.85
 </td>
 <td style="text-align:left;">
 -145.38
@@ -1083,16 +1083,16 @@ ARD
 294.79
 </td>
 <td style="text-align:left;">
-1.33e+06
+1.34e+06
 </td>
 <td style="text-align:left;">
-4.60e+05
+4.59e+05
 </td>
 <td style="text-align:left;">
-1.01e-09
+1.00e-09
 </td>
 <td style="text-align:left;">
-1886.08
+1894.98
 </td>
 <td style="text-align:left;">
 -129.65

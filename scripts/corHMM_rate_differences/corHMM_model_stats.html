@@ -11,9 +11,9 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-25" />
+<meta name="date" content="2025-05-30" />
 
-<title>Generate statistics for one- and two-rate corHMM models</title>
+<title>Generate model fit statistics for one- and two-rate corHMM models</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -574,10 +574,10 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Generate statistics for one- and two-rate
-corHMM models</h1>
+<h1 class="title toc-ignore">Generate model fit statistics for one- and
+two-rate corHMM models</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-04-25</h4>
+<h4 class="date">2025-05-30</h4>
 
 </div>
 
@@ -614,26 +614,26 @@ source(&#39;./lib/consistent_themes.R&#39;)</code></pre>
 ##     combine</code></pre>
 <pre class="r"><code># Print
 Sys.info()</code></pre>
-<pre><code>##                                                                                              sysname 
-##                                                                                             &quot;Darwin&quot; 
-##                                                                                              release 
-##                                                                                             &quot;24.4.0&quot; 
-##                                                                                              version 
-## &quot;Darwin Kernel Version 24.4.0: Wed Mar 19 21:16:31 PDT 2025; root:xnu-11417.101.15~1/RELEASE_X86_64&quot; 
-##                                                                                             nodename 
-##                                                                                     &quot;msla0572.local&quot; 
-##                                                                                              machine 
-##                                                                                             &quot;x86_64&quot; 
-##                                                                                                login 
-##                                                                                               &quot;root&quot; 
-##                                                                                                 user 
-##                                                                                           &quot;kgontjes&quot; 
-##                                                                                       effective_user 
-##                                                                                           &quot;kgontjes&quot;</code></pre>
+<pre><code>##                                                                                             sysname 
+##                                                                                            &quot;Darwin&quot; 
+##                                                                                             release 
+##                                                                                            &quot;24.5.0&quot; 
+##                                                                                             version 
+## &quot;Darwin Kernel Version 24.5.0: Tue Apr 22 19:53:26 PDT 2025; root:xnu-11417.121.6~2/RELEASE_X86_64&quot; 
+##                                                                                            nodename 
+##                                                                                    &quot;msla0572.local&quot; 
+##                                                                                             machine 
+##                                                                                            &quot;x86_64&quot; 
+##                                                                                               login 
+##                                                                                              &quot;root&quot; 
+##                                                                                                user 
+##                                                                                          &quot;kgontjes&quot; 
+##                                                                                      effective_user 
+##                                                                                          &quot;kgontjes&quot;</code></pre>
 <pre class="r"><code>sessionInfo() </code></pre>
 <pre><code>## R version 4.5.0 (2025-04-11)
 ## Platform: x86_64-apple-darwin20
-## Running under: macOS Sequoia 15.4
+## Running under: macOS Sequoia 15.5
 ## 
 ## Matrix products: default
 ## BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
@@ -655,7 +655,7 @@ Sys.info()</code></pre>
 ## [13] tidyverse_2.0.0  knitr_1.50      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] sass_0.4.10        generics_0.1.3     xml2_1.3.8         stringi_1.8.7     
+##  [1] sass_0.4.10        generics_0.1.4     xml2_1.3.8         stringi_1.8.7     
 ##  [5] lattice_0.22-7     hms_1.1.3          digest_0.6.37      magrittr_2.0.3    
 ##  [9] evaluate_1.0.3     grid_4.5.0         timechange_0.3.0   RColorBrewer_1.1-3
 ## [13] fastmap_1.2.0      jsonlite_2.0.0     Matrix_1.7-3       DBI_1.2.3         
@@ -694,12 +694,12 @@ characterize_two_cat_corHMM_model &lt;- function(corHMM_obj){
     category1_rate2 &lt;- corHMM_obj$solution[1,2]
     category2_rate2 &lt;-   corHMM_obj$solution[4,3]
   }  
-  multi_np = max(unlist(corHMM_obj$index.mat),na.rm=T)
-  multi_nRateCat = corHMM_obj$rate.cat
+  multi_number_parameters = max(unlist(corHMM_obj$index.mat),na.rm=T)
+  multi_number_rate_categories = corHMM_obj$rate.cat
   multi_loglik = corHMM_obj$loglik
   multi_AIC = corHMM_obj$AIC
   multi_AICc = corHMM_obj$AICc
-  data &lt;- data.frame(model,multi_np,multi_nRateCat,category1_rate1,category1_rate2,category2_rate1,category2_rate2,multi_loglik,multi_AIC,multi_AICc)
+  data &lt;- data.frame(model,multi_number_parameters,multi_number_rate_categories,category1_rate1,category1_rate2,category2_rate1,category2_rate2,multi_loglik,multi_AIC,multi_AICc)
   return(data)
 }
 
@@ -723,10 +723,10 @@ favorite_kable(total_df)</code></pre>
 model
 </th>
 <th style="text-align:right;">
-np
+number_parameters
 </th>
 <th style="text-align:right;">
-nRateCat
+number_rate_categories
 </th>
 <th style="text-align:right;">
 rate1
@@ -747,10 +747,10 @@ AICc
 phenotype
 </th>
 <th style="text-align:right;">
-multi_np
+multi_number_parameters
 </th>
 <th style="text-align:right;">
-multi_nRateCat
+multi_number_rate_categories
 </th>
 <th style="text-align:right;">
 category1_rate1
@@ -790,7 +790,7 @@ ER
 1
 </td>
 <td style="text-align:right;">
-12301.22
+12300.19
 </td>
 <td style="text-align:right;">
 NA
@@ -814,25 +814,25 @@ TMP_SMX_dich_num
 2
 </td>
 <td style="text-align:right;">
-1.803033e+14
+4.175297e+16
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-1.747920e-02
+8.026216e-01
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--162.3686
+-162.3567
 </td>
 <td style="text-align:right;">
-332.7371
+332.7134
 </td>
 <td style="text-align:right;">
-332.8421
+332.8184
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -849,7 +849,7 @@ ER
 1
 </td>
 <td style="text-align:right;">
-10270.87
+10270.54
 </td>
 <td style="text-align:right;">
 NA
@@ -873,25 +873,25 @@ gentamicin_dich_num
 2
 </td>
 <td style="text-align:right;">
-6.555807e+14
+1.836659e+14
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-2.831567e-01
+5.541580e-02
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--157.2074
+-157.2075
 </td>
 <td style="text-align:right;">
-322.4149
+322.4150
 </td>
 <td style="text-align:right;">
-322.5198
+322.5200
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -908,13 +908,13 @@ ER
 1
 </td>
 <td style="text-align:right;">
-23422.45
+23397.39
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--226.9771
+-226.9772
 </td>
 <td style="text-align:right;">
 455.9543
@@ -932,25 +932,25 @@ AMK_dich_num
 2
 </td>
 <td style="text-align:right;">
-1.952841e+14
+3.275679e+19
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-3.082431e+03
+2.093138e+01
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--202.3760
+-164.4453
 </td>
 <td style="text-align:right;">
-412.7521
+336.8907
 </td>
 <td style="text-align:right;">
-412.8571
+336.9957
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -967,7 +967,7 @@ ER
 1
 </td>
 <td style="text-align:right;">
-8708.53
+8706.93
 </td>
 <td style="text-align:right;">
 NA
@@ -991,13 +991,13 @@ CST_dich_num
 2
 </td>
 <td style="text-align:right;">
-2.973586e+14
+1.082302e+14
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-1.025383e-01
+4.355000e-03
 </td>
 <td style="text-align:right;">
 NA
@@ -1009,7 +1009,7 @@ NA
 312.3648
 </td>
 <td style="text-align:right;">
-312.4697
+312.4698
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -1026,7 +1026,7 @@ ER
 1
 </td>
 <td style="text-align:right;">
-7843.07
+7845.26
 </td>
 <td style="text-align:right;">
 NA
@@ -1050,25 +1050,25 @@ blbli_dich_num
 2
 </td>
 <td style="text-align:right;">
-1.821032e+19
+3.794908e+21
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
-8.624378e+00
+1.751829e+01
 </td>
 <td style="text-align:right;">
 NA
 </td>
 <td style="text-align:right;">
--110.2846
+4857.9375
 </td>
 <td style="text-align:right;">
-228.5692
+-9707.8750
 </td>
 <td style="text-align:right;">
-228.6742
+-9707.7700
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -1085,10 +1085,10 @@ ARD
 1
 </td>
 <td style="text-align:right;">
-14265.83
+14264.50
 </td>
 <td style="text-align:right;">
-9776.72
+9773.12
 </td>
 <td style="text-align:right;">
 -185.7299
@@ -1109,25 +1109,25 @@ TMP_SMX_dich_num
 2
 </td>
 <td style="text-align:right;">
-1.609744e+12
+1.907645e+11
 </td>
 <td style="text-align:right;">
-1.986425e+12
+2.356951e+11
 </td>
 <td style="text-align:right;">
-3.278109e+03
+3.252912e+03
 </td>
 <td style="text-align:right;">
 0.000
 </td>
 <td style="text-align:right;">
--160.2524
+-160.2523
 </td>
 <td style="text-align:right;">
-332.5047
+332.5046
 </td>
 <td style="text-align:right;">
-332.7263
+332.7262
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -1144,10 +1144,10 @@ ARD
 1
 </td>
 <td style="text-align:right;">
-10791.87
+10792.06
 </td>
 <td style="text-align:right;">
-9820.39
+9819.40
 </td>
 <td style="text-align:right;">
 -162.0099
@@ -1168,25 +1168,25 @@ gentamicin_dich_num
 2
 </td>
 <td style="text-align:right;">
-1.719886e+12
+2.059311e+06
 </td>
 <td style="text-align:right;">
-2.326660e+13
+1.035418e+05
 </td>
 <td style="text-align:right;">
-7.467863e+03
+1.936783e+05
 </td>
 <td style="text-align:right;">
-18147.693
+12564.278
 </td>
 <td style="text-align:right;">
--156.6846
+-156.3303
 </td>
 <td style="text-align:right;">
-325.3692
+324.6605
 </td>
 <td style="text-align:right;">
-325.5908
+324.8822
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -1203,10 +1203,10 @@ ARD
 1
 </td>
 <td style="text-align:right;">
-24657.66
+24665.00
 </td>
 <td style="text-align:right;">
-42350.99
+42364.96
 </td>
 <td style="text-align:right;">
 -222.4716
@@ -1227,16 +1227,16 @@ AMK_dich_num
 2
 </td>
 <td style="text-align:right;">
-4.852068e+05
+4.853067e+05
 </td>
 <td style="text-align:right;">
-7.476839e+05
+7.481003e+05
 </td>
 <td style="text-align:right;">
-4.945507e+03
+4.934647e+03
 </td>
 <td style="text-align:right;">
-50807.925
+50839.904
 </td>
 <td style="text-align:right;">
 -197.3504
@@ -1262,10 +1262,10 @@ ARD
 1
 </td>
 <td style="text-align:right;">
-7876.02
+7876.70
 </td>
 <td style="text-align:right;">
-11611.03
+11610.62
 </td>
 <td style="text-align:right;">
 -158.4957
@@ -1286,25 +1286,25 @@ CST_dich_num
 2
 </td>
 <td style="text-align:right;">
-1.715912e+06
+1.375015e+06
 </td>
 <td style="text-align:right;">
-1.312699e+05
+1.399982e+05
 </td>
 <td style="text-align:right;">
-4.381928e+04
+1.323694e+04
 </td>
 <td style="text-align:right;">
-278.792
+3472.539
 </td>
 <td style="text-align:right;">
--147.2699
+-147.6183
 </td>
 <td style="text-align:right;">
-306.5399
+307.2366
 </td>
 <td style="text-align:right;">
-306.7615
+307.4583
 </td>
 <td style="text-align:left;">
 Two rate categories
@@ -1321,10 +1321,10 @@ ARD
 1
 </td>
 <td style="text-align:right;">
-12922.02
+12924.85
 </td>
 <td style="text-align:right;">
-76983.84
+76999.85
 </td>
 <td style="text-align:right;">
 -145.3771
@@ -1345,22 +1345,22 @@ blbli_dich_num
 2
 </td>
 <td style="text-align:right;">
-1.334794e+06
+1.335406e+06
 </td>
 <td style="text-align:right;">
-4.597336e+05
+4.593393e+05
 </td>
 <td style="text-align:right;">
 0.000000e+00
 </td>
 <td style="text-align:right;">
-1886.081
+1894.977
 </td>
 <td style="text-align:right;">
 -129.6518
 </td>
 <td style="text-align:right;">
-271.3037
+271.3036
 </td>
 <td style="text-align:right;">
 271.5253

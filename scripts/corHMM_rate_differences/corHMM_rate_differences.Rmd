@@ -26,8 +26,7 @@ sessionInfo()
 ```
  
 # Load data
-```{r} 
-# Standard data
+```{r}  
 df <- readRDS("./data/dataset/df.RDS")
 tr <- read.tree("./data/tree/tree.treefile")
 tip_name_var="isolate_no"

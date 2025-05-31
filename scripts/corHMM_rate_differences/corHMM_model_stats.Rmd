@@ -1,5 +1,5 @@
 ---
-title: "Generate statistics for one- and two-rate corHMM models"
+title: "Generate model fit statistics for one- and two-rate corHMM models"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
@@ -50,12 +50,12 @@ characterize_two_cat_corHMM_model <- function(corHMM_obj){
     category1_rate2 <- corHMM_obj$solution[1,2]
     category2_rate2 <-   corHMM_obj$solution[4,3]
   }  
-  multi_np = max(unlist(corHMM_obj$index.mat),na.rm=T)
-  multi_nRateCat = corHMM_obj$rate.cat
+  multi_number_parameters = max(unlist(corHMM_obj$index.mat),na.rm=T)
+  multi_number_rate_categories = corHMM_obj$rate.cat
   multi_loglik = corHMM_obj$loglik
   multi_AIC = corHMM_obj$AIC
   multi_AICc = corHMM_obj$AICc
-  data <- data.frame(model,multi_np,multi_nRateCat,category1_rate1,category1_rate2,category2_rate1,category2_rate2,multi_loglik,multi_AIC,multi_AICc)
+  data <- data.frame(model,multi_number_parameters,multi_number_rate_categories,category1_rate1,category1_rate2,category2_rate1,category2_rate2,multi_loglik,multi_AIC,multi_AICc)
   return(data)
 }
 
