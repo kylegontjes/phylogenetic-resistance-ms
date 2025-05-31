@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-05-30" />
+<meta name="date" content="2025-05-31" />
 
 <title>Supplemental Table 4: Comparison of ancestral state reconstruction models using Akaike information criteria</title>
 
@@ -578,7 +578,7 @@ display: none;
 ancestral state reconstruction models using Akaike information
 criteria</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-05-30</h4>
+<h4 class="date">2025-05-31</h4>
 
 </div>
 
@@ -685,6 +685,9 @@ asr_model_characteristics &lt;- lapply(pheno,FUN=function(i){
 <h2>Format</h2>
 <pre class="r"><code>stable4 &lt;- asr_model_characteristics %&gt;%  select(pheno,model,number_parameters,rate1,rate2,loglik,AICc,best_model) %&gt;% `colnames&lt;-`(c(&quot;Phenotype&quot;,&quot;Model&quot;,&quot;No. Parameters&quot;,&quot;Rate 1&quot;,&quot;Rate 2&quot;,&quot;Log Likelihood&quot;,&quot;Corrected AIC&quot;,&quot;Best model&quot;)) %&gt;% `rownames&lt;-`(NULL) 
 
+stable4$`Log Likelihood` &lt;- formatC(stable4$`Log Likelihood`,format = &quot;f&quot;,digits =4)
+stable4$`Corrected AIC` &lt;-  formatC(stable4$`Log Likelihood`,format = &quot;f&quot;,digits =4)
+
 stable4$Phenotype &lt;- recode(stable4$Phenotype,&#39;TMP_SMX&#39;=&#39;TMP-SMX&#39;,
                              &quot;gentamicin&quot;=&quot;Gentamicin&quot;,
                              &#39;AMK_dich&#39;=&#39;Amikacin&#39;,
@@ -710,10 +713,10 @@ Rate 1
 <th style="text-align:right;">
 Rate 2
 </th>
-<th style="text-align:right;">
+<th style="text-align:left;">
 Log Likelihood
 </th>
-<th style="text-align:right;">
+<th style="text-align:left;">
 Corrected AIC
 </th>
 <th style="text-align:left;">
@@ -738,11 +741,11 @@ ER
 <td style="text-align:right;">
 NA
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 -186.8567
 </td>
-<td style="text-align:right;">
-375.7238
+<td style="text-align:left;">
+-186.8567
 </td>
 <td style="text-align:left;">
 FALSE
@@ -764,11 +767,11 @@ ARD
 <td style="text-align:right;">
 9772.79
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 -185.7299
 </td>
-<td style="text-align:right;">
-375.4911
+<td style="text-align:left;">
+-185.7299
 </td>
 <td style="text-align:left;">
 TRUE
@@ -790,11 +793,11 @@ ER
 <td style="text-align:right;">
 NA
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 -162.0817
 </td>
-<td style="text-align:right;">
-326.1739
+<td style="text-align:left;">
+-162.0817
 </td>
 <td style="text-align:left;">
 TRUE
@@ -816,11 +819,11 @@ ARD
 <td style="text-align:right;">
 9820.55
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 -162.0099
 </td>
-<td style="text-align:right;">
-328.0512
+<td style="text-align:left;">
+-162.0099
 </td>
 <td style="text-align:left;">
 FALSE
@@ -842,11 +845,11 @@ ER
 <td style="text-align:right;">
 NA
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 -226.9771
 </td>
-<td style="text-align:right;">
-455.9647
+<td style="text-align:left;">
+-226.9771
 </td>
 <td style="text-align:left;">
 FALSE
@@ -868,11 +871,11 @@ ARD
 <td style="text-align:right;">
 42368.73
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 -222.4716
 </td>
-<td style="text-align:right;">
-448.9745
+<td style="text-align:left;">
+-222.4716
 </td>
 <td style="text-align:left;">
 TRUE
@@ -894,11 +897,11 @@ ER
 <td style="text-align:right;">
 NA
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 -159.2620
 </td>
-<td style="text-align:right;">
-320.5343
+<td style="text-align:left;">
+-159.2620
 </td>
 <td style="text-align:left;">
 TRUE
@@ -920,11 +923,11 @@ ARD
 <td style="text-align:right;">
 11609.37
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 -158.4957
 </td>
-<td style="text-align:right;">
-321.0227
+<td style="text-align:left;">
+-158.4957
 </td>
 <td style="text-align:left;">
 FALSE
@@ -946,11 +949,11 @@ ER
 <td style="text-align:right;">
 NA
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 -166.5255
 </td>
-<td style="text-align:right;">
-335.0613
+<td style="text-align:left;">
+-166.5255
 </td>
 <td style="text-align:left;">
 FALSE
@@ -972,11 +975,11 @@ ARD
 <td style="text-align:right;">
 76998.04
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 -145.3771
 </td>
-<td style="text-align:right;">
-294.7856
+<td style="text-align:left;">
+-145.3771
 </td>
 <td style="text-align:left;">
 TRUE
