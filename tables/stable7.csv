@@ -1,11 +1,11 @@
 Phenotype,Model,Rate 1,Rate 2,Single-rate Log Likelihood,Single-rate AICc,Category I Rate 1,Category I Rate 2,Category II Rate 1,Category II Rate 2,Multi-rate Log Likelihood,Multi-rate AICc,Best model
-TMP-SMX,ER,12300.19,NA,-186.86,375.72,4.18e+16,NA,0.80,NA,-162.36,332.82,Two rate categories
-TMP-SMX,ARD,14264.50,9773.12,-185.73,375.49,1.91e+11,2.36e+11,3252.91,2.79e-09,-160.25,332.73,Two rate categories
-Gentamicin,ER,10270.54,NA,-162.08,326.17,1.84e+14,NA,0.06,NA,-157.21,322.52,Two rate categories
-Gentamicin,ARD,10792.06,9819.40,-162.01,328.05,2.06e+06,1.04e+05,1.94e+05,12564.28,-156.33,324.88,Two rate categories
-Amikacin,ER,23397.39,NA,-226.98,455.96,3.28e+19,NA,20.93,NA,-164.45,337.00,Two rate categories
-Amikacin,ARD,24665.00,42364.96,-222.47,448.97,4.85e+05,7.48e+05,4934.65,50839.90,-197.35,406.92,Two rate categories
-Colistin,ER,8706.93,NA,-159.26,320.53,1.08e+14,NA,0.00,NA,-152.18,312.47,Two rate categories
-Colistin,ARD,7876.70,11610.62,-158.50,321.02,1.38e+06,1.40e+05,13236.94,3472.54,-147.62,307.46,Two rate categories
-BL/BLI,ER,7845.26,NA,-166.53,335.06,3.79e+21,NA,17.52,NA,4857.94,-9707.77,Two rate categories
-BL/BLI,ARD,12924.85,76999.85,-145.38,294.79,1.34e+06,4.59e+05,1.00e-09,1894.98,-129.65,271.53,Two rate categories
+TMP-SMX,ER,12301.83,NA,-186.86,375.72,1.44e+12,NA,8.14e-07,NA,-162.37,332.84,Two rate categories
+TMP-SMX,ARD,14265.06,9773.29,-185.73,375.49,3.15e+11,3.90e+11,3251.30,1.91e-06,-160.25,332.73,Two rate categories
+Gentamicin,ER,10270.57,NA,-162.08,326.17,6.30e+11,NA,0.00,NA,-157.21,322.52,Two rate categories
+Gentamicin,ARD,10792.83,9821.52,-162.01,328.05,3.60e+11,1.18e+12,0.01,4660.81,-156.67,325.55,Two rate categories
+Amikacin,ER,23430.82,NA,-226.98,455.96,5.96e+05,NA,1782.15,NA,-202.12,412.35,Two rate categories
+Amikacin,ARD,24662.95,42366.02,-222.47,448.97,4.84e+05,7.47e+05,4859.19,51051.42,-197.35,406.92,Two rate categories
+Colistin,ER,8707.02,NA,-159.26,320.53,8.61e+17,NA,1326.06,NA,-152.17,312.45,Two rate categories
+Colistin,ARD,7876.33,11610.01,-158.50,321.02,1.71e+06,1.31e+05,43726.54,293.61,-147.27,306.76,Two rate categories
+BL/BLI,ER,7844.23,NA,-166.53,335.06,1.96e+17,NA,0.00,NA,-134.75,277.60,Two rate categories
+BL/BLI,ARD,12924.80,76995.92,-145.38,294.79,1.35e+06,4.66e+05,1.02e-09,1903.25,-129.65,271.53,Two rate categories
