@@ -1,5 +1,5 @@
 ---
-title: "results_section_4"
+title: "Results Section 4 - Phylogenetically informed risk factor analysis revealed shared and unique risk factors associated with the emergence and spread of antibiotic resistance"
 author: "Kyle Gontjes"
 date: "`r Sys.Date()`"
 output: html_document
@@ -35,32 +35,6 @@ phyloaware_regression_obj <- readRDS("./data/regression/purposeful_regression_re
 
 # Get model components
 ```{r}
-print_final_model <- function(x){
-  tables <- lapply(x,FUN=function(list){
-    list[['final_model_table']] %>% arrange(p_value)
-  })  %>% `names<-`(c("present","singleton","spread")) 
-  
-  lapply(tables,function(y){
-   if(y %>% as.data.frame %>% nrow()==0){
-      paste0(names(y))
-      cbind.data.frame(Variable ='No model',`OR (95% CI)` = 'NA',p_value ='NA')
-    } 
-    if(y %>% as.data.frame %>% nrow()>0){
-      paste0(names(y))
-      y %>% arrange(p_value) %>% rownames_to_column(.,'Variable') %>% select("Variable","OR (95% CI)","p_value")
-    } 
-  })
-}
-
-cbind_na <- function(df_list) { 
-  max_rows <- max(lapply(df_list, nrow) %>% unlist) 
-  lapply(df_list,function(x){
-    rbind(x,as.data.frame(matrix(NA,nrow = (max_rows - nrow(x)),ncol=ncol(x))) %>% mutate_all(as.character) %>% `colnames<-`(c("Variable","OR (95% CI)","p_value")))
-  }) %>% do.call(cbind,.)
-}
-```
-
-```{r}
 drugs <- c("TMP_SMX",'gentamicin','AMK','CST','blbli')
 mv_tables <- lapply(drugs,FUN=function(x){
   print_final_model(phyloaware_regression_obj[[x]]$multivariable)  %>% cbind_na
@@ -70,9 +44,9 @@ mv_tables <- lapply(drugs,FUN=function(x){
 # List model components
 ```{r}
 get_list_of_components <- function(tbl){
-  Present =  tbl$present.Variable  %>% subset(.!='NA')
-  Emergence = tbl$singleton.Variable   %>% subset(.!='NA')
-  Spread = tbl$spread.Variable  %>% subset(.!='NA')
+  Present =  tbl$present.variable  %>% subset(.!='NA')
+  Emergence = tbl$singleton.variable   %>% subset(.!='NA')
+  Spread = tbl$spread.variable  %>% subset(.!='NA')
   results <- list(A_Present=Present,B_Emergence=Emergence,C_Spread=Spread)
   return(results)
 }
@@ -81,7 +55,7 @@ model_lists <- lapply(mv_tables,get_list_of_components) %>% `names<-`(drugs)
 ```
 
 # Get matrix of demographics, antibiotics, comorbidities
-# Uniquity
+## Looking for both unique and shared features
 ```{r}
 create_venn_diagram_df <- function(variable_list){
 overview <- process_region_data(Venn(variable_list))
@@ -98,26 +72,20 @@ as.data.frame(overview)
 
 get_shared <- function(variable_list,phyloaware_regression_obj,drug){
   shared <- subset(variable_list,name %in% c("B_Emergence/C_Spread",'A_Present/B_Emergence/C_Spread')) %>% .$item %>% subset(.!='0')  %>% str_split(.,";") %>% unlist
-  emergence_model <- phyloaware_regression_obj[[drug]]$multivariable[['singleton']][['final_model_table']] %>% subset(rownames(.) %in% shared) 
-  cluster_model <- phyloaware_regression_obj[[drug]]$multivariable[['cluster']][['final_model_table']] %>% subset(rownames(.) %in% shared) 
+  emergence_model <- phyloaware_regression_obj[[drug]]$multivariable[['singleton']][['final_model_table']]  
+  cluster_model <- phyloaware_regression_obj[[drug]]$multivariable[['cluster']][['final_model_table']] 
   results <- list(shared=shared,emergence_model=emergence_model,cluster_model=cluster_model)
   return(results)
 }
 
 get_unique <-  function(variable_list,phyloaware_regression_obj,drug){
   emergence <- subset(variable_list,name %in% c("B_Emergence",'A_Present/B_Emergence')) %>% .$item %>% subset(.!='0') %>% str_split(.,";") %>% unlist
-  emergence_model <- phyloaware_regression_obj[[drug]]$multivariable[['singleton']][['final_model_table']] %>% subset(rownames(.) %in% emergence) 
+  emergence_model <- phyloaware_regression_obj[[drug]]$multivariable[['singleton']][['final_model_table']]  
   spread <-  subset(variable_list,name %in% c("C_Spread",'A_Present/C_Spread')) %>% .$item %>% subset(.!='0') %>% str_split(.,";") %>% unlist
-  cluster_model <- phyloaware_regression_obj[[drug]]$multivariable[['cluster']][['final_model_table']] %>% subset(rownames(.) %in% spread) 
+  cluster_model <- phyloaware_regression_obj[[drug]]$multivariable[['cluster']][['final_model_table']]  
   results <- list(emergence=emergence,emergence_model=emergence_model,spread=spread,cluster_model=cluster_model)
   return(results)
-}
- 
-
-gent_shared_unique <- create_venn_diagram_df(model_lists$gentamicin)
-AMK_shared_unique <- create_venn_diagram_df(model_lists$AMK)
-CST_shared_unique <- create_venn_diagram_df(model_lists$CST)
-blbli_shared_unique <- create_venn_diagram_df(model_lists$blbli)
+} 
 ```
 
 ```{r}
@@ -134,7 +102,7 @@ get_overall <- function(drug,model_lists,phyloaware_regression_obj){
 sharing <- lapply(drugs,get_overall,model_lists = model_lists,phyloaware_regression_obj=phyloaware_regression_obj) %>% `names<-`(drugs)
 ```
 
-# TMP_smx
+# TMP-SMX
 ```{r}
 sharing$TMP_SMX
 ```

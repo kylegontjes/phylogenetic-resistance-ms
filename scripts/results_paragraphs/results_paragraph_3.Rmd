@@ -89,7 +89,7 @@ CST_lr_CI$univariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="Colistin
 blbli_lr_CI$univariable %>% do.call(rbind.data.frame,.) %>% mutate(pheno="BL/BLI")
 ```
 
-## Modeling Clade II
+## Modeling Clade II (required as clade I was the exposure in figure 3!)
 ```{r,warning=F,message=F}
 variables_of_interest_II <- c("clade_II")
 TMP_SMX_lr_CII <- phyloaware_regression("TMP_SMX_dich_num",df = TMP_SMX_regression_df,variables = variables_of_interest_II,first_present = T,patient_id = 'Patient_ID',culture_date = "Cx_date",multivariable = F)

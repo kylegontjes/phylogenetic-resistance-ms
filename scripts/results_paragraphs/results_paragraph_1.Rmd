@@ -50,4 +50,4 @@ paste0("Number of patients contributing more than one isolate: ",sum(patient_sum
 paste0("Proportion of patients contributing more than one isolate: ",round(sum(patient_summaries$more_than_one) / nrow(patient_summaries) *100,2))
 ```
 
-# Cohort statistics from this section are provided in Supplemental Table 3
+# Cohort statistics found in this section are provided in Supplemental Table 3

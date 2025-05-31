@@ -11,9 +11,9 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-28" />
+<meta name="date" content="2025-05-31" />
 
-<title>results_section_4</title>
+<title>Results Section 4 - Phylogenetically informed risk factor analysis revealed shared and unique risk factors associated with the emergence and spread of antibiotic resistance</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -350,9 +350,11 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">results_section_4</h1>
+<h1 class="title toc-ignore">Results Section 4 - Phylogenetically
+informed risk factor analysis revealed shared and unique risk factors
+associated with the emergence and spread of antibiotic resistance</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-04-28</h4>
+<h4 class="date">2025-05-31</h4>
 
 </div>
 
@@ -366,29 +368,6 @@ display: none;
 </div>
 <div id="get-model-components" class="section level1">
 <h1>Get model components</h1>
-<pre class="r"><code>print_final_model &lt;- function(x){
-  tables &lt;- lapply(x,FUN=function(list){
-    list[[&#39;final_model_table&#39;]] %&gt;% arrange(p_value)
-  })  %&gt;% `names&lt;-`(c(&quot;present&quot;,&quot;singleton&quot;,&quot;spread&quot;)) 
-  
-  lapply(tables,function(y){
-   if(y %&gt;% as.data.frame %&gt;% nrow()==0){
-      paste0(names(y))
-      cbind.data.frame(Variable =&#39;No model&#39;,`OR (95% CI)` = &#39;NA&#39;,p_value =&#39;NA&#39;)
-    } 
-    if(y %&gt;% as.data.frame %&gt;% nrow()&gt;0){
-      paste0(names(y))
-      y %&gt;% arrange(p_value) %&gt;% rownames_to_column(.,&#39;Variable&#39;) %&gt;% select(&quot;Variable&quot;,&quot;OR (95% CI)&quot;,&quot;p_value&quot;)
-    } 
-  })
-}
-
-cbind_na &lt;- function(df_list) { 
-  max_rows &lt;- max(lapply(df_list, nrow) %&gt;% unlist) 
-  lapply(df_list,function(x){
-    rbind(x,as.data.frame(matrix(NA,nrow = (max_rows - nrow(x)),ncol=ncol(x))) %&gt;% mutate_all(as.character) %&gt;% `colnames&lt;-`(c(&quot;Variable&quot;,&quot;OR (95% CI)&quot;,&quot;p_value&quot;)))
-  }) %&gt;% do.call(cbind,.)
-}</code></pre>
 <pre class="r"><code>drugs &lt;- c(&quot;TMP_SMX&quot;,&#39;gentamicin&#39;,&#39;AMK&#39;,&#39;CST&#39;,&#39;blbli&#39;)
 mv_tables &lt;- lapply(drugs,FUN=function(x){
   print_final_model(phyloaware_regression_obj[[x]]$multivariable)  %&gt;% cbind_na
@@ -397,9 +376,9 @@ mv_tables &lt;- lapply(drugs,FUN=function(x){
 <div id="list-model-components" class="section level1">
 <h1>List model components</h1>
 <pre class="r"><code>get_list_of_components &lt;- function(tbl){
-  Present =  tbl$present.Variable  %&gt;% subset(.!=&#39;NA&#39;)
-  Emergence = tbl$singleton.Variable   %&gt;% subset(.!=&#39;NA&#39;)
-  Spread = tbl$spread.Variable  %&gt;% subset(.!=&#39;NA&#39;)
+  Present =  tbl$present.variable  %&gt;% subset(.!=&#39;NA&#39;)
+  Emergence = tbl$singleton.variable   %&gt;% subset(.!=&#39;NA&#39;)
+  Spread = tbl$spread.variable  %&gt;% subset(.!=&#39;NA&#39;)
   results &lt;- list(A_Present=Present,B_Emergence=Emergence,C_Spread=Spread)
   return(results)
 }
@@ -408,9 +387,8 @@ model_lists &lt;- lapply(mv_tables,get_list_of_components) %&gt;% `names&lt;-`(d
 </div>
 <div id="get-matrix-of-demographics-antibiotics-comorbidities" class="section level1">
 <h1>Get matrix of demographics, antibiotics, comorbidities</h1>
-</div>
-<div id="uniquity" class="section level1">
-<h1>Uniquity</h1>
+<div id="looking-for-both-unique-and-shared-features" class="section level2">
+<h2>Looking for both unique and shared features</h2>
 <pre class="r"><code>create_venn_diagram_df &lt;- function(variable_list){
 overview &lt;- process_region_data(Venn(variable_list))
 overview$item &lt;- sapply(overview$item,FUN=function(x){
@@ -426,26 +404,20 @@ as.data.frame(overview)
 
 get_shared &lt;- function(variable_list,phyloaware_regression_obj,drug){
   shared &lt;- subset(variable_list,name %in% c(&quot;B_Emergence/C_Spread&quot;,&#39;A_Present/B_Emergence/C_Spread&#39;)) %&gt;% .$item %&gt;% subset(.!=&#39;0&#39;)  %&gt;% str_split(.,&quot;;&quot;) %&gt;% unlist
-  emergence_model &lt;- phyloaware_regression_obj[[drug]]$multivariable[[&#39;singleton&#39;]][[&#39;final_model_table&#39;]] %&gt;% subset(rownames(.) %in% shared) 
-  cluster_model &lt;- phyloaware_regression_obj[[drug]]$multivariable[[&#39;cluster&#39;]][[&#39;final_model_table&#39;]] %&gt;% subset(rownames(.) %in% shared) 
+  emergence_model &lt;- phyloaware_regression_obj[[drug]]$multivariable[[&#39;singleton&#39;]][[&#39;final_model_table&#39;]]  
+  cluster_model &lt;- phyloaware_regression_obj[[drug]]$multivariable[[&#39;cluster&#39;]][[&#39;final_model_table&#39;]] 
   results &lt;- list(shared=shared,emergence_model=emergence_model,cluster_model=cluster_model)
   return(results)
 }
 
 get_unique &lt;-  function(variable_list,phyloaware_regression_obj,drug){
   emergence &lt;- subset(variable_list,name %in% c(&quot;B_Emergence&quot;,&#39;A_Present/B_Emergence&#39;)) %&gt;% .$item %&gt;% subset(.!=&#39;0&#39;) %&gt;% str_split(.,&quot;;&quot;) %&gt;% unlist
-  emergence_model &lt;- phyloaware_regression_obj[[drug]]$multivariable[[&#39;singleton&#39;]][[&#39;final_model_table&#39;]] %&gt;% subset(rownames(.) %in% emergence) 
+  emergence_model &lt;- phyloaware_regression_obj[[drug]]$multivariable[[&#39;singleton&#39;]][[&#39;final_model_table&#39;]]  
   spread &lt;-  subset(variable_list,name %in% c(&quot;C_Spread&quot;,&#39;A_Present/C_Spread&#39;)) %&gt;% .$item %&gt;% subset(.!=&#39;0&#39;) %&gt;% str_split(.,&quot;;&quot;) %&gt;% unlist
-  cluster_model &lt;- phyloaware_regression_obj[[drug]]$multivariable[[&#39;cluster&#39;]][[&#39;final_model_table&#39;]] %&gt;% subset(rownames(.) %in% spread) 
+  cluster_model &lt;- phyloaware_regression_obj[[drug]]$multivariable[[&#39;cluster&#39;]][[&#39;final_model_table&#39;]]  
   results &lt;- list(emergence=emergence,emergence_model=emergence_model,spread=spread,cluster_model=cluster_model)
   return(results)
-}
- 
-
-gent_shared_unique &lt;- create_venn_diagram_df(model_lists$gentamicin)
-AMK_shared_unique &lt;- create_venn_diagram_df(model_lists$AMK)
-CST_shared_unique &lt;- create_venn_diagram_df(model_lists$CST)
-blbli_shared_unique &lt;- create_venn_diagram_df(model_lists$blbli)</code></pre>
+} </code></pre>
 <pre class="r"><code>get_overall &lt;- function(drug,model_lists,phyloaware_regression_obj){
   model_shared_unique &lt;- create_venn_diagram_df(model_lists[[drug]])
   model_shared &lt;- get_shared(model_shared_unique,phyloaware_regression_obj,drug) 
@@ -455,8 +427,9 @@ blbli_shared_unique &lt;- create_venn_diagram_df(model_lists$blbli)</code></pre>
 }</code></pre>
 <pre class="r"><code>sharing &lt;- lapply(drugs,get_overall,model_lists = model_lists,phyloaware_regression_obj=phyloaware_regression_obj) %&gt;% `names&lt;-`(drugs)</code></pre>
 </div>
-<div id="tmp_smx" class="section level1">
-<h1>TMP_smx</h1>
+</div>
+<div id="tmp-smx" class="section level1">
+<h1>TMP-SMX</h1>
 <pre class="r"><code>sharing$TMP_SMX</code></pre>
 <pre><code>$model_shared_unique
      id                           name
@@ -481,12 +454,23 @@ $model_shared$shared
 [1] &quot;bactrim_1d&quot;
 
 $model_shared$emergence_model
-                     OR (95% CI) p_value
-bactrim_1d 119.13 (5.95-5891.04)  0.0041
+          variable     OR 2.5%   97.5% p_value
+1       bactrim_1d 119.13 5.95 5891.04  0.0041
+2       sex.female   0.35 0.13    0.86  0.0284
+3   tigecycline_1d   3.66 1.10   11.75  0.0292
+4         zosyn_1d   0.09 0.00    0.67  0.0709
+5 poly_colistin_1d   0.10 0.00    0.80  0.0892
 
 $model_shared$cluster_model
-                   OR (95% CI) p_value
-bactrim_1d 18.93 (3.13-368.12)  0.0077
+            variable    OR 2.5%  97.5% p_value
+1                AKI  0.41 0.23   0.70  0.0014
+2 third_plus_ceph_1d  0.40 0.22   0.73  0.0031
+3         bactrim_1d 18.93 3.13 368.12  0.0077
+4              FQ_1d  0.42 0.20   0.82  0.0132
+5              decub  2.10 1.11   4.06  0.0247
+6             gastro  1.89 1.09   3.33  0.0256
+7            gent_1d  0.09 0.00   0.54  0.0286
+8              trach  1.67 0.94   3.01  0.0831
 
 
 $model_unique
@@ -494,11 +478,12 @@ $model_unique$emergence
 [1] &quot;sex.female&quot;       &quot;zosyn_1d&quot;         &quot;poly_colistin_1d&quot; &quot;tigecycline_1d&quot;  
 
 $model_unique$emergence_model
-                       OR (95% CI) p_value
-zosyn_1d          0.09 (0.00-0.67)  0.0709
-tigecycline_1d   3.66 (1.10-11.75)  0.0292
-sex.female        0.35 (0.13-0.86)  0.0284
-poly_colistin_1d  0.10 (0.00-0.80)  0.0892
+          variable     OR 2.5%   97.5% p_value
+1       bactrim_1d 119.13 5.95 5891.04  0.0041
+2       sex.female   0.35 0.13    0.86  0.0284
+3   tigecycline_1d   3.66 1.10   11.75  0.0292
+4         zosyn_1d   0.09 0.00    0.67  0.0709
+5 poly_colistin_1d   0.10 0.00    0.80  0.0892
 
 $model_unique$spread
 [1] &quot;trach&quot;              &quot;third_plus_ceph_1d&quot; &quot;AKI&quot;               
@@ -506,14 +491,15 @@ $model_unique$spread
 [7] &quot;FQ_1d&quot;             
 
 $model_unique$cluster_model
-                        OR (95% CI) p_value
-third_plus_ceph_1d 0.40 (0.22-0.73)  0.0031
-decub              2.10 (1.11-4.06)  0.0247
-AKI                0.41 (0.23-0.70)  0.0014
-gent_1d            0.09 (0.00-0.54)  0.0286
-gastro             1.89 (1.09-3.33)  0.0256
-trach              1.67 (0.94-3.01)  0.0831
-FQ_1d              0.42 (0.20-0.82)  0.0132</code></pre>
+            variable    OR 2.5%  97.5% p_value
+1                AKI  0.41 0.23   0.70  0.0014
+2 third_plus_ceph_1d  0.40 0.22   0.73  0.0031
+3         bactrim_1d 18.93 3.13 368.12  0.0077
+4              FQ_1d  0.42 0.20   0.82  0.0132
+5              decub  2.10 1.11   4.06  0.0247
+6             gastro  1.89 1.09   3.33  0.0256
+7            gent_1d  0.09 0.00   0.54  0.0286
+8              trach  1.67 0.94   3.01  0.0831</code></pre>
 </div>
 <div id="gentamicin" class="section level1">
 <h1>Gentamicin</h1>
@@ -533,12 +519,19 @@ $model_shared$shared
 [1] &quot;third_plus_ceph_1d&quot;
 
 $model_shared$emergence_model
-                        OR (95% CI) p_value
-third_plus_ceph_1d 0.13 (0.01-0.67)  0.0513
+            variable   OR 2.5% 97.5% p_value
+1                CHF 3.61 1.21 10.75  0.0199
+2 third_plus_ceph_1d 0.13 0.01  0.67  0.0513
+3      carbapenem_1d 0.27 0.06  0.95  0.0626
 
 $model_shared$cluster_model
-                        OR (95% CI) p_value
-third_plus_ceph_1d 0.56 (0.32-0.98)  0.0438
+            variable    OR 2.5%  97.5% p_value
+1              decub  2.57 1.37   4.96  0.0038
+2                CKD  0.47 0.27   0.82  0.0082
+3         bactrim_1d 10.85 1.96 203.63  0.0259
+4 third_plus_ceph_1d  0.56 0.32   0.98  0.0438
+5                AKI  0.60 0.36   1.00  0.0501
+6            gent_1d  0.23 0.03   1.01  0.0773
 
 
 $model_unique
@@ -546,20 +539,22 @@ $model_unique$emergence
 [1] &quot;CHF&quot;           &quot;carbapenem_1d&quot;
 
 $model_unique$emergence_model
-                    OR (95% CI) p_value
-CHF           3.61 (1.21-10.75)  0.0199
-carbapenem_1d  0.27 (0.06-0.95)  0.0626
+            variable   OR 2.5% 97.5% p_value
+1                CHF 3.61 1.21 10.75  0.0199
+2 third_plus_ceph_1d 0.13 0.01  0.67  0.0513
+3      carbapenem_1d 0.27 0.06  0.95  0.0626
 
 $model_unique$spread
 [1] &quot;gent_1d&quot;    &quot;decub&quot;      &quot;CKD&quot;        &quot;bactrim_1d&quot; &quot;AKI&quot;       
 
 $model_unique$cluster_model
-                   OR (95% CI) p_value
-CKD           0.47 (0.27-0.82)  0.0082
-AKI           0.60 (0.36-1.00)  0.0501
-bactrim_1d 10.85 (1.96-203.63)  0.0259
-decub         2.57 (1.37-4.96)  0.0038
-gent_1d       0.23 (0.03-1.01)  0.0773</code></pre>
+            variable    OR 2.5%  97.5% p_value
+1              decub  2.57 1.37   4.96  0.0038
+2                CKD  0.47 0.27   0.82  0.0082
+3         bactrim_1d 10.85 1.96 203.63  0.0259
+4 third_plus_ceph_1d  0.56 0.32   0.98  0.0438
+5                AKI  0.60 0.36   1.00  0.0501
+6            gent_1d  0.23 0.03   1.01  0.0773</code></pre>
 </div>
 <div id="amikacin" class="section level1">
 <h1>Amikacin</h1>
@@ -579,14 +574,17 @@ $model_shared$shared
 [1] &quot;tobra_1d&quot; &quot;gent_1d&quot; 
 
 $model_shared$emergence_model
-               OR (95% CI) p_value
-tobra_1d 3.79 (1.03-12.65)  0.0334
-gent_1d  5.61 (0.94-33.04)  0.0474
+    variable   OR 2.5% 97.5% p_value
+1   tobra_1d 3.79 1.03 12.65  0.0334
+2    gent_1d 5.61 0.94 33.04  0.0474
+3 malignancy 2.55 0.89  6.69  0.0649
 
 $model_shared$cluster_model
-               OR (95% CI) p_value
-gent_1d  4.61 (1.08-23.30)  0.0424
-tobra_1d  2.52 (0.88-7.24)  0.0806
+            variable   OR 2.5% 97.5% p_value
+1 third_plus_ceph_1d 1.88 1.06  3.33  0.0297
+2            gent_1d 4.61 1.08 23.30  0.0424
+3            lung_dz 1.80 0.96  3.35  0.0618
+4           tobra_1d 2.52 0.88  7.24  0.0806
 
 
 $model_unique
@@ -594,16 +592,20 @@ $model_unique$emergence
 [1] &quot;malignancy&quot;
 
 $model_unique$emergence_model
-                OR (95% CI) p_value
-malignancy 2.55 (0.89-6.69)  0.0649
+    variable   OR 2.5% 97.5% p_value
+1   tobra_1d 3.79 1.03 12.65  0.0334
+2    gent_1d 5.61 0.94 33.04  0.0474
+3 malignancy 2.55 0.89  6.69  0.0649
 
 $model_unique$spread
 [1] &quot;third_plus_ceph_1d&quot; &quot;lung_dz&quot;           
 
 $model_unique$cluster_model
-                        OR (95% CI) p_value
-third_plus_ceph_1d 1.88 (1.06-3.33)  0.0297
-lung_dz            1.80 (0.96-3.35)  0.0618</code></pre>
+            variable   OR 2.5% 97.5% p_value
+1 third_plus_ceph_1d 1.88 1.06  3.33  0.0297
+2            gent_1d 4.61 1.08 23.30  0.0424
+3            lung_dz 1.80 0.96  3.35  0.0618
+4           tobra_1d 2.52 0.88  7.24  0.0806</code></pre>
 </div>
 <div id="colistin" class="section level1">
 <h1>Colistin</h1>
@@ -623,12 +625,17 @@ $model_shared$shared
 [1] &quot;poly_colistin_1d&quot;
 
 $model_shared$emergence_model
-                       OR (95% CI) p_value
-poly_colistin_1d 7.87 (1.92-34.78)  0.0042
+          variable   OR 2.5% 97.5% p_value
+1            foley 0.15 0.04  0.49  0.0039
+2 poly_colistin_1d 7.87 1.92 34.78  0.0042
+3          lung_dz 4.60 1.54 14.26  0.0064
+4   tigecycline_1d 3.95 1.11 13.41  0.0277
 
 $model_shared$cluster_model
-                      OR (95% CI) p_value
-poly_colistin_1d 3.19 (1.45-7.11)  0.0039
+          variable   OR 2.5% 97.5% p_value
+1 poly_colistin_1d 3.19 1.45  7.11  0.0039
+2      underweight 0.47 0.24  0.87  0.0208
+3      LOSbeforeCx 0.99 0.98  1.00  0.0667
 
 
 $model_unique
@@ -636,18 +643,20 @@ $model_unique$emergence
 [1] &quot;foley&quot;          &quot;lung_dz&quot;        &quot;tigecycline_1d&quot;
 
 $model_unique$emergence_model
-                     OR (95% CI) p_value
-lung_dz        4.60 (1.54-14.26)  0.0064
-tigecycline_1d 3.95 (1.11-13.41)  0.0277
-foley           0.15 (0.04-0.49)  0.0039
+          variable   OR 2.5% 97.5% p_value
+1            foley 0.15 0.04  0.49  0.0039
+2 poly_colistin_1d 7.87 1.92 34.78  0.0042
+3          lung_dz 4.60 1.54 14.26  0.0064
+4   tigecycline_1d 3.95 1.11 13.41  0.0277
 
 $model_unique$spread
 [1] &quot;LOSbeforeCx&quot; &quot;underweight&quot;
 
 $model_unique$cluster_model
-                 OR (95% CI) p_value
-underweight 0.47 (0.24-0.87)  0.0208
-LOSbeforeCx 0.99 (0.98-1.00)  0.0667</code></pre>
+          variable   OR 2.5% 97.5% p_value
+1 poly_colistin_1d 3.19 1.45  7.11  0.0039
+2      underweight 0.47 0.24  0.87  0.0208
+3      LOSbeforeCx 0.99 0.98  1.00  0.0667</code></pre>
 </div>
 <div id="blbli" class="section level1">
 <h1>BL/BLI</h1>
@@ -667,14 +676,20 @@ $model_shared$shared
 [1] &quot;age&quot;         &quot;underweight&quot;
 
 $model_shared$emergence_model
-                 OR (95% CI) p_value
-age         1.03 (1.01-1.06)  0.0250
-underweight 0.39 (0.11-1.06)  0.0930
+        variable   OR 2.5% 97.5% p_value
+1            age 1.03 1.01  1.06  0.0250
+2  carbapenem_1d 2.41 1.08  5.37  0.0299
+3 tigecycline_1d 2.32 0.90  5.60  0.0683
+4   linezolid_1d 0.17 0.01  0.87  0.0894
+5    underweight 0.39 0.11  1.06  0.0930
 
 $model_shared$cluster_model
-                 OR (95% CI) p_value
-age         1.04 (1.00-1.09)  0.0383
-underweight 0.29 (0.06-1.00)  0.0744
+            variable   OR 2.5% 97.5% p_value
+1 third_plus_ceph_1d 5.74 2.03 17.14  0.0011
+2            lung_dz 4.16 1.38 12.54  0.0102
+3                age 1.04 1.00  1.09  0.0383
+4              foley 3.10 1.07 10.49  0.0478
+5        underweight 0.29 0.06  1.00  0.0744
 
 
 $model_unique
@@ -682,19 +697,23 @@ $model_unique$emergence
 [1] &quot;tigecycline_1d&quot; &quot;linezolid_1d&quot;   &quot;carbapenem_1d&quot; 
 
 $model_unique$emergence_model
-                    OR (95% CI) p_value
-tigecycline_1d 2.32 (0.90-5.60)  0.0683
-carbapenem_1d  2.41 (1.08-5.37)  0.0299
-linezolid_1d   0.17 (0.01-0.87)  0.0894
+        variable   OR 2.5% 97.5% p_value
+1            age 1.03 1.01  1.06  0.0250
+2  carbapenem_1d 2.41 1.08  5.37  0.0299
+3 tigecycline_1d 2.32 0.90  5.60  0.0683
+4   linezolid_1d 0.17 0.01  0.87  0.0894
+5    underweight 0.39 0.11  1.06  0.0930
 
 $model_unique$spread
 [1] &quot;lung_dz&quot;            &quot;foley&quot;              &quot;third_plus_ceph_1d&quot;
 
 $model_unique$cluster_model
-                         OR (95% CI) p_value
-third_plus_ceph_1d 5.74 (2.03-17.14)  0.0011
-lung_dz            4.16 (1.38-12.54)  0.0102
-foley              3.10 (1.07-10.49)  0.0478</code></pre>
+            variable   OR 2.5% 97.5% p_value
+1 third_plus_ceph_1d 5.74 2.03 17.14  0.0011
+2            lung_dz 4.16 1.38 12.54  0.0102
+3                age 1.04 1.00  1.09  0.0383
+4              foley 3.10 1.07 10.49  0.0478
+5        underweight 0.29 0.06  1.00  0.0744</code></pre>
 </div>
 
 

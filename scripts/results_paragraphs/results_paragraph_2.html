@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-04-25" />
+<meta name="date" content="2025-05-31" />
 
 <title>Results Section 2: Antibiotic susceptibility profiles of clinical carbapenem-resistant Klebsiella pneumoniae isolates</title>
 
@@ -578,7 +578,7 @@ display: none;
 susceptibility profiles of clinical carbapenem-resistant Klebsiella
 pneumoniae isolates</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-04-25</h4>
+<h4 class="date">2025-05-31</h4>
 
 </div>
 
@@ -591,11 +591,9 @@ pneumoniae isolates</h1>
 <pre class="r"><code># Patient Metadata
 df &lt;- readRDS(&quot;./data/dataset/df.RDS&quot;)</code></pre>
 </div>
-<div id="describe-resistance" class="section level1">
-<h1>Describe resistance</h1>
-<ul>
-<li>Note: 1 indicates resistance</li>
-</ul>
+<div id="describe-resistance-frequency" class="section level1">
+<h1>Describe resistance frequency</h1>
+<p>Note: 1 indicates resistance</p>
 <pre class="r"><code>pheno_vars &lt;- c(&quot;TMP_SMX_dich_num&quot;,&quot;gentamicin_dich_num&quot;,&quot;AMK_dich_num&quot;,&quot;CST_dich_num&quot;,&quot;blbli_dich_num&quot;,&quot;MVB_dich_num&quot;,&quot;IR_dich_num&quot;)
 convert_tableone_into_df(df,vars=pheno_vars,factorVars = pheno_vars) %&gt;% favorite_kable</code></pre>
 <table style="width:100%; color: black; margin-left: auto; margin-right: auto;" class="table table-striped table-hover table-condensed table-responsive">
