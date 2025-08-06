@@ -40,7 +40,7 @@ for(i in phenotypes){
 
 ncluster <- max(sizes)
 color_palette <- grDevices::colors() %>% subset(grepl("red",.)==F)
-clusters_col <- iwanthue(ncluster,hmin=15,hmax=360,lmin = 5,lmax = 95,cmin=5,cmax=90,random = F,plot = T)
+clusters_col <- iwanthue(ncluster,hmin=15,hmax=360,lmin = 5,lmax = 95,cmin=5,cmax=90,random = F,plot = F)
 
 clusters_name <- paste0("Resistant Cluster ",1:ncluster)
 names(clusters_col) <- clusters_name

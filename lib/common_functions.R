@@ -41,11 +41,15 @@ get_legend <- function(plot){
   cowplot::get_plot_component(plot,"guide-box",return_all=T) %>% .[[3]]
 }
 
-
-# Create table 1 and figure 4 tables
-print_final_model <- function(x){
+# Create table 1, s table 8, and figure 3
+print_final_model <- function(x,threshold=NULL){
   tables <- lapply(x,FUN=function(list){
     mv_table <- list[['final_model_table']] %>% arrange(p_value)
+
+    if(is.null(threshold)==F){
+      mv_table <- mv_table %>% subset(p_value < threshold)
+    }
+
     # Format the tables
     mv_table$OR <- formatC(mv_table$OR, format = "f", digits = 2)
     mv_table$`2.5%` <- formatC(mv_table$`2.5%`, format = "f", digits = 2)

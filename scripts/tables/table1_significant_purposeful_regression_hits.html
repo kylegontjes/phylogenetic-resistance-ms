@@ -13,7 +13,7 @@
 
 <meta name="date" content="2025-08-06" />
 
-<title>Supplemental Table 6: Evaluation of single-regime and clade-specific evolutionary rate model using fitmultiMK</title>
+<title>Table 1: Purposeful selection hits</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -574,9 +574,7 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Supplemental Table 6: Evaluation of
-single-regime and clade-specific evolutionary rate model using
-fitmultiMK</h1>
+<h1 class="title toc-ignore">Table 1: Purposeful selection hits</h1>
 <h4 class="author">Kyle Gontjes</h4>
 <h4 class="date">2025-08-06</h4>
 
@@ -586,7 +584,7 @@ fitmultiMK</h1>
 <div id="environment" class="section level1">
 <h1>Environment</h1>
 <pre class="r"><code>#Packages
-packages &lt;- c(&quot;tidyverse&quot;,&#39;kableExtra&#39;,&#39;gridExtra&#39;)   
+packages &lt;- c(&quot;tidyverse&quot;)   
 
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) </code></pre>
@@ -599,550 +597,929 @@ invisible(lapply(packages,library,character.only=T,quietly=T)) </code></pre>
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code># Functions
+source(&quot;./lib/common_functions.R&quot;)
+source(&#39;./lib/consistent_themes.R&#39;)</code></pre>
+<pre><code>
+Attaching package: &#39;gridExtra&#39;
+
+The following object is masked from &#39;package:dplyr&#39;:
+
+    combine
+
 
 Attaching package: &#39;kableExtra&#39;
 
-
 The following object is masked from &#39;package:dplyr&#39;:
 
-    group_rows
+    group_rows</code></pre>
+<pre class="r"><code># Print
+Sys.info()</code></pre>
+<pre><code>                                                                                            sysname 
+                                                                                           &quot;Darwin&quot; 
+                                                                                            release 
+                                                                                           &quot;24.5.0&quot; 
+                                                                                            version 
+&quot;Darwin Kernel Version 24.5.0: Tue Apr 22 19:53:26 PDT 2025; root:xnu-11417.121.6~2/RELEASE_X86_64&quot; 
+                                                                                           nodename 
+                                                                      &quot;msla0572.wifi.med.umich.edu&quot; 
+                                                                                            machine 
+                                                                                           &quot;x86_64&quot; 
+                                                                                              login 
+                                                                                             &quot;root&quot; 
+                                                                                               user 
+                                                                                         &quot;kgontjes&quot; 
+                                                                                     effective_user 
+                                                                                         &quot;kgontjes&quot; </code></pre>
+<pre class="r"><code>sessionInfo() </code></pre>
+<pre><code>R version 4.5.1 (2025-06-13)
+Platform: x86_64-apple-darwin20
+Running under: macOS Sequoia 15.5
 
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.5-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
-Attaching package: &#39;gridExtra&#39;
+time zone: America/Detroit
+tzcode source: internal
 
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
 
-The following object is masked from &#39;package:dplyr&#39;:
+other attached packages:
+ [1] hues_0.2.0       kableExtra_1.4.0 gridExtra_2.3    lubridate_1.9.4 
+ [5] forcats_1.0.0    stringr_1.5.1    dplyr_1.1.4      purrr_1.0.4     
+ [9] readr_2.1.5      tidyr_1.3.1      tibble_3.2.1     ggplot2_3.5.2   
+[13] tidyverse_2.0.0  knitr_1.50      
 
-    combine</code></pre>
-<pre class="r"><code># Load function
-source(&#39;./lib/consistent_themes.R&#39;)
-
-# Print
-Sys.info()
-sessionInfo() </code></pre>
+loaded via a namespace (and not attached):
+ [1] gtable_0.3.6       jsonlite_2.0.0     compiler_4.5.1     tidyselect_1.2.1  
+ [5] xml2_1.3.8         jquerylib_0.1.4    systemfonts_1.2.2  scales_1.4.0      
+ [9] yaml_2.3.10        fastmap_1.2.0      R6_2.6.1           generics_0.1.4    
+[13] svglite_2.1.3      bslib_0.9.0        pillar_1.10.2      RColorBrewer_1.1-3
+[17] tzdb_0.5.0         rlang_1.1.6        cachem_1.1.0       stringi_1.8.7     
+[21] xfun_0.52          sass_0.4.10        viridisLite_0.4.2  timechange_0.3.0  
+[25] cli_3.6.5          withr_3.0.2        magrittr_2.0.3     digest_0.6.37     
+[29] grid_4.5.1         rstudioapi_0.17.1  hms_1.1.3          lifecycle_1.0.4   
+[33] vctrs_0.6.5        evaluate_1.0.3     glue_1.8.0         farver_2.1.2      
+[37] colorspace_2.1-1   rmarkdown_2.29     tools_4.5.1        pkgconfig_2.0.3   
+[41] htmltools_0.5.8.1 </code></pre>
 </div>
-<div id="create-table" class="section level1">
-<h1>Create table</h1>
-<pre class="r"><code>rate_differences_table &lt;- readRDS(&#39;./data/fitmultiMk_rate_differences/fitmultiMk_rate_differences_table.RDS&#39;)
+<div id="load-data" class="section level1">
+<h1>Load data</h1>
+<pre class="r"><code>phyloaware_regression_obj &lt;- readRDS(&quot;./data/regression/purposeful_regression_results.RDS&quot;)</code></pre>
+</div>
+<div id="multivariable-model" class="section level1">
+<h1>Multivariable model</h1>
+<pre class="r"><code>paste0(&quot;Bactrim&quot;)</code></pre>
+<p>[1] “Bactrim”</p>
+<pre class="r"><code>TMP_SMX_tbl &lt;- print_final_model(phyloaware_regression_obj$TMP_SMX$multivariable,threshold = 0.05)  %&gt;% cbind_na
 
-rate_differences_table_formatted &lt;- rate_differences_table %&gt;% select(phenotype,model) %&gt;% cbind(.,rate_differences_table %&gt;% select(R1,R2,log_likelihood,AIC,CI_R1,CI_R2,CII_R1,CII_R2,multi_regime_log_likelihood,multi_regime_AIC,LRT_chisq)  %&gt;% mutate_all(as.numeric) %&gt;% round(.,2)) %&gt;% cbind(.,rate_differences_table %&gt;% select(LRT_pvalue) %&gt;% round(.,3))  
+paste0(&quot;Gentamicin&quot;)</code></pre>
+<p>[1] “Gentamicin”</p>
+<pre class="r"><code>gentamicin_tbl &lt;- print_final_model(phyloaware_regression_obj$gentamicin$multivariable,threshold = 0.05)  %&gt;% cbind_na
 
-rate_differences_table_formatted$phenotype &lt;- recode(rate_differences_table_formatted$phenotype,&#39;AMK_dich_num&#39; = &#39;Amikacin&#39;,&#39;blbli_dich_num&#39;=&#39;BL/BLI&#39;,&#39;CST_dich_num&#39;=&#39;Colistin&#39;,&#39;TMP_SMX_dich_num&#39;=&#39;TMP-SMX&#39;,&#39;gentamicin_dich_num&#39;=&#39;Gentamicin&#39;)     
-rate_differences_table_formatted$phenotype &lt;- factor(rate_differences_table_formatted$phenotype,levels = c(&quot;TMP-SMX&quot;,&quot;Gentamicin&quot;,&quot;Amikacin&quot;,&quot;Colistin&quot;,&quot;BL/BLI&quot;))
-rate_differences_table_formatted &lt;- rate_differences_table_formatted %&gt;% arrange(phenotype)  
-colnames(rate_differences_table_formatted) &lt;- c(&quot;Phenotype&quot;,
-&quot;Model&quot;,
-&quot;Rate 1&quot;,
-&quot;Rate 2&quot;,
-&quot;Single-regime Log Likelihood&quot;,
-&quot;Single-regime AIC&quot;,
-&quot;Clade I Rate 1&quot;,
-&quot;Clade I Rate 2&quot;,
-&quot;Clade II Rate 1&quot;,
-&quot;Clade II Rate 2&quot;,
-&quot;Multi-regime Log Likelihood&quot;,
-&quot;Multi-regime AIC&quot;,
-&quot;X2 value&quot;,
-&quot;p-value&quot;)
+paste0(&quot;AMK&quot;)</code></pre>
+<p>[1] “AMK”</p>
+<pre class="r"><code>AMK_tbl &lt;- print_final_model(phyloaware_regression_obj$AMK$multivariable,threshold = 0.05)  %&gt;% cbind_na
 
-favorite_kable(rate_differences_table_formatted)</code></pre>
+paste0(&quot;CST&quot;)</code></pre>
+<p>[1] “CST”</p>
+<pre class="r"><code>CST_tbl &lt;- print_final_model(phyloaware_regression_obj$CST$multivariable,threshold = 0.05)   %&gt;% cbind_na
+
+paste0(&quot;blbli&quot;)</code></pre>
+<p>[1] “blbli”</p>
+<pre class="r"><code>blbli_tbl &lt;- print_final_model(phyloaware_regression_obj$blbli$multivariable,threshold = 0.05)  %&gt;% cbind_na</code></pre>
+</div>
+<div id="size-of-events-per-model" class="section level1">
+<h1>Size of events per model</h1>
+<pre class="r"><code>print_data &lt;- function(drug,df){
+  dich &lt;- paste0(drug,&quot;_dich_num&quot;)
+  cluster &lt;- paste0(&quot;asr_cluster_renamed_resistant&quot;)  
+  
+  present &lt;- subset(df,get(dich) ==1) %&gt;% nrow %&gt;% paste0(&quot;Present: &quot;,.) 
+  singleton &lt;- subset(df,get(cluster)==&quot;Resistant Singleton&quot;) %&gt;% nrow  %&gt;% paste0(&quot;Singleton: &quot;,.)
+  cluster &lt;-  subset(df,get(dich)==1 &amp; get(cluster)!=&quot;Resistant Singleton&quot;) %&gt;% nrow  %&gt;% paste0(&quot;Cluster: &quot;,.)
+  
+  results &lt;- cbind.data.frame(drug,present,var1=&quot;&quot;,singleton,var2=&quot;&quot;,var3=&quot;&quot;,cluster,var6=&quot;&quot;,var5=&quot;&quot;)
+  return(results)
+}
+
+TMP_SMX_ct &lt;- print_data(&quot;TMP_SMX&quot;,phyloaware_regression_obj$TMP_SMX$datasets$present)
+gentamicin_ct &lt;- print_data(&quot;gentamicin&quot;,phyloaware_regression_obj$gentamicin$datasets$present)
+AMK_ct &lt;- print_data(&quot;AMK&quot;,phyloaware_regression_obj$AMK$datasets$present)
+CST_ct &lt;- print_data(&quot;CST&quot;,phyloaware_regression_obj$CST$datasets$present)
+blbli_ct &lt;- print_data(&quot;blbli&quot;,phyloaware_regression_obj$blbli$datasets$present)</code></pre>
+</div>
+<div id="final-table" class="section level1">
+<h1>Final table</h1>
+<pre class="r"><code>list_df &lt;- list(TMP_SMX_ct,header = TMP_SMX_tbl,gentamicin_ct,gentamicin_tbl,AMK_ct,AMK_tbl,CST_ct,CST_tbl,blbli_ct,blbli_tbl)
+table_1 &lt;- lapply(list_df,FUN=function(x){
+  as.matrix(x)
+}) %&gt;% do.call(rbind,.) %&gt;% as.data.frame  </code></pre>
+</div>
+<div id="save-final-table" class="section level1">
+<h1>Save final table</h1>
+<pre class="r"><code>favorite_kable(table_1)</code></pre>
 <table style="width:100%; color: black; margin-left: auto; margin-right: auto;" class="table table-striped table-hover table-condensed table-responsive">
 <thead>
 <tr>
 <th style="text-align:left;">
-Phenotype
+drug
 </th>
 <th style="text-align:left;">
-Model
+present
 </th>
-<th style="text-align:right;">
-Rate 1
+<th style="text-align:left;">
+var1
 </th>
-<th style="text-align:right;">
-Rate 2
+<th style="text-align:left;">
+singleton
 </th>
-<th style="text-align:right;">
-Single-regime Log Likelihood
+<th style="text-align:left;">
+var2
 </th>
-<th style="text-align:right;">
-Single-regime AIC
+<th style="text-align:left;">
+var3
 </th>
-<th style="text-align:right;">
-Clade I Rate 1
+<th style="text-align:left;">
+cluster
 </th>
-<th style="text-align:right;">
-Clade I Rate 2
+<th style="text-align:left;">
+var6
 </th>
-<th style="text-align:right;">
-Clade II Rate 1
-</th>
-<th style="text-align:right;">
-Clade II Rate 2
-</th>
-<th style="text-align:right;">
-Multi-regime Log Likelihood
-</th>
-<th style="text-align:right;">
-Multi-regime AIC
-</th>
-<th style="text-align:right;">
-X2 value
-</th>
-<th style="text-align:right;">
-p-value
+<th style="text-align:left;">
+var5
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
-TMP-SMX
+TMP_SMX
 </td>
 <td style="text-align:left;">
-ER
+Present: 170
 </td>
-<td style="text-align:right;">
-12300.44
+<td style="text-align:left;">
 </td>
-<td style="text-align:right;">
-NA
+<td style="text-align:left;">
+Singleton: 28
 </td>
-<td style="text-align:right;">
--186.86
+<td style="text-align:left;">
 </td>
-<td style="text-align:right;">
-375.71
+<td style="text-align:left;">
 </td>
-<td style="text-align:right;">
-12935.96
+<td style="text-align:left;">
+Cluster: 142
 </td>
-<td style="text-align:right;">
-NA
+<td style="text-align:left;">
 </td>
-<td style="text-align:right;">
-12016.96
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
--186.84
-</td>
-<td style="text-align:right;">
-377.67
-</td>
-<td style="text-align:right;">
-0.04
-</td>
-<td style="text-align:right;">
-0.843
+<td style="text-align:left;">
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-TMP-SMX
+third_plus_ceph_1d
 </td>
 <td style="text-align:left;">
-ARD
+0.40 (0.22-0.72)
 </td>
-<td style="text-align:right;">
-14277.61
+<td style="text-align:left;">
+0.0022
 </td>
-<td style="text-align:right;">
-9773.99
+<td style="text-align:left;">
+bactrim_1d
 </td>
-<td style="text-align:right;">
--185.75
+<td style="text-align:left;">
+119.13 (5.95-5891.04)
 </td>
-<td style="text-align:right;">
-375.49
+<td style="text-align:left;">
+0.0041
 </td>
-<td style="text-align:right;">
-13558.78
+<td style="text-align:left;">
+AKI
 </td>
-<td style="text-align:right;">
-18657.04
+<td style="text-align:left;">
+0.41 (0.23-0.70)
 </td>
-<td style="text-align:right;">
-18620.48
-</td>
-<td style="text-align:right;">
-9281.00
-</td>
-<td style="text-align:right;">
--184.26
-</td>
-<td style="text-align:right;">
-376.51
-</td>
-<td style="text-align:right;">
-2.98
-</td>
-<td style="text-align:right;">
-0.225
+<td style="text-align:left;">
+0.0014
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Gentamicin
+bactrim_1d
 </td>
 <td style="text-align:left;">
-ER
+24.97 (4.02-504.50)
 </td>
-<td style="text-align:right;">
-10271.16
+<td style="text-align:left;">
+0.0044
 </td>
-<td style="text-align:right;">
-NA
+<td style="text-align:left;">
+sex.female
 </td>
-<td style="text-align:right;">
--162.08
+<td style="text-align:left;">
+0.35 (0.13-0.86)
 </td>
-<td style="text-align:right;">
-326.16
+<td style="text-align:left;">
+0.0284
 </td>
-<td style="text-align:right;">
-15179.17
+<td style="text-align:left;">
+third_plus_ceph_1d
 </td>
-<td style="text-align:right;">
-NA
+<td style="text-align:left;">
+0.40 (0.22-0.73)
 </td>
-<td style="text-align:right;">
-8494.82
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
--160.89
-</td>
-<td style="text-align:right;">
-325.77
-</td>
-<td style="text-align:right;">
-2.39
-</td>
-<td style="text-align:right;">
-0.122
+<td style="text-align:left;">
+0.0031
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Gentamicin
+AKI
 </td>
 <td style="text-align:left;">
-ARD
+0.49 (0.29-0.81)
 </td>
-<td style="text-align:right;">
-10765.84
+<td style="text-align:left;">
+0.0060
 </td>
-<td style="text-align:right;">
-9852.66
+<td style="text-align:left;">
+tigecycline_1d
 </td>
-<td style="text-align:right;">
--162.02
+<td style="text-align:left;">
+3.66 (1.10-11.75)
 </td>
-<td style="text-align:right;">
-328.04
+<td style="text-align:left;">
+0.0292
 </td>
-<td style="text-align:right;">
-18208.26
+<td style="text-align:left;">
+bactrim_1d
 </td>
-<td style="text-align:right;">
-41250.16
+<td style="text-align:left;">
+18.93 (3.13-368.12)
 </td>
-<td style="text-align:right;">
-9512.24
-</td>
-<td style="text-align:right;">
-8328.10
-</td>
-<td style="text-align:right;">
--158.65
-</td>
-<td style="text-align:right;">
-325.29
-</td>
-<td style="text-align:right;">
-6.75
-</td>
-<td style="text-align:right;">
-0.034
+<td style="text-align:left;">
+0.0077
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Amikacin
+gastro
 </td>
 <td style="text-align:left;">
-ER
+1.86 (1.11-3.18)
 </td>
-<td style="text-align:right;">
-23429.23
+<td style="text-align:left;">
+0.0203
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 NA
 </td>
-<td style="text-align:right;">
--226.98
-</td>
-<td style="text-align:right;">
-455.95
-</td>
-<td style="text-align:right;">
-398075.94
-</td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 NA
 </td>
-<td style="text-align:right;">
-12357.89
-</td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 NA
 </td>
-<td style="text-align:right;">
--212.00
+<td style="text-align:left;">
+FQ_1d
 </td>
-<td style="text-align:right;">
-428.00
+<td style="text-align:left;">
+0.42 (0.20-0.82)
 </td>
-<td style="text-align:right;">
-29.95
-</td>
-<td style="text-align:right;">
-0.000
+<td style="text-align:left;">
+0.0132
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Amikacin
+decub
 </td>
 <td style="text-align:left;">
-ARD
+2.08 (1.12-3.96)
 </td>
-<td style="text-align:right;">
-24665.84
+<td style="text-align:left;">
+0.0227
 </td>
-<td style="text-align:right;">
-42370.76
+<td style="text-align:left;">
+NA
 </td>
-<td style="text-align:right;">
--222.47
+<td style="text-align:left;">
+NA
 </td>
-<td style="text-align:right;">
-448.94
+<td style="text-align:left;">
+NA
 </td>
-<td style="text-align:right;">
-202426.53
+<td style="text-align:left;">
+decub
 </td>
-<td style="text-align:right;">
-140691.98
+<td style="text-align:left;">
+2.10 (1.11-4.06)
 </td>
-<td style="text-align:right;">
-16090.46
-</td>
-<td style="text-align:right;">
-55069.54
-</td>
-<td style="text-align:right;">
--202.83
-</td>
-<td style="text-align:right;">
-413.67
-</td>
-<td style="text-align:right;">
-39.27
-</td>
-<td style="text-align:right;">
-0.000
+<td style="text-align:left;">
+0.0247
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Colistin
+tigecycline_1d
 </td>
 <td style="text-align:left;">
-ER
+2.34 (1.12-5.11)
 </td>
-<td style="text-align:right;">
-8707.39
+<td style="text-align:left;">
+0.0278
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 NA
 </td>
-<td style="text-align:right;">
--159.26
-</td>
-<td style="text-align:right;">
-320.52
-</td>
-<td style="text-align:right;">
-9924.87
-</td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 NA
 </td>
-<td style="text-align:right;">
-8150.87
-</td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 NA
 </td>
-<td style="text-align:right;">
--159.14
+<td style="text-align:left;">
+gastro
 </td>
-<td style="text-align:right;">
-322.27
+<td style="text-align:left;">
+1.89 (1.09-3.33)
 </td>
-<td style="text-align:right;">
-0.25
-</td>
-<td style="text-align:right;">
-0.616
+<td style="text-align:left;">
+0.0256
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Colistin
+gent_1d
 </td>
 <td style="text-align:left;">
-ARD
+0.17 (0.02-0.76)
 </td>
-<td style="text-align:right;">
-7889.80
+<td style="text-align:left;">
+0.0346
 </td>
-<td style="text-align:right;">
-11658.15
+<td style="text-align:left;">
+NA
 </td>
-<td style="text-align:right;">
--158.52
+<td style="text-align:left;">
+NA
 </td>
-<td style="text-align:right;">
-321.04
+<td style="text-align:left;">
+NA
 </td>
-<td style="text-align:right;">
-184614.13
+<td style="text-align:left;">
+gent_1d
 </td>
-<td style="text-align:right;">
-1097808.65
+<td style="text-align:left;">
+0.09 (0.00-0.54)
 </td>
-<td style="text-align:right;">
-8487.38
-</td>
-<td style="text-align:right;">
-7764.60
-</td>
-<td style="text-align:right;">
--146.18
-</td>
-<td style="text-align:right;">
-300.36
-</td>
-<td style="text-align:right;">
-24.68
-</td>
-<td style="text-align:right;">
-0.000
+<td style="text-align:left;">
+0.0286
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-BL/BLI
+amikacin_1d
 </td>
 <td style="text-align:left;">
-ER
+0.46 (0.21-0.98)
 </td>
-<td style="text-align:right;">
-7844.06
+<td style="text-align:left;">
+0.0465
 </td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 NA
 </td>
-<td style="text-align:right;">
--166.53
-</td>
-<td style="text-align:right;">
-335.05
-</td>
-<td style="text-align:right;">
-22055.86
-</td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 NA
 </td>
-<td style="text-align:right;">
-4480.41
-</td>
-<td style="text-align:right;">
+<td style="text-align:left;">
 NA
 </td>
-<td style="text-align:right;">
--158.75
+<td style="text-align:left;">
+NA
 </td>
-<td style="text-align:right;">
-321.51
+<td style="text-align:left;">
+NA
 </td>
-<td style="text-align:right;">
-15.54
-</td>
-<td style="text-align:right;">
-0.000
+<td style="text-align:left;">
+NA
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-BL/BLI
+gentamicin
 </td>
 <td style="text-align:left;">
-ARD
+Present: 171
 </td>
-<td style="text-align:right;">
-12926.43
+<td style="text-align:left;">
 </td>
-<td style="text-align:right;">
-77010.14
+<td style="text-align:left;">
+Singleton: 19
 </td>
-<td style="text-align:right;">
--145.38
+<td style="text-align:left;">
 </td>
-<td style="text-align:right;">
-294.75
+<td style="text-align:left;">
 </td>
-<td style="text-align:right;">
-45899.85
+<td style="text-align:left;">
+Cluster: 152
 </td>
-<td style="text-align:right;">
-139580.52
+<td style="text-align:left;">
 </td>
-<td style="text-align:right;">
-8497.99
+<td style="text-align:left;">
 </td>
-<td style="text-align:right;">
-82031.48
+</tr>
+<tr>
+<td style="text-align:left;">
+decub
 </td>
-<td style="text-align:right;">
--142.39
+<td style="text-align:left;">
+2.23 (1.22-4.20)
 </td>
-<td style="text-align:right;">
-292.77
+<td style="text-align:left;">
+0.0105
 </td>
-<td style="text-align:right;">
-5.98
+<td style="text-align:left;">
+CHF
 </td>
-<td style="text-align:right;">
-0.050
+<td style="text-align:left;">
+3.61 (1.21-10.75)
+</td>
+<td style="text-align:left;">
+0.0199
+</td>
+<td style="text-align:left;">
+decub
+</td>
+<td style="text-align:left;">
+2.57 (1.37-4.96)
+</td>
+<td style="text-align:left;">
+0.0038
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+third_plus_ceph_1d
+</td>
+<td style="text-align:left;">
+0.49 (0.28-0.84)
+</td>
+<td style="text-align:left;">
+0.0108
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CKD
+</td>
+<td style="text-align:left;">
+0.47 (0.27-0.82)
+</td>
+<td style="text-align:left;">
+0.0082
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CKD
+</td>
+<td style="text-align:left;">
+0.52 (0.31-0.88)
+</td>
+<td style="text-align:left;">
+0.0152
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+bactrim_1d
+</td>
+<td style="text-align:left;">
+10.85 (1.96-203.63)
+</td>
+<td style="text-align:left;">
+0.0259
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bactrim_1d
+</td>
+<td style="text-align:left;">
+12.95 (2.22-249.77)
+</td>
+<td style="text-align:left;">
+0.0193
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+third_plus_ceph_1d
+</td>
+<td style="text-align:left;">
+0.56 (0.32-0.98)
+</td>
+<td style="text-align:left;">
+0.0438
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AMK
+</td>
+<td style="text-align:left;">
+Present: 119
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Singleton: 33
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Cluster: 86
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+tobra_1d
+</td>
+<td style="text-align:left;">
+2.82 (1.14-7.40)
+</td>
+<td style="text-align:left;">
+0.0279
+</td>
+<td style="text-align:left;">
+tobra_1d
+</td>
+<td style="text-align:left;">
+3.79 (1.03-12.65)
+</td>
+<td style="text-align:left;">
+0.0334
+</td>
+<td style="text-align:left;">
+third_plus_ceph_1d
+</td>
+<td style="text-align:left;">
+1.88 (1.06-3.33)
+</td>
+<td style="text-align:left;">
+0.0297
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+gent_1d
+</td>
+<td style="text-align:left;">
+4.44 (1.24-20.80)
+</td>
+<td style="text-align:left;">
+0.0318
+</td>
+<td style="text-align:left;">
+gent_1d
+</td>
+<td style="text-align:left;">
+5.61 (0.94-33.04)
+</td>
+<td style="text-align:left;">
+0.0474
+</td>
+<td style="text-align:left;">
+gent_1d
+</td>
+<td style="text-align:left;">
+4.61 (1.08-23.30)
+</td>
+<td style="text-align:left;">
+0.0424
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CST
+</td>
+<td style="text-align:left;">
+Present: 111
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Singleton: 20
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Cluster: 91
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+poly_colistin_1d
+</td>
+<td style="text-align:left;">
+3.85 (1.85-8.28)
+</td>
+<td style="text-align:left;">
+4e-04
+</td>
+<td style="text-align:left;">
+foley
+</td>
+<td style="text-align:left;">
+0.15 (0.04-0.49)
+</td>
+<td style="text-align:left;">
+0.0039
+</td>
+<td style="text-align:left;">
+poly_colistin_1d
+</td>
+<td style="text-align:left;">
+3.19 (1.45-7.11)
+</td>
+<td style="text-align:left;">
+0.0039
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VDRF
+</td>
+<td style="text-align:left;">
+0.54 (0.30-0.95)
+</td>
+<td style="text-align:left;">
+0.0353
+</td>
+<td style="text-align:left;">
+poly_colistin_1d
+</td>
+<td style="text-align:left;">
+7.87 (1.92-34.78)
+</td>
+<td style="text-align:left;">
+0.0042
+</td>
+<td style="text-align:left;">
+underweight
+</td>
+<td style="text-align:left;">
+0.47 (0.24-0.87)
+</td>
+<td style="text-align:left;">
+0.0208
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+underweight
+</td>
+<td style="text-align:left;">
+0.53 (0.29-0.95)
+</td>
+<td style="text-align:left;">
+0.0361
+</td>
+<td style="text-align:left;">
+lung_dz
+</td>
+<td style="text-align:left;">
+4.60 (1.54-14.26)
+</td>
+<td style="text-align:left;">
+0.0064
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+tigecycline_1d
+</td>
+<td style="text-align:left;">
+3.95 (1.11-13.41)
+</td>
+<td style="text-align:left;">
+0.0277
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+blbli
+</td>
+<td style="text-align:left;">
+Present: 50
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Singleton: 31
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+Cluster: 19
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age
+</td>
+<td style="text-align:left;">
+1.04 (1.01-1.06)
+</td>
+<td style="text-align:left;">
+0.0036
+</td>
+<td style="text-align:left;">
+age
+</td>
+<td style="text-align:left;">
+1.03 (1.01-1.06)
+</td>
+<td style="text-align:left;">
+0.025
+</td>
+<td style="text-align:left;">
+third_plus_ceph_1d
+</td>
+<td style="text-align:left;">
+5.74 (2.03-17.14)
+</td>
+<td style="text-align:left;">
+0.0011
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+third_plus_ceph_1d
+</td>
+<td style="text-align:left;">
+2.21 (1.13-4.27)
+</td>
+<td style="text-align:left;">
+0.0186
+</td>
+<td style="text-align:left;">
+carbapenem_1d
+</td>
+<td style="text-align:left;">
+2.41 (1.08-5.37)
+</td>
+<td style="text-align:left;">
+0.0299
+</td>
+<td style="text-align:left;">
+lung_dz
+</td>
+<td style="text-align:left;">
+4.16 (1.38-12.54)
+</td>
+<td style="text-align:left;">
+0.0102
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+carbapenem_1d
+</td>
+<td style="text-align:left;">
+1.94 (1.02-3.69)
+</td>
+<td style="text-align:left;">
+0.0424
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+age
+</td>
+<td style="text-align:left;">
+1.04 (1.00-1.09)
+</td>
+<td style="text-align:left;">
+0.0383
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+underweight
+</td>
+<td style="text-align:left;">
+0.42 (0.16-0.95)
+</td>
+<td style="text-align:left;">
+0.0498
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+foley
+</td>
+<td style="text-align:left;">
+3.10 (1.07-10.49)
+</td>
+<td style="text-align:left;">
+0.0478
 </td>
 </tr>
 </tbody>
 </table>
-</div>
-<div id="save-table" class="section level1">
-<h1>Save table</h1>
-<pre class="r"><code>saveRDS(rate_differences_table_formatted,&quot;./tables/stable6.RDS&quot;)
-write_csv(rate_differences_table_formatted,&quot;./tables/stable6.csv&quot;)</code></pre>
+<pre class="r"><code>saveRDS(table_1,&quot;./tables/table1.RDS&quot;)
+write_csv(table_1,&quot;./tables/table1.csv&quot;)</code></pre>
 </div>
 
 

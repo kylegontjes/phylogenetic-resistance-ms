@@ -36,19 +36,19 @@ phyloaware_regression_obj <- readRDS("./data/regression/purposeful_regression_re
 #  Multivariable model
 ```{r,results='asis'}
 paste0("Bactrim")
-TMP_SMX_tbl <- print_final_model(phyloaware_regression_obj$TMP_SMX$multivariable)  %>% cbind_na
+TMP_SMX_tbl <- print_final_model(phyloaware_regression_obj$TMP_SMX$multivariable,threshold = 0.05)  %>% cbind_na
 
 paste0("Gentamicin")
-gentamicin_tbl <- print_final_model(phyloaware_regression_obj$gentamicin$multivariable)  %>% cbind_na
+gentamicin_tbl <- print_final_model(phyloaware_regression_obj$gentamicin$multivariable,threshold = 0.05)  %>% cbind_na
 
 paste0("AMK")
-AMK_tbl <- print_final_model(phyloaware_regression_obj$AMK$multivariable)  %>% cbind_na
+AMK_tbl <- print_final_model(phyloaware_regression_obj$AMK$multivariable,threshold = 0.05)  %>% cbind_na
 
 paste0("CST")
-CST_tbl <- print_final_model(phyloaware_regression_obj$CST$multivariable)   %>% cbind_na
+CST_tbl <- print_final_model(phyloaware_regression_obj$CST$multivariable,threshold = 0.05)   %>% cbind_na
 
 paste0("blbli")
-blbli_tbl <- print_final_model(phyloaware_regression_obj$blbli$multivariable)  %>% cbind_na
+blbli_tbl <- print_final_model(phyloaware_regression_obj$blbli$multivariable,threshold = 0.05)  %>% cbind_na
 ```
  
 # Size of events per model
