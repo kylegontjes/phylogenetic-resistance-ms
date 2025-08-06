@@ -1,0 +1,96 @@
+---
+title: "Supplemental Figure 4: Distribution of phylogenetic groups across facilities"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+
+# Environment
+```{r environment, echo=F, message=FALSE, include=F, results=F}
+#Packages
+packages <- c("tidyverse","devtools","kableExtra","cowplot","gridExtra",'hues','magick','ggtree','ape','ggnewscale','grid',"ComplexHeatmap")   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T))
+
+#Themes
+source("./lib/consistent_themes.R")
+
+# Scripts
+source("./lib/common_functions.R")
+
+# Print environment
+Sys.info()
+sessionInfo()
+```
+
+# Load data
+```{r load data,include=T,echo=T,results=F,message=F}
+# Patient Metadata & Phylogeny
+df <- readRDS("./data/dataset/df.RDS")
+tr <- read.tree("./data/tree/tree.treefile")   
+df<- df %>% .[match(tr$tip.label,.$isolate_no),] 
+# Best model call
+pclustering_df <- readRDS("./data/asr_clustering/asr_clustering_df.RDS")
+df <- left_join(df,pclustering_df)
+```
+ 
+```{r}
+pheno <- c("TMP_SMX_asr_cluster_renamed_resistant","gentamicin_asr_cluster_renamed_resistant","AMK_asr_cluster_renamed_resistant","CST_asr_cluster_renamed_resistant","blbli_asr_cluster_renamed_resistant") 
+
+cluster_levels <- c(paste0("Resistant Cluster ",ncluster:1),"Resistant Singleton","Susceptible")
+
+for(i in pheno){
+df[[paste0(i,"_rev")]] <- factor(df[[i]], levels = cluster_levels,labels = cluster_levels)
+}
+```
+
+# Heatmap of facility and cluster calls
+ 
+```{r,fig.width=11.25,fig.height=9}
+pheno_rev <- paste0(pheno,"_rev")
+heatmaps <- lapply(pheno_rev,FUN=function(phenotype){
+  dataframe <- df
+  dataframe$clustering <- dataframe[[phenotype]]
+  
+  matrix_raw <- dataframe %>%
+    group_by(LTACH_Recode, clustering) %>%
+    summarise(n = n(), .groups = "drop") %>%
+    tidyr::pivot_wider(
+        names_from = LTACH_Recode,
+        values_from = n,
+        values_fill = 0  
+    ) %>% column_to_rownames(var='clustering')
+
+  matrix_raw_ordered <- matrix_raw[match(rev(levels(dataframe$clustering)),rownames(matrix_raw),incomparables = F) %>% subset(is.na(.)==F),]
+
+  rownames(matrix_raw_ordered) <- paste0(rownames(matrix_raw_ordered)," (n = ",rowSums(matrix_raw_ordered),")")
+
+  mat_prop <- sweep(matrix_raw_ordered, 1, rowSums(matrix_raw_ordered), FUN = "/")
+
+  ComplexHeatmap::Heatmap(matrix = mat_prop,col=c("white","red"),cluster_rows = F,cluster_columns = F, cell_fun = function(j, i, x, y, width, height, fill) {
+    grid.text(sprintf("%.3s", matrix_raw_ordered[i, j]), x, y, gp = gpar(fontsize = 11))
+},show_heatmap_legend = F,
+  column_names_rot = 0,column_title = "Facility",column_title_side = 'bottom')
+})
+
+heatmap_for_cowplot <- lapply(heatmaps,FUN=function(fig){
+   grid.grabExpr(draw(fig))
+})
+
+# Add margin to this
+figure <- cowplot::plot_grid(plotlist = heatmap_for_cowplot,labels="AUTO",ncol=2,label_x=-0.0255,label_size = 16) + 
+  theme(plot.margin = margin(t = 0,r = 0,b = 0,l = 8))  
+
+figure
+```
+
+```{r}
+ggsave("./figures/sfigure4.png",figure,width=11.25,height=9,dpi=900,bg='white')  
+```

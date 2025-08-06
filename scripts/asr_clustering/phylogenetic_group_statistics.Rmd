@@ -1,0 +1,117 @@
+---
+title: "Phylogenetic group statistics"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+
+# Environment
+```{r environment, echo=F, message=FALSE, include=F, results=F}
+#Packages
+packages <- c("tidyverse","devtools","kableExtra","cowplot","gridExtra",'hues','magick','ggtree','ape','ggnewscale','grid',"ComplexHeatmap")   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T))
+
+#Themes
+source("./lib/consistent_themes.R")
+
+# Scripts
+source("./lib/common_functions.R")
+
+# Print environment
+Sys.info()
+sessionInfo()
+```
+
+# Load data
+```{r load data,include=T,echo=T,results=F,message=F}
+# Patient Metadata & Phylogeny
+df <- readRDS("./data/dataset/df.RDS")
+tr <- read.tree("./data/tree/tree.treefile")   
+df<- df %>% .[match(tr$tip.label,.$isolate_no),] 
+# Best model call
+pclustering_df <- readRDS("./data/asr_clustering/asr_clustering_df.RDS")
+df <- left_join(df,pclustering_df)
+```
+
+## Cluster scale
+```{r}
+phenotypes <- c("TMP_SMX","gentamicin","AMK","CST","blbli") %>% paste0(.,"_asr_cluster_renamed_resistant")
+sizes <- c()
+for(i in phenotypes){
+  sizes[i] <- table(df[,i])  %>% subset(names(.) != "Resistant Singleton" & grepl("Cluster",names(.))) %>% as.numeric %>% length
+}
+
+ncluster <- max(sizes) 
+clusters_name <- paste0("Resistant Cluster ",1:ncluster) 
+```
+
+```{r}
+pheno <- c("TMP_SMX_asr_cluster_renamed_resistant","gentamicin_asr_cluster_renamed_resistant","AMK_asr_cluster_renamed_resistant","CST_asr_cluster_renamed_resistant","blbli_asr_cluster_renamed_resistant") 
+
+cluster_levels <- c(paste0("Resistant Cluster ",ncluster:1),"Resistant Singleton","Susceptible")
+
+for(i in pheno){
+df[[paste0(i,"_rev")]] <- factor(df[[i]], levels = cluster_levels,labels = cluster_levels)
+}
+```
+
+```{r}
+pheno_rev <- paste0(pheno,"_rev")
+groups <- c("Susceptible","Resistant Singleton",clusters_name)
+
+get_cluster_stats <- function(group,variable){
+  df_sub <- df %>% subset(get(variable) == group)
+  n_isolates <- as.numeric(nrow(df_sub))
+  n_patients <- as.numeric(length(unique(df_sub$Patient_ID)))
+  n_facilities <- as.numeric(length(unique(df_sub$LTACH_Recode)))
+  subsequent_transmission <- as.numeric(n_patients - 1)
+  
+  sum <- as.data.frame(summary(df_sub$Cx_date)) %>% t %>% as.data.frame %>% `colnames<-`(snakecase::to_snake_case(colnames(.))) %>% mutate_all(lubridate::as_date)
+  sum$duration <- sum$max - sum$min 
+  cbind(group,n_isolates,n_patients,n_facilities,sum) %>% `rownames<-`(NULL)
+}
+```
+
+
+```{r,fig.width=15,fig.height=10}
+stats <- lapply(pheno_rev,FUN=function(phenotype){ 
+  cluster_individual_data <- lapply(groups,get_cluster_stats,variable=phenotype) %>% do.call(rbind.data.frame,.) %>% subset(n_isolates >0) %>% mutate(phenotype =phenotype)
+return(cluster_individual_data)
+}) %>% do.call(rbind,.)
+
+table <- stats %>% select(phenotype,group,n_isolates,n_patients,n_facilities, min,`1_st_qu`,median,`3_rd_qu`,max,duration)
+table$phenotype <- recode(table$phenotype,'TMP_SMX_asr_cluster_renamed_resistant_rev'='TMP-SMX',
+                          "gentamicin_asr_cluster_renamed_resistant_rev"="Gentamicin",
+                          "AMK_asr_cluster_renamed_resistant_rev"="Amikacin",
+                          "CST_asr_cluster_renamed_resistant_rev" ="Colistin",
+                          "blbli_asr_cluster_renamed_resistant_rev"="BL/BLI")
+
+colnames(table) <- recode(colnames(table),
+                          "phenotype"='Phenotype',
+                          "group" = "Phylogenetic group",
+                          "n_isolates"="Isolates",
+                          "n_patients"="Patients",
+                          "n_facilities"="Facilities",
+                          "min"="Earliest date",
+                          "1_st_qu"="Q1 date",
+                          "median"="Median date",
+                          "3_rd_qu"="Q3 date",
+                          "max"="Latest date",
+                          "duration"="Duration")
+```
+
+# Print and save
+```{r}
+favorite_kable(table)  
+
+saveRDS(table,"./data/asr_clustering/phylogenetic_group_statistics.RDS")
+write_csv(table,"./data/asr_clustering/phylogenetic_group_statistics.csv")
+```

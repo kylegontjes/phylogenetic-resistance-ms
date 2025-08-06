@@ -1,5 +1,5 @@
 ---
-title: "Figure 2. Phylogenetic characterization of resistance revealed differential patterns of resistance emergence and spread for five antibiotic phenotypes among clinical carbapenem-resistant Klebsiella pneumoniae sequence type 258 isolates"
+title: "Figure 1. Phylogenetic characterization of resistance revealed differential patterns of resistance emergence and spread for five antibiotic phenotypes among clinical carbapenem-resistant Klebsiella pneumoniae sequence type 258 isolates"
 author: "Kyle Gontjes"
 output: html_document
 date: "`r Sys.Date()`"
@@ -44,52 +44,24 @@ df <- left_join(df,pclustering_df)
 
 # Conceptual diagram
 ```{r}
-F2A <- magick::image_read(path = "./figures/clustering_algorithm_conceptual_figure.png") %>% image_ggplot()
+F1A <- magick::image_read(path = "./figures/clustering_algorithm_conceptual_figure.png") %>% image_ggplot()
 ```
 
-# Create phylogenies
-```{r}
-phenotypes <- c("TMP_SMX","gentamicin","AMK","CST","blbli") %>% paste0(.,"_asr_cluster_renamed_resistant")
-sizes <- c()
-for(i in phenotypes){
-  sizes[i] <- table(df[,i])  %>% subset(names(.) != "Resistant Singleton" & grepl("Cluster",names(.))) %>% as.numeric %>% length
-}
-
-ncluster <- max(sizes)
-color_palette <- grDevices::colors() %>% subset(grepl("red",.)==F)
-clusters_col <- iwanthue(ncluster,hmin=15,hmax=360,lmin = 5,lmax = 95,cmin=5,cmax=90,random = F,plot = T)
-
-clusters_name <- paste0("Resistant Cluster ",1:ncluster)
-names(clusters_col) <- clusters_name
-
-# Clustering scales
-## Clade scale
-clade_scale <- scale_fill_manual(breaks =c("Clade I","Clade II"),values=c("red","blue" ),name="Clade", guide = guide_legend(ncol=1, title.position = "top", label.position = "right",order=1))
-## Non-susceptible 
-NS_scale <- scale_fill_manual(breaks = c("Susceptible","Non-Susceptible"),values=c("white","black"),labels = c("Susceptible","Resistant"),name="Resistance profile",guide = guide_legend(title.position = "top", label.position = "right",nrow=2),drop = FALSE )
-
-## cluster_scale
-cluster_scale <- scale_fill_manual(breaks =c("Susceptible","Resistant Singleton",names(clusters_col)),values=c("Susceptible" = "white","Resistant Singleton" = "red",clusters_col),labels=c("Susceptible","Singleton",gsub("Resistant ","",clusters_name)),name="Phylogenetics of resistance", guide = guide_legend(ncol=4, title.position = "top", label.position = "right"))
-```
-
+# Create phylogenies 
 ```{r} 
 rownames(df) <- df$isolate_no
 # Clade
-F2B.0 <- gheatmap(ggtree(tr),df %>% select(clade_I) %>% `colnames<-`("Clade") %>% mutate_all(as.factor) , colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .15) + ylim(NA,575)  + clade_scale + consistent_theme
-F2B.1 <- F2B.0 + ggnewscale::new_scale_fill()
+F1B.0 <- gheatmap(ggtree(tr),df %>% select(clade_I) %>% `colnames<-`("Clade") %>% mutate_all(as.factor) , colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .15) + ylim(NA,560)  + clade_scale + consistent_theme
+F1B.1 <- F1B.0 + ggnewscale::new_scale_fill()
 # Non-susceptibility
-F2B <- gheatmap(F2B.1,df %>% select(TMP_SMX_dich,gentamicin_dich,AMK_dich,CST_dich,blbli_dich) %>% `colnames<-`(c("TMP-SMX resistance","Gentamicin resistance","Amikacin resistance","Colistin resistance","BL/BLI resistance")) %>% mutate_all(as.factor) , colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .75,offset =0.00004) + NS_scale  + ylim(NA,575)  + consistent_theme
+F1B <- gheatmap(F1B.1,df %>% select(TMP_SMX_dich_num,gentamicin_dich_num,AMK_dich_num,CST_dich_num,blbli_dich_num) %>% `colnames<-`(c("TMP-SMX resistance","Gentamicin resistance","Amikacin resistance","Colistin resistance","BL/BLI resistance")) %>% mutate_all(as.factor) , colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .75,offset =0.000035) + resistance_scale  + ylim(NA,560)  + consistent_theme
 
 # Clustering
-F2C <- gheatmap(ggtree(tr),df %>%  select(TMP_SMX_asr_cluster_renamed_resistant,gentamicin_asr_cluster_renamed_resistant,AMK_asr_cluster_renamed_resistant,CST_asr_cluster_renamed_resistant,blbli_asr_cluster_renamed_resistant) %>% `colnames<-`(c("TMP-SMX clustering","Gentamicin clustering","Amikacin clustering","Colistin clustering","BL/BLI clustering")) %>% mutate_all(as.factor), colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .75) + ylim(NA,575) + cluster_scale + consistent_theme 
+F1C <- gheatmap(ggtree(tr),df %>%  select(TMP_SMX_asr_cluster_renamed_resistant,gentamicin_asr_cluster_renamed_resistant,AMK_asr_cluster_renamed_resistant,CST_asr_cluster_renamed_resistant,blbli_asr_cluster_renamed_resistant) %>% `colnames<-`(c("TMP-SMX clustering","Gentamicin clustering","Amikacin clustering","Colistin clustering","BL/BLI clustering")) %>% mutate_all(as.factor), colnames_position = "top",colnames_angle=90, colnames_offset_y = 0.25, hjust = 0, color = NA, font.size = 7, width = .75) + ylim(NA,560) + cluster_scale + consistent_theme 
  
 # Figure 
-F2BC <- plot_grid(F2B,F2C,labels=c("B","C"),label_size=24,align = "hv", ncol=2) + theme(plot.margin = unit(c(0,0,-0.1,0), "cm")) 
-```
-
-```{r,fig.width=15,fig.height=10.5}
-F2BC
-```
+F1BC <- plot_grid(F1B,F1C,labels=c("B","C"),label_size=24,align = "hv", ncol=2) + theme(plot.margin = unit(c(0,0,-0.75,0), "cm")) 
+``` 
 
 # Transition data table
 ```{r}
@@ -103,7 +75,7 @@ D_table$Phenotype <- recode(D_table$Phenotype,'AMK' = 'Amikacin','blbli'='BL/BLI
 ```
 
 ```{r}
-F2D_tbl <- D_table %>% tableGrob(rows = NULL,theme=mytheme) 
+F1D_tbl <- D_table %>% tableGrob(rows = NULL,theme=mytheme) 
 ```
 
 # Clustering data table
@@ -168,39 +140,37 @@ new_column_names <- manually_pad_column_names(colnames(D_table_manipulated),coln
 colnames(D_table_manipulated) <- new_column_names$colnames_D
 colnames(E_table) <- new_column_names$colnames_E
 
-F2D_tbl <- D_table_manipulated %>% tableGrob(rows = NULL,theme=mytheme) 
+F1D_tbl <- D_table_manipulated %>% tableGrob(rows = NULL,theme=mytheme) 
 
-F2E_tbl <- E_table %>% tableGrob(rows = NULL,theme=mytheme)
+F1E_tbl <- E_table %>% tableGrob(rows = NULL,theme=mytheme)
 
-common_widths <- unit.pmax(F2D_tbl$widths, F2E_tbl$widths)
-F2D_tbl$widths <- common_widths
-F2E_tbl$widths <- common_widths
+common_widths <- unit.pmax(F1D_tbl$widths, F1E_tbl$widths)
+F1D_tbl$widths <- common_widths
+F1E_tbl$widths <- common_widths
 
-g1 <- ggdraw() + draw_grob(F2D_tbl, x = 0, hjust = 0)
-g2 <- ggdraw() + draw_grob(F2E_tbl, x = 0, hjust = 0)
-g2
+g1 <- ggdraw() + draw_grob(F1D_tbl, x = 0, hjust = 0)
+g2 <- ggdraw() + draw_grob(F1E_tbl, x = 0, hjust = 0) 
 ```
 
 ```{r ,fig.height=20,fig.width=16}
 blank <- ggdraw() + draw_label("")
-F2D <- plot_grid(
+F1D <- plot_grid(
   plot_grid(g1, g2, ncol = 1, rel_heights = c(1, 1), labels = c("D", "E"), label_size = 24, align = "h"),
-  blank,  # 2nd column is empty
+  blank, 
   ncol = 2,
-  rel_widths = c(1, 0)  # zero width 2nd column forces both grobs into 1 unit-wide space
+  rel_widths = c(1, 0)
 ) +
-  theme(plot.margin = unit(c(0, 0, 0, 0), "cm"))
-F2D
+  theme(plot.margin = unit(c(0, 0, 0, 0), "cm")) 
 ```
 
 
 # Merge figures together
 ```{r ,fig.height=20,fig.width=16.25}
-F2 <- plot_grid(F2A,F2BC,F2D,labels = c("A","",""),nrow=3,label_size = 24,rel_heights = c(.5,1,.45))
-F2
+F1 <- plot_grid(F1A,F1BC,F1D,labels = c("A","",""),nrow=3,label_size = 24,rel_heights = c(.5,1,.45))
+F1
 ```
 
 # Save
 ```{r}
-ggsave("./figures/figure2.png",F2,width=16.5,height=20,dpi=600,bg='white')  
+ggsave("./figures/figure1.png",F1,width=16.25,height=20,dpi=900,bg='white')  
 ```

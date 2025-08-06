@@ -1,0 +1,117 @@
+---
+title: "Supplemental Figure 3: Temporal distribution of phylogenetic groups"
+author: "Kyle Gontjes"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(knitr)
+opts_knit$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA) 
+opts_chunk$set(echo = T,warning = FALSE, message = FALSE,error=F,comment=NA)
+opts_knit$set(root.dir='~/Desktop/gl_mount/Analysis/Phyloaware/phylogenetic-resistance-ms/')
+```
+
+# Environment
+```{r environment, echo=F, message=FALSE, include=F, results=F}
+#Packages
+packages <- c("tidyverse","devtools","kableExtra","cowplot","gridExtra",'hues','magick','ggtree','ape','ggnewscale','grid',"ComplexHeatmap")   
+#Load Packages
+invisible(lapply(packages,library,character.only=T,quietly=T))
+
+#Themes
+source("./lib/consistent_themes.R")
+
+# Scripts
+source("./lib/common_functions.R")
+
+# Print environment
+Sys.info()
+sessionInfo()
+```
+
+# Load data
+```{r load data,include=T,echo=T,results=F,message=F}
+# Patient Metadata & Phylogeny
+df <- readRDS("./data/dataset/df.RDS")
+tr <- read.tree("./data/tree/tree.treefile")   
+df<- df %>% .[match(tr$tip.label,.$isolate_no),] 
+# Best model call
+pclustering_df <- readRDS("./data/asr_clustering/asr_clustering_df.RDS")
+df <- left_join(df,pclustering_df)
+```
+ 
+# Relevel
+```{r}
+pheno <- c("TMP_SMX_asr_cluster_renamed_resistant","gentamicin_asr_cluster_renamed_resistant","AMK_asr_cluster_renamed_resistant","CST_asr_cluster_renamed_resistant","blbli_asr_cluster_renamed_resistant") 
+
+cluster_levels <- c(paste0("Resistant Cluster ",ncluster:1),"Resistant Singleton","Susceptible")
+
+for(i in pheno){
+df[[paste0(i,"_rev")]] <- factor(df[[i]], levels = cluster_levels,labels = cluster_levels)
+}
+```
+
+
+# Create histogram of date (months) and
+```{r,fig.width=13,fig.height=6.825}
+number_of_weeks <- as.numeric(round(difftime(max(df$Cx_date),min(df$Cx_date),units = 'weeks')) + 1)
+paste0("Number of weeks used as bin count for histogram: ", number_of_weeks)
+
+pheno_rev <- paste0(pheno,"_rev")
+
+histograms <- lapply(pheno_rev,FUN=function(phenotype){
+   ggplot(data=df,aes(x=Cx_date,fill=get(phenotype))) + geom_histogram(bins = number_of_weeks) + theme_bw_me + xlab("Collection date") + ylab ("Number of isolates") + scale_y_continuous(limits = c(0, 20)) + sfigure_3_theme + cluster_scale_gray
+})
+
+legend_of_histogram <- gontjesr::get_legend(histograms[[3]])
+
+histograms_wo_legend <- lapply(histograms,FUN=function(x){x+theme(legend.position='none')})
+
+names(histograms_wo_legend) <- pheno
+
+histograms_wo_legend[["legend"]] <- legend_of_histogram 
+```
+
+# Boxplot visualization
+```{r}
+cluster_stats <- readRDS('./data/asr_clustering/phylogenetic_group_statistics.RDS') 
+renaming <- c('TMP_SMX_asr_cluster_renamed_resistant_rev'='TMP-SMX',
+                          "gentamicin_asr_cluster_renamed_resistant_rev"="Gentamicin",
+                          "AMK_asr_cluster_renamed_resistant_rev"="Amikacin",
+                          "CST_asr_cluster_renamed_resistant_rev" ="Colistin",
+                          "blbli_asr_cluster_renamed_resistant_rev"="BL/BLI")
+reversed <- setNames(names(renaming), renaming)
+cluster_stats$phenotype_input <- recode(cluster_stats$Phenotype,!!!reversed)
+```
+
+
+```{r,fig.width=15,fig.height=10}
+boxplots <- lapply(pheno_rev,FUN=function(phenotype){
+  cluster_stats_sub <- subset(cluster_stats,phenotype_input==phenotype)  
+  cluster_number_name <- paste0(cluster_stats_sub[["Phylogenetic group"]]," (",cluster_stats_sub$Isolates," isolates, ",cluster_stats_sub$Patients," patients)")  
+
+  breaks = rev(levels(df[[phenotype]])) %>% subset(. %in% cluster_stats_sub$`Phylogenetic group`)
+  recoded_y_scale <-  scale_y_discrete(breaks = breaks,labels = cluster_number_name)
+
+  ggplot(data=df,aes(x=Cx_date,fill=get(phenotype),y=as.factor(get(phenotype)))) + geom_boxplot() + theme_bw_me + xlab("Collection date") + ylab("") + sfigure_3_theme + cluster_scale_gray + theme(legend.position = 'none') + recoded_y_scale 
+})
+names(boxplots) <- pheno
+```
+
+# Merge these figures!
+```{r,fig.height=12.5,fig.width=10.41667}
+figure <- cowplot::plot_grid(histograms_wo_legend$TMP_SMX_asr_cluster_renamed_resistant,boxplots$TMP_SMX_asr_cluster_renamed_resistant,
+                   histograms_wo_legend$gentamicin_asr_cluster_renamed_resistant,boxplots$gentamicin_asr_cluster_renamed_resistant,
+                   histograms_wo_legend$AMK_asr_cluster_renamed_resistant,boxplots$AMK_asr_cluster_renamed_resistant,
+                   histograms_wo_legend$CST_asr_cluster_renamed_resistant,boxplots$CST_asr_cluster_renamed_resistant,
+                   histograms_wo_legend$blbli_asr_cluster_renamed_resistant,boxplots$blbli_asr_cluster_renamed_resistant,
+                   labels = c("AUTO"),ncol=2,label_size = 14,rel_widths = c(0.7,1,0.7,1,0.7,1,0.7,1,0.7,1))
+
+figure 
+```
+
+```{r}
+ggsave("./figures/sfigure3.png",figure,width=12.5,height=10.41667,dpi=900,bg='white')  
+```
+ 

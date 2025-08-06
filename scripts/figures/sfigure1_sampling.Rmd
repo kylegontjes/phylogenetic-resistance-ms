@@ -1,5 +1,5 @@
 ---
-title: "Figure 1: Comprehensive sampling of carbapenem-resistant Klebsiella pneumoniae that are resistant to last-resort or recently-introduced antibiotics"
+title: "Supplemental Figure 1: Comprehensive sampling of carbapenem-resistant Klebsiella pneumoniae that are resistant to last-resort or recently-introduced antibiotics"
 author: "Kyle Gontjes & Aryan Singh"
 date: "`r Sys.Date()`"
 output: html_document
@@ -21,9 +21,11 @@ packages <- c("tidyverse")
 #Load Packages
 invisible(lapply(packages,library,character.only=T,quietly=T)) 
 
-# Functions
+#Themes
+source("./lib/consistent_themes.R")
+
+# Scripts
 source("./lib/common_functions.R")
-source('./lib/consistent_themes.R')
 
 # Print
 Sys.info()
@@ -36,7 +38,7 @@ sessionInfo()
 df <- readRDS("./data/dataset/df.RDS") 
 ```
 
-# Figure 1: Sampling density
+# Supplemental Figure 1: Sampling density
 ## Code
 ```{r}
 phenos <- c("TMP_SMX_dich","gentamicin_dich","AMK_dich",'CST_dich','blbli_dich')
@@ -44,14 +46,14 @@ phenos <- c("TMP_SMX_dich","gentamicin_dich","AMK_dich",'CST_dich','blbli_dich')
 number_of_weeks <- as.numeric(round(difftime(max(df$Cx_date),min(df$Cx_date),units = 'weeks')) + 1)
 paste0("Number of weeks used as bin count for histogram: ", number_of_weeks)
 
-A <- ggplot(data=df,aes(x=Cx_date)) + geom_histogram(fill='black', bins = number_of_weeks) + theme_bw_me + xlab("Date of specimen collection") + ylab ("Number of specimens") + scale_y_continuous(limits = c(0, 20)) + figure_1_theme
+A <- ggplot(data=df,aes(x=Cx_date)) + geom_histogram(fill='black', bins = number_of_weeks) + theme_bw_me + xlab("Collection date") + ylab ("Number of isolates") + scale_y_continuous(limits = c(0, 20)) + sfigure_1_theme
  
 # Histogram by facility 
-B <- ggplot(data=df,aes(x=LTACH_Recode))+ geom_bar(fill='black',stat='count') + theme_bw_me + xlab("Facility") + ylab ("Number of specimens") + figure_1_theme + geom_text(stat='count', aes(label=..count..), vjust=-1, size = 5) + ylim(NA,max(max(table(df$LTACH_Recode)))+3)
+B <- ggplot(data=df,aes(x=LTACH_Recode))+ geom_bar(fill='black',stat='count') + theme_bw_me + xlab("Facility") + ylab ("Number of isolates") + sfigure_1_theme + geom_text(stat='count', aes(label=..count..), vjust=-1,nudge_y = -2, size = 5) + ylim(NA,max(max(table(df$LTACH_Recode)))+2)
 
 # Number specimens per patients
 patient_summaries <- df %>% group_by(Patient_ID) %>% summarise(n=n()) 
-C <- ggplot(data=patient_summaries,aes(x=n)) + geom_bar(fill = "black", width = 0.7, stat = "count") + theme_bw_me + xlab("Number of specimens") + ylab ("Number of patients") + scale_y_continuous(limits = c(0, 300)) + figure_1_theme + geom_text(stat='count', aes(label=..count..), vjust=-1, size = 5)
+C <- ggplot(data=patient_summaries,aes(x=n)) + geom_bar(fill = "black", width = 0.7, stat = "count") + theme_bw_me + xlab("Number of isolates") + ylab ("Number of patients") + scale_y_continuous(limits = c(0, 300)) + sfigure_1_theme + geom_text(stat='count', aes(label=..count..), vjust=-1, size = 5)
 
 # Resistance proportion  
 resistance_metl <- reshape2::melt(df %>% select(isolate_no,phenos),'isolate_no')
@@ -70,26 +72,26 @@ res_order <- resistance_metl %>% group_by(variable) %>% summarise(prop_resistant
 
 resistance_metl <- resistance_metl %>% mutate(variable = factor(variable, levels = res_order$variable))
 
-D <- ggplot(data=resistance_metl,aes(x=variable,fill=value)) + geom_bar(width = 0.7, stat = "count") + scale_fill_manual(values = c("Resistant" = "black", "Susceptible" = "darkgray"), name = "Resistance profile") + theme_bw_me + xlab("") + ylab ("Number of specimens") + theme(
+D <- ggplot(data=resistance_metl,aes(x=variable,fill=value)) + geom_bar(width = 0.7, stat = "count") + scale_fill_manual(values = c("Resistant" = "black", "Susceptible" = "darkgray"), name = "Resistance profile") + theme_bw_me + xlab("") + ylab ("Number of isolates") + theme(
   legend.title = element_text(size = 16),
   legend.text = element_text(size = 14),
   legend.key.size = unit(0.3, "cm"),
   legend.spacing.x = unit(0.05, "cm"),
-  axis.title.x = element_text(margin = margin(t = 2))) + figure_1_theme
+  axis.title.x = element_text(margin = margin(t = 2))) + sfigure_1_theme
 ```
 
-## Curating the multi-paneled figure
-```{r,fig.width=12.75,fig.height=8.5}
-figure_1_wo_legend <- cowplot::plot_grid(A,B,C,D + theme(legend.position = "none"),ncol=2,labels = 'AUTO', label_size = 18, scale = c(0.95, 0.95, 0.95, 0.95)) 
+## Curating the multi-paneled sfigure
+```{r,fig.width=12.75,fig.height= 7.75}
+sfigure_1_wo_legend <- cowplot::plot_grid(A,B,C,D + theme(legend.position = "none"),ncol=2,labels = 'AUTO', label_size = 18, scale = c(0.95, 0.95, 0.95, 0.95)) 
 
 cowplot_legend <- cowplot::plot_grid(NULL, get_legend(D), ncol = 2) 
 
-figure_1 <- cowplot::plot_grid(figure_1_wo_legend, cowplot_legend + theme(plot.margin = unit(c(-1,0,0.2,0), "cm")), ncol = 1, rel_heights = c(1,0.025))
+sfigure_1 <- cowplot::plot_grid(sfigure_1_wo_legend, cowplot_legend + theme(plot.margin = unit(c(-1,0,0.2,0), "cm")), ncol = 1, rel_heights = c(1,0.025))
  
-figure_1 
+sfigure_1 
 ```
 
-## Saving the figure
+## Saving the sfigure
 ```{r}
-ggsave("./figures/figure1.png", figure_1, dpi = 600, width = 12.75, height = 8.5, bg = 'white')
+ggsave("./figures/sfigure1.png", sfigure_1, dpi = 900, width = 12.75, height = 7.75, bg = 'white')
 ```

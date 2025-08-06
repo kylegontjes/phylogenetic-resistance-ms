@@ -1,5 +1,6 @@
 ---
-title: "Figure 3. Alternate, all unadjusted"
+title: "Figure 2. Alternate, all unadjusted"
+author: "Kyle Gontjes"
 output: html_document
 date: "`r Sys.Date()`"
 ---
@@ -31,10 +32,10 @@ dysbiosis_forest <- readRDS("./data/regression/unadjusted_regression_dysbiotic_f
 
 # Create cowplot
 ```{r,fig.height=16,fig.width=11.25}
-fig3A <- ggplotify::grid2grob(plot(clade_forest))
-fig3B <- ggplotify::grid2grob(plot(cognate_forest))
-fig3C <- ggplotify::grid2grob(plot(dysbiosis_forest)) 
+fig2A <- ggplotify::grid2grob(plot(clade_forest))
+fig2B <- ggplotify::grid2grob(plot(cognate_forest))
+fig2C <- ggplotify::grid2grob(plot(dysbiosis_forest)) 
 
-figure3 <- plot_grid(fig3A,fig3B,fig3C,labels = "AUTO",nrow=3,label_size = 18,rel_heights = c(1,1,1),label_x = 0,align = "hv",axis='l') 
-figure3
+figure2 <- plot_grid(fig2A,fig2B,fig2C,labels = "AUTO",nrow=3,label_size = 18,rel_heights = c(1,1,1),label_x = 0,align = "hv",axis='l') 
+figure2
 ```

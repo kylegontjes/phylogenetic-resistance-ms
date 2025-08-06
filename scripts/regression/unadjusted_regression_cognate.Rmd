@@ -24,7 +24,7 @@ source("./lib/consistent_themes.R")
 
 # Scripts
 source("./lib/common_functions.R")
-source("./scripts/figures/figure3.R")
+source("./scripts/figures/figure2.R")
 
 # Print environment
 Sys.info()

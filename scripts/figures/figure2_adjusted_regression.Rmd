@@ -1,5 +1,6 @@
 ---
-title: "Figure 3. Influence of genetic background and antibiotic exposures on the emergence and spread of resistant lineages"
+title: "Figure 2. Alternate, all adjusted"
+author: "Kyle Gontjes"
 output: html_document
 date: "`r Sys.Date()`"
 ---
@@ -24,22 +25,17 @@ sessionInfo()
 
 # Load figures
 ```{r load data,include=F,echo=F,results=F,message=F, include=F}
-clade_forest <- readRDS("./data/regression/unadjusted_regression_clade_figure.RDS")
+clade_forest <- readRDS("./data/regression/adjusted_regression_clade_figure.RDS")
 cognate_forest <- readRDS("./data/regression/adjusted_regression_cognate_figure.RDS") 
 dysbiosis_forest <- readRDS("./data/regression/adjusted_regression_dysbiotic_figure.RDS") 
 ```
 
 # Create cowplot
 ```{r,fig.height=16,fig.width=11.25}
-fig3A <- ggplotify::grid2grob(plot(clade_forest))
-fig3B <- ggplotify::grid2grob(plot(cognate_forest))
-fig3C <- ggplotify::grid2grob(plot(dysbiosis_forest)) 
+fig2A <- ggplotify::grid2grob(plot(clade_forest))
+fig2B <- ggplotify::grid2grob(plot(cognate_forest))
+fig2C <- ggplotify::grid2grob(plot(dysbiosis_forest)) 
 
-figure3 <- plot_grid(fig3A,fig3B,fig3C,labels = "AUTO",nrow=3,label_size = 18,rel_heights = c(1,1,1),label_x = 0,align = "hv",axis='l') 
-figure3
-```
-
-# Save figure
-```{r}
-ggsave("./figures/figure3.png",figure3,dpi=600,width=11.25,height=15,bg='white')
+figure2 <- plot_grid(fig2A,fig2B,fig2C,labels = "AUTO",nrow=3,label_size = 18,rel_heights = c(1,1,1),label_x = 0,align = "hv",axis='l') 
+figure2
 ```
