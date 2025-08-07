@@ -53,7 +53,7 @@ df[[paste0(i,"_rev")]] <- factor(df[[i]], levels = cluster_levels,labels = clust
 
 # Heatmap of facility and cluster calls
  
-```{r,fig.width=11.25,fig.height=9}
+```{r,fig.width=11.5,fig.height=9}
 pheno_rev <- paste0(pheno,"_rev")
 heatmaps <- lapply(pheno_rev,FUN=function(phenotype){
   dataframe <- df
@@ -85,12 +85,12 @@ heatmap_for_cowplot <- lapply(heatmaps,FUN=function(fig){
 })
 
 # Add margin to this
-figure <- cowplot::plot_grid(plotlist = heatmap_for_cowplot,labels="AUTO",ncol=2,label_x=-0.0255,label_size = 16) + 
+figure <- cowplot::plot_grid(plotlist = heatmap_for_cowplot,labels="AUTO",ncol=2,label_x=-0.03,label_size = 16) + 
   theme(plot.margin = margin(t = 0,r = 0,b = 0,l = 8))  
 
 figure
 ```
 
 ```{r}
-ggsave("./figures/sfigure4.png",figure,width=11.25,height=9,dpi=900,bg='white')  
+ggsave("./figures/sfigure4.png",figure,width=11.5,height=9.2,dpi=900,bg='white')  
 ```

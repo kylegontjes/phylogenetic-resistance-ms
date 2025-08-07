@@ -112,6 +112,6 @@ figure
 ```
 
 ```{r}
-ggsave("./figures/sfigure3.png",figure,width=12.5,height=10.41667,dpi=900,bg='white')  
+ggsave("./figures/sfigure3.png",figure,width=10.41667,height=12.5,dpi=900,bg='white')  
 ```
  
