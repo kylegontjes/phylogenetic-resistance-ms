@@ -11,7 +11,7 @@
 
 <meta name="author" content="Kyle Gontjes" />
 
-<meta name="date" content="2025-05-31" />
+<meta name="date" content="2025-08-26" />
 
 <title>Results Section 3: Whole-genome sequencing revealed variable phylogenetic clustering of resistance</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Results Section 3: Whole-genome sequencing
 revealed variable phylogenetic clustering of resistance</h1>
 <h4 class="author">Kyle Gontjes</h4>
-<h4 class="date">2025-05-31</h4>
+<h4 class="date">2025-08-26</h4>
 
 </div>
 
@@ -439,9 +439,9 @@ present    clade_I  4.43 2.37   8.52  0.0000 BL/BLI
 singleton  clade_I  2.34 1.09   4.99  0.0272 BL/BLI
 cluster    clade_I 21.19 5.89 135.76  0.0001 BL/BLI</code></pre>
 </div>
-<div id="modeling-clade-ii-required-as-clade-i-was-the-exposure-in-figure-3" class="section level2">
-<h2>Modeling Clade II (required as clade I was the exposure in figure
-3!)</h2>
+<div id="modeling-clade-ii-required-as-clade-i-was-the-exposure-in-the-regression-foresplot-figure" class="section level2">
+<h2>Modeling Clade II (required as clade I was the exposure in the
+regression foresplot figure)</h2>
 <pre class="r"><code>variables_of_interest_II &lt;- c(&quot;clade_II&quot;)
 TMP_SMX_lr_CII &lt;- phyloaware_regression(&quot;TMP_SMX_dich_num&quot;,df = TMP_SMX_regression_df,variables = variables_of_interest_II,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = F)
 gentamicin_lr_CII &lt;- phyloaware_regression(&quot;gentamicin_dich_num&quot;,gentamicin_regression_df,variables = variables_of_interest_II,first_present = T,patient_id = &#39;Patient_ID&#39;,culture_date = &quot;Cx_date&quot;,multivariable = F)   
